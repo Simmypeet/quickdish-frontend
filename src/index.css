@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 
-body{
+/* body{
   min-width: 693px;
-}
+} */
 
 .general-card{
-  @apply rounded-3xl shadow-xl p-4;
+  @apply rounded-3xl drop-shadow-md p-4;
 }
 
 .sidebar-button {
-  @apply text-white hover:text-black hover:bg-white rounded-xl w-10 text-center px-2.5 py-2.5 ;
+  @apply text-white hover:text-black hover:bg-white rounded-xl w-10 h-10 text-center flex;
 }
 
 .gradient-color {
@@ -37,7 +37,10 @@ body{
 
 /* sidebar */
 .sidebar-icon {
-  @apply size-6 mr-3 ; 
+  @apply size-6 self-center mx-auto; 
+}
+.bottom-bar-icon {
+  @apply size-6 self-center mx-auto; 
 }
 
 .nav-link{
@@ -79,12 +82,12 @@ body{
 } */
 
 .carousel-item-spacing{
-  padding-right: 10px; 
+  @apply p-2
 }
 
 /* comment page */
 .comment-heading-font{
-  @apply text-blue-950 font-bold text-2xl
+  @apply text-blue-950 font-bold text-2xl text-center
 }
 
 .comment-sub-heading-bold-font{

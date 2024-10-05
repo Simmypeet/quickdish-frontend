@@ -15,7 +15,7 @@ const Tag = ({ name, handleButtonClick}) => {
     return (
         <button type="button" 
         onClick={ handleTagClicked }
-        className={`text-white ${color} hover:${hoverColor} font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2`}>
+        className={`text-white ${color} hover:${hoverColor} font-medium rounded-lg text-sm px-5 py-2.5 text-center mx-3`}>
             {name}
         </button>
     );

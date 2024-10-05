@@ -1,7 +1,7 @@
 
 const CanteenCard = ( {canteenName, img} ) => {
     return (
-        <div className="w-full md:w-96 h-64 mt-3 mb-10 rounded-2xl shadow-md hover:shadow-xl relative">
+        <div className="w-full h-64 mt-3 mb-10 rounded-2xl drop-shadow-md hover:shadow-xl relative">
             {/* <div className="w-full h-full rounded-2xl bg-slate-300">
                 
             </div> */} 
