@@ -1,5 +1,6 @@
 
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom"; 
 import AuthContext from "../../context/AuthProvider";
 import axios from "../../api/axios";
 
@@ -9,6 +10,7 @@ const Login = ({toggle}) => {
     const [ password, setPassword ] = useState('');
     const [ errMsg, setErrMsg ] = useState('');
     const [ success, setSuccess ] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
@@ -26,10 +28,13 @@ const Login = ({toggle}) => {
             console.log(response.data);
 
             //edit backend to return accessToken and role
-            // const accessToken = response?.data?.accessToken; 
+            const accessToken = response?.data?.accessToken; 
             // const role = response?.data?.role;
             // setAuth({ username, password, role, accessToken });
+            setAuth({ username, password, accessToken });
+
             setSuccess(true);
+            navigate('/dashboard');
 
         //edit backend to return various error message
         }catch(err){
@@ -105,7 +110,7 @@ const Login = ({toggle}) => {
 
                             <div className="!mt-8">
                                 <button type="submit" className="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                                Sign in
+                                    Sign in
                                 </button>
                             </div>
                             <p className="text-gray-800 text-sm !mt-8 text-center">Don't have an account? <a href="#" className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold" onClick={toggle}>Register here</a></p>

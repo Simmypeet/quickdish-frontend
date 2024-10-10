@@ -16,7 +16,7 @@ const SideBar = () => {
             <div className="flex flex-col w-full grow justify-between items-center py-7">
                 <FontAwesomeIcon className="text-5xl text-white" icon={faUtensils} />
                 <div className="flex flex-col space-y-10 items-center">
-                    <NavLink to="/">
+                    <NavLink to="/home">
                         <button type="button" className="sidebar-button">
                             <FontAwesomeIcon icon={faHouse} className="sidebar-icon"/>
                         </button>

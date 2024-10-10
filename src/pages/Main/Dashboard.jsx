@@ -11,7 +11,7 @@ import BottomBar from "../../components/BottomBar";
 //sidebar, header, link to other pages
 const Dashboard = () => {
     return (
-        <Router>
+        <>
             <div className="flex w-full h-svh overflow-y-auto ">
                 
                 <div className="
@@ -47,7 +47,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-        </Router> 
+        </> 
     )
 }; 
 
