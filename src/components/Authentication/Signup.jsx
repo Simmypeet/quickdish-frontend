@@ -35,6 +35,12 @@ const Signup = ({toggle}) => {
             )
             setSuccess(true);
             console.log(response.data);
+            setFirstname('');
+            setLastname('');
+            setUsername('');
+            setPassword('');
+            setEmail('');
+            
         }catch(err){
             if(!err?.response){
                 setErrMsg('No Server Response'); 
@@ -65,6 +71,7 @@ const Signup = ({toggle}) => {
                                 <div className="relative flex items-center">
                                 <input 
                                     name="username" 
+                                    value={username}
                                     type="text" required 
                                     className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" 
                                     onChange={(e) => setUsername(e.target.value)}
@@ -82,6 +89,7 @@ const Signup = ({toggle}) => {
                                     <div className="relative flex items-center">
                                     <input 
                                         name="firstname" 
+                                        value={firstname}
                                         type="text" required 
                                         className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" 
                                         onChange={(e) => setFirstname(e.target.value)}
@@ -98,6 +106,7 @@ const Signup = ({toggle}) => {
                                     <div className="relative flex items-center">
                                     <input 
                                         name="lastname" 
+                                        value={lastname}
                                         type="text" required 
                                         className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" 
                                         onChange={(e) => setLastname(e.target.value)}
@@ -116,6 +125,7 @@ const Signup = ({toggle}) => {
                                 <div className="relative flex items-center">
                                 <input 
                                     name="email" 
+                                    value={email}
                                     type="text" required 
                                     className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" 
                                     onChange={(e) => setEmail(e.target.value)}
@@ -132,6 +142,7 @@ const Signup = ({toggle}) => {
                                 <div className="relative flex items-center">
                                 <input 
                                     name="password" 
+                                    value={password}
                                     type="password" 
                                     required className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" 
                                     onChange={(e) => setPassword(e.target.value)}

@@ -1,7 +1,7 @@
 
 import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
-// import axios from "../../api/axios";
+import axios from "../../api/axios";
 
 const Login = ({toggle}) => {
     const { setAuth } = useContext(AuthContext); 
@@ -15,7 +15,7 @@ const Login = ({toggle}) => {
 
         console.log("submit form"); 
         try{
-            const response = await axios.post('http://127.0.0.1:8000/customers/login', 
+            const response = await axios.post('/customers/login', 
                 JSON.stringify({ username: username, password: password }), 
                 //header
                 {
@@ -26,9 +26,9 @@ const Login = ({toggle}) => {
             console.log(response.data);
 
             //edit backend to return accessToken and role
-            const accessToken = response?.data?.accessToken; 
-            const role = response?.data?.role;
-            setAuth({ username, password, role, accessToken });
+            // const accessToken = response?.data?.accessToken; 
+            // const role = response?.data?.role;
+            // setAuth({ username, password, role, accessToken });
             setSuccess(true);
 
         //edit backend to return various error message
@@ -104,7 +104,7 @@ const Login = ({toggle}) => {
                             </div>
 
                             <div className="!mt-8">
-                                <button type="button" className="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                                <button type="submit" className="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
                                 Sign in
                                 </button>
                             </div>
