@@ -16,27 +16,27 @@ const SideBar = () => {
             <div className="flex flex-col w-full grow justify-between items-center py-7">
                 <FontAwesomeIcon className="text-5xl text-white" icon={faUtensils} />
                 <div className="flex flex-col space-y-10 items-center">
-                    <NavLink to="/home">
+                    <NavLink to="/dashboard">
                         <button type="button" className="sidebar-button">
                             <FontAwesomeIcon icon={faHouse} className="sidebar-icon"/>
                         </button>
                     </NavLink>
-                    <NavLink to="/favourites">
+                    <NavLink to="/dashboard/favourites">
                         <button type="button" className="sidebar-button">
                             <FontAwesomeIcon icon={faBookmark} className="sidebar-icon"/>
                         </button>
                     </NavLink>
-                    <NavLink to="/favourites">
+                    <NavLink to="/dashboard/favourites">
                         <button type="button" className="sidebar-button">
                             <FontAwesomeIcon icon={faComment} className="sidebar-icon"/>
                         </button>
                     </NavLink>
-                    <NavLink to="/purchase_history">
+                    <NavLink to="/dashboard/purchase_history">
                         <button type="button" className="sidebar-button">
                             <FontAwesomeIcon icon={faClockRotateLeft} className="sidebar-icon" />
                         </button>
                     </NavLink>
-                    <NavLink to="/myprofile">
+                    <NavLink to="/dashboard/myprofile">
                         <button type="button" className="sidebar-button">
                             <FontAwesomeIcon icon={faUser} className="sidebar-icon"/>
                         </button>

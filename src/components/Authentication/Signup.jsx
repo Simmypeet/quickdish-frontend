@@ -40,7 +40,7 @@ const Signup = ({toggle}) => {
             setUsername('');
             setPassword('');
             setEmail('');
-            
+
         }catch(err){
             if(!err?.response){
                 setErrMsg('No Server Response'); 
@@ -72,7 +72,8 @@ const Signup = ({toggle}) => {
                                 <input 
                                     name="username" 
                                     value={username}
-                                    type="text" required 
+                                    type="text" 
+                                    required 
                                     className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" 
                                     onChange={(e) => setUsername(e.target.value)}
                                     placeholder="Enter user name" />
@@ -90,7 +91,8 @@ const Signup = ({toggle}) => {
                                     <input 
                                         name="firstname" 
                                         value={firstname}
-                                        type="text" required 
+                                        type="text" 
+                                        required 
                                         className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" 
                                         onChange={(e) => setFirstname(e.target.value)}
                                         placeholder="Firstname" />
@@ -107,7 +109,8 @@ const Signup = ({toggle}) => {
                                     <input 
                                         name="lastname" 
                                         value={lastname}
-                                        type="text" required 
+                                        type="text" 
+                                        required 
                                         className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" 
                                         onChange={(e) => setLastname(e.target.value)}
                                         placeholder="Lastname" />
@@ -126,7 +129,8 @@ const Signup = ({toggle}) => {
                                 <input 
                                     name="email" 
                                     value={email}
-                                    type="text" required 
+                                    type="text" 
+                                    required 
                                     className="w-full text-gray-800 text-sm border border-gray-300 px-4 py-3 rounded-md outline-blue-600" 
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter email" />

@@ -13,7 +13,6 @@ const Dashboard = () => {
     return (
         <>
             <div className="flex w-full h-svh overflow-y-auto ">
-                
                 <div className="
                     sticky top-0 left-0 h-svh max-h-svh p-4 hidden md:block 
                     z-10
@@ -28,7 +27,7 @@ const Dashboard = () => {
                         <Routes>
                             <Route path="/" element={
                                 <div className='md:-ml-4 sticky top-0 z-10'>
-                                    <Header />
+                                    <Header/>
                                 </div>
                             }/>
                         </Routes>
@@ -36,9 +35,9 @@ const Dashboard = () => {
                         <div className="p-2 md:pr-4 md:pl-0">
                             <Routes>
                                 <Route path="/" element={<Home/>}/>
-                                <Route path="/purchase_history" element={<PurchaseHistory/>}/>
-                                <Route path="/myprofile" element={<MyProfile/>}/>
-                                <Route path="/favourites" element={<Favourite/>}/>
+                                <Route path="purchase_history" element={<PurchaseHistory/>}/>
+                                <Route path="myprofile" element={<MyProfile/>}/>
+                                <Route path="favourites" element={<Favourite/>}/>
                             </Routes>
                         </div>
                     </div>

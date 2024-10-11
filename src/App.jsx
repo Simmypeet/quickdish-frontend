@@ -12,7 +12,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Authentication></Authentication>}></Route>
+        <Route path="/" element={<Authentication/>}></Route>
         <Route path="/dashboard/*" element={auth ? <DashBoard/> : <Navigate to="/"/>}></Route>
         {/* <DashBoard></DashBoard> */}
         {/* <RateAndReview></RateAndReview> */}
