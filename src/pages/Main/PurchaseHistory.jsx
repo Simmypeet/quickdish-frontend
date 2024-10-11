@@ -9,9 +9,10 @@ const PurchaseHistory = () => {
     const handleState = (color) => {
         setColor(color);
     }
+    
     return (
         <div className="p-7">
-            <div className="flex">
+            <div className="">
                 <FontAwesomeIcon className="sidebar-icon" icon={faClockRotateLeft} />
                 <h1 className="big-title" >Purchase History</h1>
             </div>

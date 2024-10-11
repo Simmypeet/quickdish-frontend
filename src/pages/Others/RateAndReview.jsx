@@ -3,16 +3,22 @@ import Comment from "../../components/Comment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faLocationDot, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import CommentWindow from "../../components/CommentWindow";
+import { useNavigate } from "react-router-dom";
 
 const RateAndReview = () => {
+    const navigate = useNavigate();
     const [showModal, setShowModal] = React.useState(false);
     const closeModal = () => setShowModal(!showModal);
+    const switchtoDashboard = () => {
+        const path = "/dashboard/purchase_history";
+        navigate(path);
+    }
     //edit this
     return (
         <div className="gradient-color-orange overflow-scroll">
             {/* add black gradient */}
             <div className="fixed top-0 w-full pt-8 text-white hover:text-blue-950 text-3xl flex ">
-                <button className="flex" type="button" >
+                <button className="flex" type="button" onClick={switchtoDashboard}>
                     <FontAwesomeIcon className="m-1 ml-4 size-8 z-10" icon={faArrowLeft} />
                     <h1 className="font-medium z-10 ">Rate & Review</h1>
                 </button>

@@ -1,9 +1,17 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
+
 
 const PurchaseCard = ({date, time, name, price, canteen, userLocation, orderStatus}) => {
     // date : 1 Sep 24, 11:09
+    const navigate = useNavigate();
+    const switchToReview = () => {
+        // switch to review page
+        navigate("/user_review");
+    }
+
     return (
         <>
             <div className="flex width-full h-36 mt-2 mb-5">
@@ -26,7 +34,7 @@ const PurchaseCard = ({date, time, name, price, canteen, userLocation, orderStat
                     
                     <div className="flex justify-between">
                         <h2 className="text-xl font-semibold text-green-700">{orderStatus}</h2>
-                        <button className="general-button" type="submit">
+                        <button className="general-button" type="submit" onClick={switchToReview}>
                             <h2 className="text-lg">Rate and give review</h2>
                         </button> 
                     </div>

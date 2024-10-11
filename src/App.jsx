@@ -15,7 +15,7 @@ const App = () => {
         <Route path="/" element={<Authentication/>}></Route>
         <Route path="/dashboard/*" element={auth ? <DashBoard/> : <Navigate to="/"/>}></Route>
         {/* <DashBoard></DashBoard> */}
-        {/* <RateAndReview></RateAndReview> */}
+        <Route path="/user_review" element={auth ? <RateAndReview/> : <Navigate to="/"/>}></Route>
         {/* <Menu restaurantID={8}></Menu> */}
         {/* <Authentication/> */}
       </Routes>
