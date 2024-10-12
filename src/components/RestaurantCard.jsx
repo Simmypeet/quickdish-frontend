@@ -1,12 +1,28 @@
+// @ts-check
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import IdleTag from './idleTag';
+import React from 'react';
 
+/**
+ *
+ * @param {{
+ *  name: string,
+ *  food: string,
+ *  image: string,
+ *  canteenName: string,
+ *  busyness: string,
+ *  queue: number,
+ *  rating: number
+ * }} param0
+ * @returns
+ */
 const RestaurantCard = ({
-    storeName,
+    name,
     food,
-    img,
+    image,
     canteenName,
     busyness,
     queue,
@@ -27,12 +43,12 @@ const RestaurantCard = ({
             {/* <img src={ img } alt="" /> */}
             <img
                 className="aspect-square h-full w-auto rounded-xl object-cover object-center"
-                src="https://i0.wp.com/tokyotreatblog.wpcomstaging.com/wp-content/uploads/2022/05/Shutterstock_751789537-min.jpg?fit=4096%2C2731&ssl=1"
+                src={image}
                 alt=""
             />
             <div className="mx-2 flex grow flex-col justify-between md:mx-4 md:my-2">
                 <div className="flex items-center justify-between">
-                    <h2 className="sub-title line-clamp-1">Restaurant</h2>
+                    <h2 className="sub-title line-clamp-1">{name}</h2>
                     <button type="button" onClick={handleFlag}>
                         {/* change to black when click  */}
                         {flag ? (
@@ -52,15 +68,17 @@ const RestaurantCard = ({
                 <div className="mx-1 flex w-full grow flex-col py-2 md:justify-evenly md:space-y-2">
                     <div className="flex justify-between">
                         <h2 className="card-info">Status:</h2>
-                        <h2 className="card-info">Busy</h2>
+                        <h2 className="card-info">{busyness}</h2>
                     </div>
                     <div className="flex justify-between">
                         <h2 className="card-info">Queue:</h2>
-                        <h2 className="card-info">32</h2>
+                        <h2 className="card-info">{queue}</h2>
                     </div>
                     <div className="hidden justify-between md:flex">
                         <h2 className="card-info">Rating:</h2>
-                        <h2 className="card-info">4.5/5</h2>
+                        <h2 className="card-info">{`${rating.toFixed(
+                            1
+                        )}/5`}</h2>
                     </div>
                     <div className="hidden justify-between md:flex">
                         <h2 className="card-info">Price:</h2>
@@ -71,7 +89,7 @@ const RestaurantCard = ({
                 <div className="mx-1 flex">
                     <div className="flex w-0 grow overflow-x-clip">
                         <IdleTag name="Thai" />
-                        <IdleTag name="CanteenA" />
+                        <IdleTag name={canteenName} />
                     </div>
                 </div>
             </div>
