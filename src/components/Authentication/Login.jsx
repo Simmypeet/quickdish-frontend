@@ -36,7 +36,9 @@ const Login = ({toggle}) => {
 
             //edit backend to return accessToken and role
             const accessToken = response?.data?.jwt_token; 
-            const role = response?.data?.role;
+            // const role = response?.data?.role;
+            const role = "user";
+
             setAuth({ username: username, password: password, role: role, accessToken: accessToken });
 
             console.log("username after login: ", auth.username)

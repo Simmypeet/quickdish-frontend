@@ -6,6 +6,7 @@ import RateAndReview from './pages/Others/RateAndReview'
 import Menu from './pages/Restaurant/Restaurant'
 import Authentication from './pages/Others/Authentication'
 import AuthContext from './context/AuthProvider'
+import Unauthorized from './pages/Others/Unauthorize';
 
 const App = () => {
   const auth = useContext(AuthContext); 
@@ -18,7 +19,7 @@ const App = () => {
         {/* <DashBoard></DashBoard> */}
         <Route path="/user_review" element={auth ? <RateAndReview/> : <Navigate to="/"/>}></Route>
         {/* <Menu restaurantID={8}></Menu> */}
-        {/* <Authentication/> */}
+        <Route path="/unauthorized" element={<Unauthorized/>}></Route>
       </Routes>
     </Router>
   )

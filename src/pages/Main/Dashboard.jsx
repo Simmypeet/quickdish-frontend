@@ -37,7 +37,8 @@ const Dashboard = () => {
                             <Routes>
                                 <Route path="/" element={<Home/>}/>
 
-                                <Route element={<RequireAuth/>}>
+                                {/* for several roles = ['user', 'admin', 'staff'] */}
+                                <Route element={<RequireAuth allowedRoles={'user'}/>}> 
                                     <Route path="purchase_history" element={<PurchaseHistory/>}/>
                                     <Route path="myprofile" element={<MyProfile/>}/>
                                     <Route path="favourites" element={<Favourite/>}/>
