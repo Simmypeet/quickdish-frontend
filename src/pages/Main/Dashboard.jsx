@@ -7,6 +7,7 @@ import MyProfile from "./MyProfile";
 import Favourite from "./Favourite";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
 import BottomBar from "../../components/BottomBar";
+import RequireAuth from "../../components/RequireAuth";
 
 //sidebar, header, link to other pages
 const Dashboard = () => {
@@ -35,9 +36,13 @@ const Dashboard = () => {
                         <div className="p-2 md:pr-4 md:pl-0">
                             <Routes>
                                 <Route path="/" element={<Home/>}/>
-                                <Route path="purchase_history" element={<PurchaseHistory/>}/>
-                                <Route path="myprofile" element={<MyProfile/>}/>
-                                <Route path="favourites" element={<Favourite/>}/>
+
+                                <Route element={<RequireAuth/>}>
+                                    <Route path="purchase_history" element={<PurchaseHistory/>}/>
+                                    <Route path="myprofile" element={<MyProfile/>}/>
+                                    <Route path="favourites" element={<Favourite/>}/>
+                                </Route>
+
                             </Routes>
                         </div>
                     </div>

@@ -2,8 +2,15 @@ import React from 'react'
 import { NavLink } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faBookmark, faComment,faClockRotateLeft,faUser, faUtensils, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import useAuth from '../hooks/useAuth';
 
 const SideBar = () => {
+
+    const { setAuth } = useAuth();
+    const logout = () => {
+        setAuth({});
+    }
+
     return (    
         <div 
             className='
@@ -41,7 +48,7 @@ const SideBar = () => {
                         </button>
                     </NavLink>
                 </div>
-                <FontAwesomeIcon className="sidebar-button text-3xl" icon={faArrowRightFromBracket} />
+                <FontAwesomeIcon className="sidebar-button text-3xl" icon={faArrowRightFromBracket} onClick={logout}/>
             </div>
             
         </div>

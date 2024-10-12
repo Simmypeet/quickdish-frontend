@@ -1,16 +1,23 @@
 
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { Link, useLoaderData, useNavigate, useLocation } from "react-router-dom"; 
 import AuthContext from "../../context/AuthProvider";
 import axios from "../../api/axios";
+import useAuth from "../../hooks/useAuth";
 
 const Login = ({toggle}) => {
-    const { setAuth } = useContext(AuthContext); 
+    const { auth, setAuth } = useAuth(); 
+    // const { setAuth } = useContext(AuthContext); 
+
+    const navigate = useNavigate();
+    const location = useLocation(); 
+    const from = location.state?.from?.pathname || "/"; //get path where user is coming from
+
+    console.log(location.state);
+
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ errMsg, setErrMsg ] = useState('');
-    const [ success, setSuccess ] = useState(false);
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
@@ -28,11 +35,14 @@ const Login = ({toggle}) => {
             console.log(response.data);
 
             //edit backend to return accessToken and role
-            const accessToken = response?.data?.accessToken; 
+            const accessToken = response?.data?.jwt_token; 
             const role = response?.data?.role;
-            setAuth({ username, password, role, accessToken });
-            setSuccess(true);
-            navigate('/dashboard');
+            setAuth({ username: username, password: password, role: role, accessToken: accessToken });
+
+            console.log("username after login: ", auth.username)
+
+            navigate(from, {replace: true}); 
+            // navigate("/dashboard/purchase_history"); 
 
         //edit backend to return various error message
         }catch(err){

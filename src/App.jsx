@@ -10,6 +10,7 @@ import AuthContext from './context/AuthProvider'
 const App = () => {
   const auth = useContext(AuthContext); 
   return (
+    
     <Router>
       <Routes>
         <Route path="/" element={<Authentication/>}></Route>
