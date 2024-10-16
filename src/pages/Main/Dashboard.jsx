@@ -5,6 +5,7 @@ import Home from "./Home";
 import PurchaseHistory from "./PurchaseHistory";
 import MyProfile from "./MyProfile";
 import Favourite from "./Favourite";
+import Notification from "./Notification";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
 import BottomBar from "../../components/BottomBar";
 import RequireAuth from "../../components/RequireAuth";
@@ -42,6 +43,7 @@ const Dashboard = () => {
                                     <Route path="purchase_history" element={<PurchaseHistory/>}/>
                                     <Route path="myprofile" element={<MyProfile/>}/>
                                     <Route path="favourites" element={<Favourite/>}/>
+                                    <Route path="notification" element={<Notification/>}></Route>
                                 </Route>
 
                             </Routes>

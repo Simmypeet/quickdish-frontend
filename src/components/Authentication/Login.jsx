@@ -1,7 +1,6 @@
 
-import { useContext, useState } from "react";
-import { Link, useLoaderData, useNavigate, useLocation } from "react-router-dom"; 
-import AuthContext from "../../context/AuthProvider";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom"; 
 import axios from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
 
@@ -32,7 +31,6 @@ const Login = ({toggle}) => {
                     withCredentials: true
                 }
             )
-            console.log(response.data);
 
             //edit backend to return accessToken and role
             const accessToken = response?.data?.jwt_token; 
@@ -40,8 +38,6 @@ const Login = ({toggle}) => {
             const role = "user";
 
             setAuth({ username: username, password: password, role: role, accessToken: accessToken });
-
-            console.log("username after login: ", auth.username)
 
             navigate(from, {replace: true}); 
             // navigate("/dashboard/purchase_history"); 

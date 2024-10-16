@@ -32,7 +32,7 @@ const SideBar = () => {
                             <FontAwesomeIcon icon={faBookmark} className="sidebar-icon"/>
                         </button>
                     </NavLink>
-                    <NavLink to="/dashboard/favourites">
+                    <NavLink to="/dashboard/notification">
                         <button type="button" className="sidebar-button">
                             <FontAwesomeIcon icon={faComment} className="sidebar-icon"/>
                         </button>

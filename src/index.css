@@ -85,6 +85,16 @@
   @apply p-2
 }
 
+/* login */
+.warning{
+  @apply text-xs rounded-md bg-orange-400 text-white p-1 relative top-[-10px] mt-2
+}
+
+.offscreen{
+  @apply absolute -left-[9999px]
+}
+
+
 /* comment page */
 .comment-heading-font{
   @apply text-blue-950 font-bold text-2xl text-center
