@@ -8,6 +8,7 @@ import Home from './pages/Main/Home';
 import Favourite from './pages/Main/Favourite';
 import PurchaseHistory from './pages/Main/PurchaseHistory';
 import MyProfile from './pages/Main/MyProfile';
+import Restaurant from './pages/Restaurant/Restaurant';
 
 const App = () => {
     return (
@@ -45,6 +46,11 @@ const App = () => {
                             <MyProfile />
                         </DashBoard>
                     }
+                />
+
+                <Route
+                    path="restaurants/:restaurantID"
+                    element={<Restaurant />}
                 />
             </Routes>
         </BrowserRouter>
