@@ -128,3 +128,29 @@ export const getMenuCustomizations = async (menuID) => {
 
     return customizations.data;
 };
+
+/**
+ * @param {string} name The name of the restaurant to search for
+ * @param {limit} limit The maximum number of restaurants to return
+ * @returns {Promise<number[]>} The IDs of the restaurants that match the search query
+ */
+export const searchRestaurants = async (name, limit) => {
+    const restaurants = await axios.get(
+        process.env.QUICKDISH_BACKEND_URL + `/restaurants/search`,
+        {
+            params: {
+                query: name,
+                limit: limit,
+            },
+        }
+    );
+
+    if (restaurants.status !== 200) {
+        throw new Error(
+            `Error searching restaurant; status: ${restaurants.status}; 
+            body: ${restaurants.data}`
+        );
+    }
+
+    return restaurants.data;
+};
