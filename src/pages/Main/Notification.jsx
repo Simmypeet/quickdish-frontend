@@ -11,19 +11,24 @@ const Notification = () => {
     const refresh = useRefreshToken();
 
     useEffect(() => {
-        let isMounted = true; 
+        let isMounted = true;
         const controller = new AbortController(); //for cancelling fetch request if component is unmounted
         const getUser = async () => {
             try{
-                const response = await axiosPrivate.get('/customers/me', {
-                    signal: controller.signal
-                }); 
+                const response = await axios.get('http://127.0.0.1:8000/customers/me', {
+                    withCredentials: true, 
+                    headers: {
+                        'Authorization': `Bearer ${auth.accessToken}`, 
+                        'accept': 'application/json',
+                    }
+                });
                 console.log("response: ", response.data);
                 isMounted && setUsers(response.data);
 
             }catch(err) {
                 console.log("Error fetching: ", err);
             }
+            
         }
         getUser();
 

@@ -11,7 +11,10 @@ const useRefreshToken = () => {
         try{ 
             const response = await axios.get('/customers/refresh', 
                 {
-                    withCredentials: true
+                    withCredentials: true, 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }
             ); 
 
@@ -19,8 +22,6 @@ const useRefreshToken = () => {
             //     'Content-Type': 'application/json',
             //     'Authorization': `Bearer ${auth.accessToken}`
             // },
-
-            console.log("response: ", response.data);
 
             setAuth(prev => {
                 console.log("prev: ", prev);

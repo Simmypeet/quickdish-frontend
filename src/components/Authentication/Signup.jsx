@@ -56,7 +56,8 @@ const Signup = ({toggle}) => {
             console.log("password: ", password);
             console.log("email: ", email);
 
-            const response = await axios.post('/customers/register',
+            // const response = await axios.post('/customers/register',
+            const response = await useAxiosPrivate.post('/customers/register',
                 JSON.stringify(
                     { username: username,
                       password: password,

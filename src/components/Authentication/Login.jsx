@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; 
 import axios from "../../api/axios";
+import axiosPrivate from "../../api/axios"
 import useAuth from "../../hooks/useAuth";
 
 const Login = ({toggle}) => {
@@ -31,7 +32,7 @@ const Login = ({toggle}) => {
                     withCredentials: true
                 }
             )
-
+            
             //edit backend to return accessToken and role
             const accessToken = response?.data?.jwt_token; 
             // const role = response?.data?.role;
