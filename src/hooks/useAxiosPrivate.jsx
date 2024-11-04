@@ -24,7 +24,8 @@ const useAxiosPrivate = () => {
                 if(error?.response?.status === 401 && !prevReq._retry){
                     prevReq.sent = true; 
                     const newAccessToken = await refresh(); 
-                    prevReq.header['Authorization'] = `Bearer ${newAccessToken}`;
+                    prevReq.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                    auth.accessToken = newAccessToken; 
                     return axiosPrivate(prevReq); 
                 }
                 return Promise.reject(error);

@@ -1,11 +1,13 @@
 import axios from '../api/axios';
 import useAuth from './useAuth';
+import { useNavigate } from 'react-router-dom'
 
 //send refresh token to server to get new access token
 //return new access token
 
 const useRefreshToken = () => {
     const { auth, setAuth } = useAuth(); 
+    const navigate = useNavigate(); 
     //create api for refreshing token
     const refresh = async () => {
         try{ 
@@ -16,22 +18,29 @@ const useRefreshToken = () => {
                         'Content-Type': 'application/json'
                     }
                 }
-            ); 
+            );
 
-            // headers: {
-            //     'Content-Type': 'application/json',
-            //     'Authorization': `Bearer ${auth.accessToken}`
-            // },
 
-            setAuth(prev => {
-                console.log("prev: ", prev);
-                console.log("response: ", response.data.jwt_token);
-                return {...prev, accessToken: response.data.jwt_token} //update accessToken
-            })
+            if (response.data?.jwt_token) {
+                setAuth(prev => ({
+                    ...prev,
+                    accessToken: response.data.jwt_token // Update accessToken
+                }));
+
+                return response.data;
+            } else {
+                console.log("Refresh token response did not include jwt_token");
+                navigate('/'); // Redirect to login if jwt_token is missing
+            }
 
             return response.data; 
         }catch(err) {
             console.log("Error refreshing token: ", err);
+
+            //if refresh token expire
+            if(err.response && err.response.status === 405){
+                navigate('/'); 
+            }
         }
     }
     return refresh; 
@@ -40,33 +49,3 @@ const useRefreshToken = () => {
 
 export default useRefreshToken;
 
-// const useRefreshToken = () => {
-//     const { setAuth } = useAuth(); 
-//     //create api for refreshing token
-//     const refresh = async () => {
-//         try{ 
-//             const response = await axios.post('/customers/refresh',  
-//                 {
-//                     headers: {'Content-Type': 'application/json'}, 
-//                     withCredentials: true
-//                 }
-//             ); 
-
-//             console.log("response: ", response.data.jwt_token);
-
-//             setAuth(prev => {
-//                 console.log("prev: ", prev);
-//                 console.log("response: ", response.data.jwt_token);
-//                 return {...prev, accessToken: response.data.jwt_token} //update accessToken
-//             })
-
-//             return response.data.jwt_token; 
-//         }catch(err) {
-//             console.log("Error refreshing token: ", err);
-//         }
-//     }
-//     return refresh; 
-
-// }
-
-// export default useRefreshToken;

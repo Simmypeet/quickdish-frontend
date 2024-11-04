@@ -2,33 +2,27 @@ import { useState, useEffect } from 'react';
 import axios from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import useRefreshToken from '../../hooks/useRefreshToken';
+// import useRefreshToken from '../../hooks/useRefreshToken';
 
 const Notification = () => {
-    const [users, setUsers] = useState(); 
+    const [users, setUsers] = useState();
     const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
-    const refresh = useRefreshToken();
+    // const refresh = useRefreshToken();
 
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController(); //for cancelling fetch request if component is unmounted
-        const getUser = async () => {
+        const getUser = async() => {
             try{
-                const response = await axios.get('http://127.0.0.1:8000/customers/me', {
-                    withCredentials: true, 
-                    headers: {
-                        'Authorization': `Bearer ${auth.accessToken}`, 
-                        'accept': 'application/json',
-                    }
-                });
+               
+                const response = await axiosPrivate.get('http://127.0.0.1:8000/customers/me'); 
                 console.log("response: ", response.data);
                 isMounted && setUsers(response.data);
 
             }catch(err) {
                 console.log("Error fetching: ", err);
             }
-            
         }
         getUser();
 
@@ -37,7 +31,7 @@ const Notification = () => {
             isMounted = false; 
             controller.abort(); 
         }
-    }, [axiosPrivate])
+    }, [auth])
 
     return (
         <article>
@@ -54,12 +48,12 @@ const Notification = () => {
                     </ul>
                 ) : 
                 (
-                    <p>No users</p>
+                    <p>Loading</p>
                 )
             }
-           <button onClick={refresh}>
+           {/* <button onClick={refresh}>
                 Click me
-           </button>
+           </button> */}
         </article>
     )
 }
