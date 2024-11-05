@@ -20,7 +20,6 @@ const useRefreshToken = () => {
                 }
             );
 
-
             if (response.data?.jwt_token) {
                 setAuth(prev => ({
                     ...prev,
@@ -30,17 +29,16 @@ const useRefreshToken = () => {
                 return response.data;
             } else {
                 console.log("Refresh token response did not include jwt_token");
-                navigate('/'); // Redirect to login if jwt_token is missing
+                //navigate('/'); // Redirect to login if jwt_token is missing
             }
 
             return response.data; 
         }catch(err) {
-            console.log("Error refreshing token: ", err);
-
+            console.log("Error refreshing token: ", err.status);
             //if refresh token expire
-            if(err.response && err.response.status === 405){
-                navigate('/'); 
-            }
+            // if(err.response && err.response.status === 405){
+            //     navigate('/'); 
+            // }
         }
     }
     return refresh; 

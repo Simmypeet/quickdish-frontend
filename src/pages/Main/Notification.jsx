@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import axios from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { useNavigate, useLocation } from 'react-router-dom'
 // import useRefreshToken from '../../hooks/useRefreshToken';
 
 const Notification = () => {
     const [users, setUsers] = useState();
     const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
+    const location = useLocation(); 
+    const navigate = useNavigate(); 
     // const refresh = useRefreshToken();
 
     useEffect(() => {
@@ -22,6 +25,7 @@ const Notification = () => {
 
             }catch(err) {
                 console.log("Error fetching: ", err);
+                navigate("/", {state: {from : location}, replace: true}); 
             }
         }
         getUser();
