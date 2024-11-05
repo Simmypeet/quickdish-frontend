@@ -40,8 +40,8 @@ const Login = ({toggle}) => {
 
             setAuth({ username: username, password: password, role: role, accessToken: accessToken });
 
-            navigate(from, {replace: true}); 
-            // navigate("/dashboard/purchase_history"); 
+            // navigate(from, {replace: true}); 
+            navigate("/dashboard"); 
 
         //edit backend to return various error message
         }catch(err){
