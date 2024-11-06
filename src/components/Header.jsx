@@ -1,8 +1,13 @@
-import { React, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faMagnifyingGlass,faShoppingCart,faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { React, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faMagnifyingGlass,
+    faShoppingCart,
+    faCircleXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import Tag from './Tag';
 import { remove } from '../utils/array';
+import SearchBar from './SearchBar';
 
 const Header = () => {
     const [focus, setFocus] = useState(false);
@@ -11,45 +16,52 @@ const Header = () => {
     const [openModel, setOpenModel] = useState(false);
 
     const handleFocus = () => {
-        console.log("focus");
+        console.log('focus');
         setCloseTag(false);
         setFocus(true);
     }
 
+
     const handleCloseTag = () => {
-        console.log("close tag");
+        console.log('close tag');
         setCloseTag(true);
-    }
+    };
 
     const handleButtonClick = (foodName) => {
         setclickedFood((prevClickedFood) => {
-            if(prevClickedFood.includes(foodName)){
-                console.log("remove" + foodName);
+            if (prevClickedFood.includes(foodName)) {
+                console.log('remove' + foodName);
                 return remove(prevClickedFood, foodName);
-            }else{
-                console.log("pick" + foodName);
-                return [...prevClickedFood, foodName]; 
+            } else {
+                console.log('pick' + foodName);
+                return [...prevClickedFood, foodName];
             }
         });
-    }
+    };
 
     const toggleLocation = () => {
         setOpenModel(!openModel);
     }
 
     return (
-        <div className="bg-white w-full left-0 shadow-md">
-            <div 
+        <div className="left-0 w-full bg-white shadow-md">
+            <div
                 className="
-                    grid grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto] 
-                    py-4 px-3 md:px-5 items-center
-                ">
-                
+                    grid grid-cols-[auto_1fr] items-center 
+                    px-3 py-4 md:px-5 lg:grid-cols-[auto_1fr_auto]
+                "
+            >
                 {/* <button onClick={handleShowModel}> */}
                 <div className="">
-                    <h1 className='hidden sm:block sm:text-3xl md:text-4xl'><span className="font-bold text-orange-600">Quick</span><span className="font-bold text-orange-400">Dish</span></h1>
-                    <h1 className="hidden md:block text-xl font-semibold mt-1">What do you want to eat today?</h1>
+                    <h1 className="hidden sm:block sm:text-3xl md:text-4xl">
+                        <span className="font-bold text-orange-600">Quick</span>
+                        <span className="font-bold text-orange-400">Dish</span>
+                    </h1>
+                    <h1 className="mt-1 hidden text-xl font-semibold md:block">
+                        What do you want to eat today?
+                    </h1>
                 </div>
+
                 <div className="flex flex-col self-center mx-4 lg:mx-8"> 
                     <div className="relative w-full flex flex-1 items-center">
                         <input type="text"
@@ -70,11 +82,18 @@ const Header = () => {
                         <FontAwesomeIcon className="absolute left-2 top-2 size-6 text-gray-500 mr-3 mt-1" icon={faMagnifyingGlass} />
                     </div>
                     
+
+
                 </div>
-                <div className="hidden lg:flex justify-end">
-                    <img src="" className="w-12 h-12 rounded-full bg-slate-500" alt="" />
-                    <h1 className='title ml-3 mt-3'>Arhway</h1>
+                <div className="hidden justify-end lg:flex">
+                    <img
+                        src=""
+                        className="h-12 w-12 rounded-full bg-slate-500"
+                        alt=""
+                    />
+                    <h1 className="title ml-3 mt-3">Arhway</h1>
                 </div>
+
               
 
                 { focus && !closeTag ? 
@@ -104,10 +123,10 @@ const Header = () => {
                         
                     </div> : null
                 }
-            </div>
-            
-        </div>
-    )
-}
 
-export default Header; 
+            </div>
+        </div>
+    );
+};
+
+export default Header;

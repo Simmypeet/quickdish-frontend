@@ -19,6 +19,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-multi-carousel": "^2.8.5",
+    "react-cookie": "^7.2.0",
     "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
@@ -31,7 +32,19 @@
     "eslint-plugin-react": "^7.35.2",
     "globals": "^15.9.0",
     "postcss": "^8.4.45",
+    "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.4.1",
     "tailwindcss": "^3.4.11",
     "vite": "^5.4.1"
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "printWidth": 80,
+    "tabWidth": 4,
+    "useTabs": false,
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
   }
 }
