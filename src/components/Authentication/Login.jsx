@@ -7,7 +7,6 @@ import useAuth from "../../hooks/useAuth";
 
 const Login = ({toggle}) => {
     const { auth, setAuth } = useAuth(); 
-    // const { setAuth } = useContext(AuthContext); 
 
     const navigate = useNavigate();
     const location = useLocation(); 

@@ -10,7 +10,7 @@ const Authentication = () => {
 
     return (
         <div className='flex justify-center object-cover'>
-            {/* <img className="w-screen fixed top-0 blur-sm z-0" src="./loginBg.jpg"></img> */}
+            <img className="w-screen fixed top-0 blur-sm z-0" src="./loginBg.jpg"></img>
             {/* <div className="w-2/4 h-4/6 flex absolute top-32 rounded-2xl  z-10"> */}
             <div className="w-[900px] h-[600px] flex absolute top-36 rounded-2xl  z-10">
                 <div className="w-full h-full shadow-lg">
