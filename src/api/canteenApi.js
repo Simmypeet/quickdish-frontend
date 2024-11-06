@@ -9,7 +9,15 @@ export const getCanteenData = async () => {
         console.log("Error fetching: ", error);
         return null; 
     }
-    
+}
+
+export const getNearestCanteen = async (userLocation) => { //latitute and longitude
+    //call getCanteenData, rank canteens based on distance from userLocation, return canteen id
+
+}
+
+export const getRestaurantsFromCanteenId = async (canteenId) => {
+
 }
 
 //not done

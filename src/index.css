@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* body{
   min-width: 693px;
 } */
@@ -84,6 +83,16 @@
 .carousel-item-spacing{
   @apply p-2
 }
+
+/* login */
+.warning{
+  @apply text-xs rounded-md bg-orange-400 text-white p-1 relative top-[-10px] mt-2
+}
+
+.offscreen{
+  @apply absolute -left-[9999px]
+}
+
 
 /* comment page */
 .comment-heading-font{

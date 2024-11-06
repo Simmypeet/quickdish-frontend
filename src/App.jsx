@@ -1,60 +1,28 @@
-// @ts-check
-
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
-import DashBoard from './pages/Main/Dashboard';
-import React from 'react';
-import Home from './pages/Main/Home';
-import Favourite from './pages/Main/Favourite';
-import PurchaseHistory from './pages/Main/PurchaseHistory';
-import MyProfile from './pages/Main/MyProfile';
-import Restaurant from './pages/Restaurant/Restaurant';
+import './App.css'
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'; 
+import { useContext } from 'react'
+import DashBoard from './pages/Main/Dashboard'
+import RateAndReview from './pages/Others/RateAndReview'
+import Menu from './pages/Restaurant/Restaurant'
+import Authentication from './pages/Others/Authentication'
+import AuthContext from './context/AuthProvider'
+import Unauthorized from './pages/Others/Unauthorize';
 
 const App = () => {
-    return (
-        <BrowserRouter>
-            <Routes>
-                {/* Dashboard components */}
-                <Route
-                    path="/"
-                    element={
-                        <DashBoard header={true}>
-                            <Home />
-                        </DashBoard>
-                    }
-                />
-                <Route
-                    path="/favourites"
-                    element={
-                        <DashBoard header={false}>
-                            <Favourite />
-                        </DashBoard>
-                    }
-                />
-                <Route
-                    path="purchase_history"
-                    element={
-                        <DashBoard header={false}>
-                            <PurchaseHistory />
-                        </DashBoard>
-                    }
-                />
-                <Route
-                    path="myprofile"
-                    element={
-                        <DashBoard header={false}>
-                            <MyProfile />
-                        </DashBoard>
-                    }
-                />
+  const auth = useContext(AuthContext); 
+  return (
+    
+    <Router>
+      <Routes>
+        <Route path="/" element={<Authentication/>}></Route>
+        <Route path="/dashboard/*" element={auth ? <DashBoard/> : <Navigate to="/"/>}></Route>
+        <Route path="/user_review" element={auth ? <RateAndReview/> : <Navigate to="/"/>}></Route>
+        {/* <Menu restaurantID={8}></Menu> */}
+        <Route path="/unauthorized" element={<Unauthorized/>}></Route>
+      </Routes>
+    </Router>
+  )
+}
 
-                <Route
-                    path="restaurants/:restaurantID"
-                    element={<Restaurant />}
-                />
-            </Routes>
-        </BrowserRouter>
-    );
-};
 
 export default App;
