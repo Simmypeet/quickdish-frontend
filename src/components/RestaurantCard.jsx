@@ -16,6 +16,8 @@ import React from 'react';
  *  busyness: string,
  *  queue: number,
  *  rating: number
+ *  flag?: boolean
+ *  onFlag?: (toFlag: boolean) => void
  * }} param0
  * @returns
  */
@@ -27,10 +29,16 @@ const RestaurantCard = ({
     busyness,
     queue,
     rating,
+    flag,
+    onFlag,
 }) => {
-    const [flag, setFlag] = useState(false);
+    const [flagValue, setFlagvalue] = useState(flag ?? false);
     const handleFlag = () => {
-        setFlag(!flag);
+        if (onFlag) {
+            onFlag(!flagValue);
+        }
+
+        setFlagvalue(!flagValue);
     };
 
     return (
@@ -51,7 +59,7 @@ const RestaurantCard = ({
                     <h2 className="sub-title line-clamp-1">{name}</h2>
                     <button type="button" onClick={handleFlag}>
                         {/* change to black when click  */}
-                        {flag ? (
+                        {flagValue ? (
                             <FontAwesomeIcon className="size-4" icon={faFlag} />
                         ) : (
                             <svg
