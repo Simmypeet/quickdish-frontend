@@ -1,11 +1,13 @@
-import CanteenCard from '../../components/CanteenCard';
+// @ts-check
+
 import RestaurantCard from '../../components/RestaurantCard';
 import CarouselComponent from '../../components/CarouselComponent';
-import Banner from '../../components/Banner';
 import QueueCard from '../../components/QueueCard';
-import Header from '../../components/Header';
 import CarouselAutomate from '../../components/CarouselAutomate';
 import React from 'react';
+
+// @ts-expect-error
+import defaultRestaurant from '../../assets/defaultRestaurant.jpeg';
 
 const Home = () => {
     return (
@@ -37,8 +39,24 @@ const Home = () => {
                         Food from your nearest: Canteen A
                     </h1>
                 </div>
-                <RestaurantCard />
-                <RestaurantCard />
+                <RestaurantCard
+                    name={'First Restaurant'}
+                    food={'Some Food'}
+                    image={defaultRestaurant}
+                    canteenName={'First Canteen'}
+                    busyness={'Busy'}
+                    queue={2}
+                    rating={4.5}
+                />
+                <RestaurantCard
+                    name={'First Restaurant'}
+                    food={'Some Food'}
+                    image={defaultRestaurant}
+                    canteenName={'First Canteen'}
+                    busyness={'Busy'}
+                    queue={2}
+                    rating={4.5}
+                />
             </div>
         </div>
     );
