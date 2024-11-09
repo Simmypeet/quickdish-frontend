@@ -7,6 +7,7 @@ import Menu from './pages/Restaurant/Restaurant'
 import Authentication from './pages/Others/Authentication'
 import AuthContext from './context/AuthProvider'
 import Unauthorized from './pages/Others/Unauthorize';
+import LoadingPage from './components/LoadingPage'
 
 const App = () => {
   const auth = useContext(AuthContext); 
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/unauthorized" element={<Unauthorized/>}></Route>
       </Routes>
     </Router>
+    // <LoadingPage></LoadingPage>
   )
 }
 

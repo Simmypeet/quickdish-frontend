@@ -54,3 +54,6 @@ export const LoadingPage = ({ opacity }) => (
     </div>
   </div>
 );
+
+
+export default LoadingPage;
