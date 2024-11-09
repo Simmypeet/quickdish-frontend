@@ -53,9 +53,8 @@ const Header = () => {
     }
 
     //problem
-    //replace with google map api
-    //ask permission only after login after user redirect to dashboard, only ask permission once
-    //loading effect when fetching location
+    //ask permission only once
+    //store user location in local storage ? 
 
     //find user location
     const getLocation = () => {
@@ -87,14 +86,14 @@ const Header = () => {
         }
     }
 
-    //ask user permission
-    useEffect(() => {
-        if (userLocation.location) return;
-        const askPermission = window.confirm("Do you allow us to access your location?"); 
-        if(askPermission){
-            getLocation(); 
-        }
-    }, [userLocation.location]); 
+    //problem : ask user permission teise
+    // useEffect(() => {
+    //     if (userLocation.location) return;
+    //     const askPermission = window.confirm("Do you allow us to access your location?");
+    //     if(askPermission){
+    //         getLocation();
+    //     }
+    // }, [userLocation.location]); 
 
     return (
         <div className="left-0 w-full bg-white shadow-md">
