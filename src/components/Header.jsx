@@ -88,12 +88,13 @@ const Header = () => {
     }
 
     //ask user permission
-    // useEffect(() => {
-    //     const askPermission = window.confirm("Do you allow us to access your location?"); 
-    //     if(askPermission){
-    //         getLocation(); 
-    //     }
-    // }, []); 
+    useEffect(() => {
+        if (userLocation.location) return;
+        const askPermission = window.confirm("Do you allow us to access your location?"); 
+        if(askPermission){
+            getLocation(); 
+        }
+    }, [userLocation.location]); 
 
     return (
         <div className="left-0 w-full bg-white shadow-md">
