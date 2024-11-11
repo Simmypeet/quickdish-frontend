@@ -17,7 +17,7 @@
  * @typedef {Object} OrderCreate
  *
  * @property {number} restaurant_id
- * @property {OrderItem[]} order_items
+ * @property {OrderItem[]} items
  */
 
 /**
