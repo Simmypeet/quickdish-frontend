@@ -15,6 +15,7 @@
  * @property {Location} location
  * @property {number} id
  * @property {number} merchant_id
+ * @property {boolean} open
  */
 
 /**
