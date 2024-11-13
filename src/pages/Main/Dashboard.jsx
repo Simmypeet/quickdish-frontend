@@ -83,6 +83,7 @@ import Notification from './Notification';
 import { Route, Routes } from 'react-router-dom';
 import BottomBar from '../../components/BottomBar';
 import RequireAuth from '../../components/RequireAuth';
+import { OrderDetail } from './OrderDetail';
 
 //sidebar, header, link to other pages
 const Dashboard = () => {
@@ -111,7 +112,6 @@ const Dashboard = () => {
 
                     <div className="h-full grow p-2 md:pl-0 md:pr-4">
                         <Routes>
-
                             {/* for several roles = ['user', 'admin', 'staff'] */}
                             <Route
                                 element={<RequireAuth allowedRoles={'user'} />}
@@ -128,6 +128,10 @@ const Dashboard = () => {
                                 <Route
                                     path="favourites"
                                     element={<Favourite />}
+                                />
+                                <Route
+                                    path="orders/:orderID"
+                                    element={<OrderDetail />}
                                 />
                                 <Route
                                     path="notification"
