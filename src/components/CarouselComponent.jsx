@@ -9,18 +9,33 @@ import useLocation from "../hooks/useLocation";
 
 const CarouselComponent = () => {
     const [canteens, setCanteens] = useState(null); 
+    const [canteenImg, setCanteenImg] = useState({});
     const axiosPrivate = useAxiosPrivate();
-    const {userLocation, setUserLocation} = useLocation();
+    const { userLocation, setUserLocation } = useLocation();
 
     const getCanteens = async () => {
         try{
             const response = await axiosPrivate.get(`http://127.0.0.1:8000/canteens/?user_lat=${userLocation.latitude}&user_long=${userLocation.longtitude}`); //replace
-            console.log(response.data);
             setCanteens(response.data);
             // return response.data;
+            const images = {}; 
+            for(let canteen of response.data){
+                const img = await fetchCanteenImg(canteen.id);
+                images[canteen.id] = URL.createObjectURL(img);
+            }
+            setCanteenImg(images);
         }catch{
             console.log('error');
         }
+    }
+
+    // blo
+
+    const fetchCanteenImg = async (canteenId) => {
+        const response = await axios.get(`http://127.0.0.1:8000/canteens/${canteenId}/img`, 
+            { responseType: 'blob'}
+        );
+        return response.data; 
     }
 
     useEffect(() => {
@@ -68,7 +83,7 @@ const CarouselComponent = () => {
             >
                 {canteens.map(canteen => (
                     // <CanteenCard key={it.id} canteenName={it.name} img={it.img}/>
-                    <CanteenCard key={canteen.id} canteenName={canteen.name} img={canteen.img}/>
+                    <CanteenCard key={canteen.id} canteenName={canteen.name} img={canteenImg[canteen.id]}/>
                 ))}
             </Carousel>
     );

@@ -40,6 +40,7 @@ const Home = () => {
         }
     }
 
+
     useEffect(() => {
         if(userLocation.latitude > 0 && userLocation.longtitude > 0){
             getRestaurants();
