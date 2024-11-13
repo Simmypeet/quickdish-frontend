@@ -132,7 +132,7 @@ const Dashboard = () => {
                                 <Route
                                     path="notification"
                                     element={<Notification />}
-                                ></Route>
+                                />
                             </Route>
                         </Routes>
                     </div>
