@@ -111,12 +111,12 @@ const Dashboard = () => {
 
                     <div className="h-full grow p-2 md:pl-0 md:pr-4">
                         <Routes>
-                            <Route path="/" element={<Home />} />
 
                             {/* for several roles = ['user', 'admin', 'staff'] */}
                             <Route
                                 element={<RequireAuth allowedRoles={'user'} />}
                             >
+                                <Route path="/" element={<Home />} />
                                 <Route
                                     path="purchase_history"
                                     element={<PurchaseHistory />}
