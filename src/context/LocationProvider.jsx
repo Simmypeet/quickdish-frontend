@@ -13,14 +13,3 @@ export const UserLocationProvider = ({ children }) => {
 }
 
 export default LocationContext;
-
-// export const PermissionProvider = ({ children }) => {
-//     const [ permission, setPermission ] = useState(true);
-//     return (
-//        <PermissionContext.Provider value={{ permission, setPermission }}>
-//         { children }
-//        </PermissionContext.Provider>
-//     )
-// }
-
-// export default PermissionContext;
