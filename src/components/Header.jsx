@@ -201,14 +201,10 @@ const Header = () => {
                                     <Tag key={foodName} name={foodName} handleButtonClick={handleButtonClick}/>
                                 ))
                             }
-                            
                         </div>
-                        
                     </div> : null
                 }
-
             </div>
-
              {/* location */}
             {
                 openModel ? 
@@ -217,7 +213,6 @@ const Header = () => {
                        {
                         userLocation.location ? <FontAwesomeIcon className='text-orange-600 mr-1' icon={faLocationCrosshairs} /> : <img className="text-sm mr-1" src="./loading.svg"></img> //loading effect
                        }
-                       
                         <button onClick={getLocation}>
                             <h2 className='text-orange-600 font-semibold'>Detect current location</h2>
                         </button>

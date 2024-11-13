@@ -63,27 +63,37 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+        
+            { 
+            restaurants.length != 0 ?
+                <>
+                    <div className="">
+                        <h1 className="heading-font mt-10">Nearby Canteen</h1>
+                        <CarouselComponent />
+                    </div>
 
-            <div className="">
-                <h1 className="heading-font mt-10">Nearby Canteen</h1>
-                <CarouselComponent />
-            </div>
+                    <div className="flex flex-col gap-y-6">
+                        <div className="">
+                            <h1 className="heading-font">
+                                Food from your nearest: Canteen A
+                            </h1>
+                        </div>
+                        {
 
-            <div className="flex flex-col gap-y-6">
-                <div className="">
-                    <h1 className="heading-font">
-                        Food from your nearest: Canteen A
-                    </h1>
+                            restaurants.map((shop) => (
+                                <RestaurantCard key={shop.id} storeName={shop.name} img={shop.img} status={shop.status} queues={shop.queues} rating={shop.rating} price={shop.price}/>
+                            ))
+                        }
+                    
+                    </div>
+                </>
+                :
+                <div className="w-full flex items-center justify-center">
+                    <img src="./loading_main.svg" className='w-28'></img>
                 </div>
-                {
+            }
 
-                    restaurants.map((shop) => (
-                        <RestaurantCard key={shop.id} storeName={shop.name} img={shop.img} status={shop.status} queues={shop.queues} rating={shop.rating} price={shop.price}/>
-                    ))
-                }
-                {/* <RestaurantCard  />
-                <RestaurantCard /> */}
-            </div>
+            
         </div>
     );
 };
