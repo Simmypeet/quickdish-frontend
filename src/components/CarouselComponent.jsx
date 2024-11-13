@@ -2,23 +2,33 @@ import React, { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import CanteenCard from "./CanteenCard";
+import axios from 'axios'; //temp -> axiosPrivate
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useLocation from "../hooks/useLocation";
+
 
 const CarouselComponent = () => {
     const [canteens, setCanteens] = useState(null); 
+    const axiosPrivate = useAxiosPrivate();
+    const {userLocation, setUserLocation} = useLocation();
+
+    const getCanteens = async () => {
+        try{
+            const response = await axiosPrivate.get(`http://127.0.0.1:8000/canteens/?user_lat=${userLocation.latitude}&user_long=${userLocation.longtitude}`); //replace
+            console.log(response.data);
+            setCanteens(response.data);
+            // return response.data;
+        }catch{
+            console.log('error');
+        }
+    }
+
     useEffect(() => {
-        const fetchData = async() => {
-            try{
-                const data = Array(10).fill(0).map((_, i) => ({
-                    id: i,
-                    name: `Canteen ${i+1}`,
-                }));
-                setCanteens(data);
-            }catch(error){
-                console.log("Error fetching: ", error);
-            }
-        };
-        fetchData();
-    }, []);  //empty arry = run once on mount
+        if(userLocation.latitude > 0 && userLocation.longtitude > 0){
+            getCanteens();
+        }
+    }, [userLocation.latitude, userLocation.longtitude]);
+
 
     if (canteens == null){
         return (
@@ -26,12 +36,6 @@ const CarouselComponent = () => {
                 Loading... 
             </div>);
     }
-
-    const item = canteens.map(canteen => ({
-        id: canteen.id,
-        name: canteen.name,
-        img: canteen.img
-    }))
 
     const responsive = {
         superLargeDesktop: {
@@ -62,9 +66,9 @@ const CarouselComponent = () => {
                 partialVisible={false}
                 partialVisbile={false}
             >
-                {item.map(it => (
+                {canteens.map(canteen => (
                     // <CanteenCard key={it.id} canteenName={it.name} img={it.img}/>
-                    <CanteenCard key={it.id} canteenName={it.name}/>
+                    <CanteenCard key={canteen.id} canteenName={canteen.name} img={canteen.img}/>
                 ))}
             </Carousel>
     );

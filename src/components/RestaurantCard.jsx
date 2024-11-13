@@ -5,12 +5,11 @@ import IdleTag from './idleTag';
 
 const RestaurantCard = ({
     storeName,
-    food,
     img,
-    canteenName,
-    busyness,
-    queue,
-    rating,
+    status, //quite busy, busy, not busy
+    queues,
+    rating, // 1-5
+    price //$$-$$$
 }) => {
     const [flag, setFlag] = useState(false);
     const handleFlag = () => {
@@ -27,12 +26,12 @@ const RestaurantCard = ({
             {/* <img src={ img } alt="" /> */}
             <img
                 className="aspect-square h-full w-auto rounded-xl object-cover object-center"
-                src="https://i0.wp.com/tokyotreatblog.wpcomstaging.com/wp-content/uploads/2022/05/Shutterstock_751789537-min.jpg?fit=4096%2C2731&ssl=1"
+                src={img}
                 alt=""
             />
             <div className="mx-2 flex grow flex-col justify-between md:mx-4 md:my-2">
                 <div className="flex items-center justify-between">
-                    <h2 className="sub-title line-clamp-1">Restaurant</h2>
+                    <h2 className="sub-title line-clamp-1">{storeName}</h2>
                     <button type="button" onClick={handleFlag}>
                         {/* change to black when click  */}
                         {flag ? (
@@ -52,19 +51,19 @@ const RestaurantCard = ({
                 <div className="mx-1 flex w-full grow flex-col py-2 md:justify-evenly md:space-y-2">
                     <div className="flex justify-between">
                         <h2 className="card-info">Status:</h2>
-                        <h2 className="card-info">Busy</h2>
+                        <h2 className="card-info">{status}</h2>
                     </div>
                     <div className="flex justify-between">
                         <h2 className="card-info">Queue:</h2>
-                        <h2 className="card-info">32</h2>
+                        <h2 className="card-info">{queues}</h2>
                     </div>
                     <div className="hidden justify-between md:flex">
                         <h2 className="card-info">Rating:</h2>
-                        <h2 className="card-info">4.5/5</h2>
+                        <h2 className="card-info">{rating}/5</h2>
                     </div>
                     <div className="hidden justify-between md:flex">
                         <h2 className="card-info">Price:</h2>
-                        <h2 className="card-info">$$$</h2>
+                        <h2 className="card-info">{price}</h2>
                     </div>
                 </div>
                 {/* needed: fetch from db */}

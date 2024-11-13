@@ -12,7 +12,6 @@ import LoadingPage from './components/LoadingPage'
 const App = () => {
   const auth = useContext(AuthContext); 
   return (
-    
     <Router>
       <Routes>
         <Route path="/" element={<Authentication/>}></Route>
@@ -22,7 +21,7 @@ const App = () => {
         <Route path="/unauthorized" element={<Unauthorized/>}></Route>
       </Routes>
     </Router>
-    // <LoadingPage></LoadingPage>
+    // <img className="w-96" src="https://drive.google.com/drive-viewer/AKGpihanXGmn5_n0b5VJMoHbTYIS5HGYHJ-OYGhUXsGefYBZ1CwaIrtpB1M11_JDFnI8cXR3Mfcx6jtfU-girxGtiYdPW4czIxskBA=s1600-rw-v1"></img>
   )
 }
 

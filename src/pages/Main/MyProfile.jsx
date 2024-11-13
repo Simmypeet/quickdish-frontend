@@ -37,10 +37,10 @@ const MyProfile = () => {
                 <div className="fixed flex-1 overflow-scroll top-80 left-1/4 w-3/4 h-full flex mt-5 ">
                     <div className="md:w-4/5 md:ml-48 sm:ml-10 sm:w-full ml-10 w-full">
                         <div className="relative w-full flex flex-col rounded-2xl z-0">
-                            {/* <ProfileBody/> */}
+                            <ProfileBody/>
                             {/* <ReviewBody/> */}
                             {/* <PhotoBody/> */}
-                            <NotiBody/>
+                            {/* <NotiBody/> */}
 
                             {/* photo, notification, security */}
                         </div>

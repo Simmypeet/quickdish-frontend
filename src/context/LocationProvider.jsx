@@ -4,7 +4,7 @@ const LocationContext = createContext({});
 
 
 export const UserLocationProvider = ({ children }) => {
-    const [ userLocation , setUserLocation ] = useState({ location: '', latitude: '', longtitude: ''});
+    const [ userLocation , setUserLocation ] = useState({ location: '', latitude: 0, longtitude: 0});
     return (
         <LocationContext.Provider value={{ userLocation , setUserLocation }}>
             { children }
