@@ -35,8 +35,17 @@ const CarouselComponent = () => {
         const response = await axios.get(`http://127.0.0.1:8000/canteens/${canteenId}/img`, 
             { responseType: 'blob'}
         );
-        return response.data; 
-    }
+        if(response.status === 200){
+            return response.data; 
+        }else if(response.status === 204){
+            return null; 
+        }
+        
+        throw new Error(
+            `Error fetching restaurant image status: ${response.status};
+            body : ${response.data}`
+        ); 
+    }; 
 
     useEffect(() => {
         if(userLocation.latitude > 0 && userLocation.longtitude > 0){
