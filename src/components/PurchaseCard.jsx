@@ -18,7 +18,8 @@ const PurchaseCard = ({restaurant_id, date, time, name, price, canteen, orderSta
         const fetchImage = async () => {
             try {
                 const response = await getRestaurantImage(restaurant_id);
-                setRestImg(response);
+                const url = URL.createObjectURL(response);
+                setRestImg(url);
             } catch (error) {
                 console.error("Error fetching restaurant image: ", error);
             }
