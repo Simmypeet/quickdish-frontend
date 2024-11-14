@@ -12,17 +12,14 @@ import {
     faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
 import { LoadingPage } from '../../components/LoadingPage';
-import {
-    getOrder,
-    getOrderQueue,
-    orderEvent,
-    updateOrderStatus,
-} from '../../api/orderApi';
+import { getOrder, getOrderQueue, updateOrderStatus } from '../../api/orderApi';
 import { getMenu, getMenuImage, getRestaurant } from '../../api/restaurantApi';
 import moment from 'moment-timezone';
 
 // @ts-expect-error
 import defaultMenuImage from '../../assets/defaultMenu.webp';
+import useEvent from '../../hooks/useEvent';
+import { EventHandlerProvider } from '../../context/EventProvider';
 
 /**
  * @import { Menu, Restaurant } from '../../types/restaurant';
@@ -508,7 +505,7 @@ export const OrderItems = (props) => {
  *
  * @returns {React.ReactNode}
  */
-export const OrderDetail = () => {
+const OrderDetailInner = () => {
     const { orderID: orderIDString } = useParams();
 
     if (orderIDString === undefined) {
@@ -540,6 +537,7 @@ export const OrderDetail = () => {
     }, [orderDetailData]);
 
     const axiosPrivate = useAxiosPrivate();
+    const eventHandler = useEvent();
 
     useEffect(() => {
         async function fetchData() {
@@ -565,15 +563,21 @@ export const OrderDetail = () => {
             }
 
             // the order is ongoing, listen for any event
+            let cleanup = () => {};
+
             if (
                 order.status.type !== 'CANCELLED' &&
                 order.status.type !== 'SETTLED'
             ) {
-                orderEvent(axiosPrivate, orderID, (notification) => {
+                cleanup = eventHandler.addCallback((notification) => {
+                    if (notification.order_id !== orderID) {
+                        return;
+                    }
+
                     console.log(notification);
 
                     if (
-                        notification.type === 'QUEUE_CHANGE' &&
+                        notification.type === 'ORDER_QUEUE_CHANGE' &&
                         (notification.queue.queue_count !==
                             orderDetailData?.queue.queue_count ||
                             notification.queue.estimated_time !==
@@ -590,7 +594,7 @@ export const OrderDetail = () => {
                             };
                         });
                     } else if (
-                        notification.type === 'STATUS_CHANGE' &&
+                        notification.type === 'ORDER_STATUS_CHANGE' &&
                         notification.status.type !==
                             orderDetailData?.order.status.type
                     ) {
@@ -618,6 +622,8 @@ export const OrderDetail = () => {
                 queue,
                 menus,
             });
+
+            return cleanup;
         }
 
         fetchData();
@@ -649,5 +655,18 @@ export const OrderDetail = () => {
                 <LoadingPage opacity={false} />
             )}
         </div>
+    );
+};
+
+/**
+ *
+ * @returns {React.ReactNode}
+ */
+export const OrderDetail = () => {
+    console.log('rendered');
+    return (
+        <EventHandlerProvider>
+            <OrderDetailInner />
+        </EventHandlerProvider>
     );
 };

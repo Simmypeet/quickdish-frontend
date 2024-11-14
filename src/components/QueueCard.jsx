@@ -8,8 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAxiosPrivate from '../hooks/useAxiosPrivate';
-import { orderEvent } from '../api/orderApi';
+import useEventHandler from '../hooks/useEvent';
 
 /**
  * @import { Order, Queue } from '../types/order';
@@ -30,9 +29,8 @@ import { orderEvent } from '../api/orderApi';
 
 const QueueCard = (props) => {
     const [info, setInfo] = React.useState(props);
-
+    const eventHandler = useEventHandler();
     const navigate = useNavigate();
-    const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
         // no more event listener if the order is cancelled or settled
@@ -43,23 +41,27 @@ const QueueCard = (props) => {
             return;
         }
 
-        orderEvent(axiosPrivate, props.order.id, (event) => {
-            if (event.type === 'QUEUE_CHANGE') {
-                console.log(`Queue Change: ${event.queue.queue_count}`);
+        return eventHandler.addCallback((notification) => {
+            if (notification.order_id !== props.order.id) {
+                return;
+            }
+
+            if (notification.type === 'ORDER_QUEUE_CHANGE') {
+                console.log(`Queue Change: ${notification.queue.queue_count}`);
                 setInfo((prev) => {
                     return {
                         ...prev,
-                        queue: event.queue,
+                        queue: notification.queue,
                     };
                 });
-            } else if (event.type === 'STATUS_CHANGE') {
-                console.log(`Status Change: ${event.status.type}`);
+            } else if (notification.type === 'ORDER_STATUS_CHANGE') {
+                console.log(`Status Change: ${notification.status.type}`);
                 setInfo((prev) => {
                     return {
                         ...prev,
                         order: {
                             ...prev.order,
-                            status: event.status,
+                            status: notification.status,
                         },
                     };
                 });

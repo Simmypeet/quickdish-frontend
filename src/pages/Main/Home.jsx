@@ -11,6 +11,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import defaultRestaurant from '../../assets/defaultRestaurant.jpeg';
 import { getOnGoingOrders, getOrderQueue } from '../../api/orderApi';
 import { getRestaurant } from '../../api/restaurantApi';
+import { EventHandlerProvider } from '../../context/EventProvider';
 
 /**
  * @import { Order, Queue } from '../../types/order';
@@ -75,18 +76,20 @@ const Home = () => {
             </div>
 
             {ongoingOrders && ongoingOrders.length > 0 && (
-                <div className="mt-8 flex w-full flex-col">
-                    <h1 className="heading-font mb-5">
-                        {`My Queue (${ongoingOrders.length})`}
-                    </h1>
-                    <div className="flex">
-                        <div className="flex w-0 grow overflow-x-auto">
-                            {ongoingOrders.map((order, index) => (
-                                <QueueCard key={index} {...order} />
-                            ))}
+                <EventHandlerProvider>
+                    <div className="mt-8 flex w-full flex-col">
+                        <h1 className="heading-font mb-5">
+                            {`My Queue (${ongoingOrders.length})`}
+                        </h1>
+                        <div className="flex">
+                            <div className="flex w-0 grow overflow-x-auto">
+                                {ongoingOrders.map((order, index) => (
+                                    <QueueCard key={index} {...order} />
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
+                </EventHandlerProvider>
             )}
 
             <div className="">
