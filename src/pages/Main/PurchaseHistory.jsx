@@ -93,14 +93,13 @@ const PurchaseHistory = () => {
                             orderStatus={order.order_status}/>
                             
                         ))
-                    ) : (<img src="./no-history.png" className="w-60 h-72" alt="" />)
+                    ) : (<img src="./empty-folder.png" className="w-60 h-72" alt="" ></img>)
                 )}
             </div>
         </div>
     )
 }
 
-//add restaurant img : nah
-//no history image
-//initially load the ongoing order : kindof
+
+
 export default PurchaseHistory;
