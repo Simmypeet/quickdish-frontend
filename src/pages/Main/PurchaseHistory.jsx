@@ -54,8 +54,8 @@ const PurchaseHistory = () => {
     
     return (
         <div className="p-7">
-            <div className="">
-                <FontAwesomeIcon className="sidebar-icon" icon={faClockRotateLeft} />
+            <div className="flex">
+                <FontAwesomeIcon className="text-2xl mt-1 mr-2" icon={faClockRotateLeft} />
                 <h1 className="big-title" >Purchase History</h1>
             </div>
             
