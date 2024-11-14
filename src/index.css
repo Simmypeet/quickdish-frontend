@@ -65,7 +65,7 @@
 }
 
 .sub-heading-font{
-  @apply text-black font-bold text-xl
+  @apply font-bold text-xl
 }
 
 .detail-font{

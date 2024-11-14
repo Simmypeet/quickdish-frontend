@@ -5,6 +5,7 @@ import CanteenCard from "./CanteenCard";
 import axios from 'axios'; //temp -> axiosPrivate
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useLocation from "../hooks/useLocation";
+import { getRestaurantImage } from "../api/restaurantApi";
 
 
 const CarouselComponent = () => {

@@ -14,6 +14,9 @@ export const getRestaurant = async (restaurantID) => {
     const restaurant = await axios.get(
         process.env.QUICKDISH_BACKEND_URL + `/restaurants/${restaurantID}`
     );
+    // const restaurant = await axios.get(
+    //     `http://127.0.0.1:8000/restaurants/${restaurantID}`
+    // );
 
     if (restaurant.status !== 200) {
         throw new Error(
@@ -21,7 +24,8 @@ export const getRestaurant = async (restaurantID) => {
             body: ${restaurant.data}`
         );
     }
-
+    console.log("restaurant response: ", restaurant.data); 
+    console.log("restaurant name: ", restaurant.data.name);
     return restaurant.data;
 };
 
