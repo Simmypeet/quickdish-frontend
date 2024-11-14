@@ -11,12 +11,12 @@ import axios from 'axios';
  */
 
 export const getRestaurant = async (restaurantID) => {
-    // const restaurant = await axios.get(
-    //     process.env.QUICKDISH_BACKEND_URL + `/restaurants/${restaurantID}`
-    // );
     const restaurant = await axios.get(
-        `http://127.0.0.1:8000/restaurants/${restaurantID}`
+        process.env.QUICKDISH_BACKEND_URL + `/restaurants/${restaurantID}`
     );
+    // const restaurant = await axios.get(
+    //     `http://127.0.0.1:8000/restaurants/${restaurantID}`
+    // );
 
     if (restaurant.status !== 200) {
         throw new Error(

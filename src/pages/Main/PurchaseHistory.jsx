@@ -84,12 +84,12 @@ const PurchaseHistory = () => {
                         orders.map((order, index) => ( 
                             <PurchaseCard
                             key={index}
+                            restaurant_id={order.restaurant_id}
                             date={order.date}
                             time={order.time}
                             name={order.restaurant_name}
                             price={order.price_paid}
                             canteen={order.canteen_name}
-                            userLocation={order.canteen_name}
                             orderStatus={order.order_status}/>
                             
                         ))
@@ -100,7 +100,7 @@ const PurchaseHistory = () => {
     )
 }
 
-//add restaurant img
-//no history image if no history
-//initially load the ongoing order 
+//add restaurant img : nah
+//no history image
+//initially load the ongoing order : kindof
 export default PurchaseHistory;
