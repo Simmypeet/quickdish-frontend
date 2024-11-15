@@ -1,11 +1,28 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { getMenuImage } from "../api/restaurantApi";
+import { useEffect, useState } from "react";
 
 
-const Comment = ({ username, date, menu, numStar, comment }) => {
+const Comment = ({ username, date, menu, menu_id, numStar, comment }) => {
+    const [menuImg, setMenuImg] = useState(null);
+
+    useEffect(() => {
+        const fetchImage = async () => {
+            try {
+                const response = await getMenuImage(menu_id);
+                const url = URL.createObjectURL(response);
+                setMenuImg(url);
+            }catch(error){
+                console.error("Error fetching menu image: ", error);
+            }
+        }
+        fetchImage();
+    }, [menu_id]);
+    
+
     return (
-       
             <div className="bg-slate-100 w-5/6 p-2 rounded-3xl mb-6 ml-7 flex flex-col shadow-xl">
             {/* header */}
                 <div className="p-2">
@@ -42,7 +59,7 @@ const Comment = ({ username, date, menu, numStar, comment }) => {
                     {/* //see more if comment is too long */}
                     <div className="overflow-hidden rounded-md h-1/3 bg-slate-300 ">
                         {/* foog img */}
-                        <img className="object-cover w-full h-full" src="https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg?cs=srgb&dl=pexels-ella-olsson-572949-1640772.jpg&fm=jpg" alt="" />
+                        <img className="object-cover w-full h-full" src={menuImg} alt="" />
                     </div>
 
                     <div className="w-full flex rounded-md mt-3 justify-center">
