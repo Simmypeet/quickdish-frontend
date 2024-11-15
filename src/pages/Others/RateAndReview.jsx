@@ -159,5 +159,4 @@ const RateAndReview = () => {
 
 export default RateAndReview;
 
-//get menu photo
-//get main rating
+

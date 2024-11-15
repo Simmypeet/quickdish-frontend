@@ -27,6 +27,7 @@ const CommentWindow = ({closeModal, menuId, menuName, restaurant_id, handleRevie
         }
     }; 
 
+
     const submitReview = async (e) => {
         e.preventDefault();
         const reviewData = {
