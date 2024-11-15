@@ -20,8 +20,8 @@ const RateAndReview = () => {
     const [showModal, setShowModal] = React.useState(false);
     const closeModal = () => setShowModal(!showModal);
     const [reviews, setReviews] = React.useState([]);
+    const [menuName, setMenuName] = React.useState("");
     const axiosPrivate = useAxiosPrivate();
-    
 
     const switchtoDashboard = () => {
         const path = "/dashboard/purchase_history";
@@ -59,6 +59,15 @@ const RateAndReview = () => {
         // Get avg ratings of all reviews
     }
 
+    const getMenuName = async () => {   
+        const response = await getMenu(menu_id);
+        setMenuName(response.data.name);
+        console.log("Menu name: ", response.data.name);
+    }
+
+    useEffect(() => {
+        getMenuName(); 
+    }, []);
 
     useEffect(() => {   
         getAllReviews(restaurant_id); 
@@ -138,6 +147,7 @@ const RateAndReview = () => {
                     <CommentWindow 
                     closeModal={closeModal} 
                     menuId={menu_id} 
+                    menuName={menuName}
                     restaurant_id={restaurant_id}
                     handleReviewAdded={handleReviewAdded}/>
                     <div className="fixed top-0 left-0 bg-black opacity-50 w-screen h-screen"></div>
@@ -149,5 +159,5 @@ const RateAndReview = () => {
 
 export default RateAndReview;
 
-//load when finish adding
 //get menu photo
+//get main rating

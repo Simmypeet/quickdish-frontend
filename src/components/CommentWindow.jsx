@@ -6,13 +6,26 @@ import useAxiosPrivate  from '../hooks/useAxiosPrivate';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
+import { useState, useEffect } from 'react';
+import { getMenuImage } from '../api/restaurantApi';
 
-const CommentWindow = ({closeModal, menuId, restaurant_id, handleReviewAdded}) => {
+
+const CommentWindow = ({closeModal, menuId, menuName, restaurant_id, handleReviewAdded}) => {
     const axiosPrivate = useAxiosPrivate();
     const [review, setReview] = React.useState("");
     const [tastiness, setTastiness] = React.useState(0);
     const [hygiene, setHygiene] = React.useState(0);
     const [quickness, setQuickness] = React.useState(0);
+    const [uploadedFile, setUploadedFile] = useState(null);
+    const [menuImg, setMenuImg] = useState(null);
+
+    const uploadFile = (event) => {
+        const file = event.target.files[0];
+        if(file){
+            setUploadFile(file);
+            console.log("Uploaded file: ", file);
+        }
+    }; 
 
     const submitReview = async (e) => {
         e.preventDefault();
@@ -43,6 +56,19 @@ const CommentWindow = ({closeModal, menuId, restaurant_id, handleReviewAdded}) =
         }
 
     }
+
+    useEffect(() => {
+        const fetchImage = async () => {
+            try{
+                const response = await getMenuImage(menuId);
+                const url = URL.createObjectURL(response);
+                setMenuImg(url);
+            }catch(error){
+                console.error("Error fetching menu image: ", error);
+            }
+        }
+        fetchImage(); 
+    }, [menuId])
 
     const labels = {
         0.5: 'Useless',
@@ -87,7 +113,7 @@ const CommentWindow = ({closeModal, menuId, restaurant_id, handleReviewAdded}) =
       }
     
     return (
-        <div className='fixed top-40 left-1/4 w-3/6 max-w-3/5 min-w-2/5 p-2 z-10'>
+        <div className='fixed top-32 left-1/4 w-3/6 max-w-3/5 min-w-2/5 p-2 z-10'>
             <div className="bg-slate-100 p-2 rounded-3xl flex flex-col shadow-xl">
                     <div className="m-3">
                     <div className="flex justify-between">
@@ -98,6 +124,8 @@ const CommentWindow = ({closeModal, menuId, restaurant_id, handleReviewAdded}) =
                         </button>
                     </div>
                     <hr className="border-t-2 border-black mt-3 mb-3"/>
+
+                    <h1 className='comment-sub-heading-bold-font'>Menu: {menuName}</h1>
 
                     <div className="flex flex-col sm:flex-row justify-center mt-2">
                         <h1 className='comment-sub-heading-bold-font mt-1'>Tastiness</h1>
@@ -132,22 +160,30 @@ const CommentWindow = ({closeModal, menuId, restaurant_id, handleReviewAdded}) =
                         
                         <div className="col-span-full ">
                             <label htmlFor="cover-photo" className="block comment-sub-heading-bold-font">
-                                Food Image(Optional)
+                                Food Image
                             </label>
-                            <div className="mt-2 flex justify-center rounded-lg border border-dashed bg-slate-200 border-gray-900/25 px-6 py-10">
+                            <div className="mt-2 flex justify-center items-center rounded-lg border border-dashed bg-slate-200 w-full px-6 py-3">
+                            {/* <div className="mt-2 flex justify-center rounded-lg border border-dashed bg-slate-200 border-gray-900/25 px-6 py-10"> */}
+                                <img src={menuImg} className='w-96 overflow-hidden rounded-lg'></img>
                                 <div className="text-center">
-                                    <FontAwesomeIcon aria-hidden="true" className="mx-auto h-12 w-12 text-gray-300" icon={faUpload} />
+                                    {/* if have time */}
+                                    {/* <FontAwesomeIcon aria-hidden="true" className="mx-auto h-12 w-12 text-gray-300" icon={faUpload} />
                                     <div className="mt-4 flex text-sm leading-6 text-gray-600">
                                         <label
                                         htmlFor="file-upload"
                                         className="relative cursor-pointer rounded-md font-semibold text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                                         >
                                         <span>Upload a file</span>
-                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                                        <input 
+                                        id="file-upload" 
+                                        name="file-upload" 
+                                        type="file"
+                                        onChange={uploadFile} 
+                                        className="sr-only" />
                                         </label>
                                         <p className="pl-1">or drag and drop</p>
                                     </div>
-                                <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p> */}
                                 </div>
                             </div>
 
