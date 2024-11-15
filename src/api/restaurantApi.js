@@ -24,8 +24,7 @@ export const getRestaurant = async (restaurantID) => {
             body: ${restaurant.data}`
         );
     }
-    console.log("restaurant response: ", restaurant.data); 
-    console.log("restaurant name: ", restaurant.data.name);
+   
     return restaurant.data;
 };
 

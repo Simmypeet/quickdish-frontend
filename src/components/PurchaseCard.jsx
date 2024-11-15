@@ -10,7 +10,9 @@ const PurchaseCard = ({restaurant_id, date, time, name, price, canteen, orderSta
     const navigate = useNavigate();
     const switchToReview = () => {
         // switch to review page
-        navigate("/user_review");
+        navigate("/user_review", {
+            state: {restaurant_id, name, canteen}
+        });
     }
 
     const [restImg, setRestImg] = React.useState("");
