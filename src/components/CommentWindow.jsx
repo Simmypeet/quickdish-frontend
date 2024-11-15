@@ -1,15 +1,13 @@
 
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faXmark, faUpload} from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faUpload} from "@fortawesome/free-solid-svg-icons";
 import useAxiosPrivate  from '../hooks/useAxiosPrivate';
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
-import useAuth from '../hooks/useAuth';
 
-const CommentWindow = ({closeModal, menuId, restaurant_id}) => {
-    const { auth, setAuth } = useAuth();
+const CommentWindow = ({closeModal, menuId, restaurant_id, handleReviewAdded}) => {
     const axiosPrivate = useAxiosPrivate();
     const [review, setReview] = React.useState("");
     const [tastiness, setTastiness] = React.useState(0);
@@ -17,7 +15,6 @@ const CommentWindow = ({closeModal, menuId, restaurant_id}) => {
     const [quickness, setQuickness] = React.useState(0);
 
     const submitReview = async (e) => {
-        
         e.preventDefault();
         const reviewData = {
             restaurant_id: restaurant_id,
@@ -32,12 +29,12 @@ const CommentWindow = ({closeModal, menuId, restaurant_id}) => {
             const response = await axiosPrivate.post(
                 '/customers/add_reviews',
                 reviewData
-                
             )
+            handleReviewAdded(); 
             closeModal(); 
         }catch(error){
             if (error.response) {
-                console.error('Error:', error.response.data);  // Log error from server response
+                console.error('Error:', error.response.data);  
                 alert(`Error: ${error.response.data.detail || 'An error occurred while submitting your review.'}`);
             } else {
                 console.error('Error:', error.message);
@@ -167,8 +164,6 @@ const CommentWindow = ({closeModal, menuId, restaurant_id}) => {
                 
             </div>
         </div>
-        
-        
     );
 }
 

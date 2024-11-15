@@ -51,6 +51,10 @@ const RateAndReview = () => {
         setReviews(review_edit);
     }
 
+    const handleReviewAdded = () => {
+        getAllReviews(restaurant_id); 
+    }
+
     const getReviewRatings = async () => {
         // Get avg ratings of all reviews
     }
@@ -131,7 +135,11 @@ const RateAndReview = () => {
             {/* Modal for adding a new comment */}
             {showModal ? (
                 <div>
-                    <CommentWindow closeModal={closeModal} menuId={menu_id} restaurant_id={restaurant_id}/>
+                    <CommentWindow 
+                    closeModal={closeModal} 
+                    menuId={menu_id} 
+                    restaurant_id={restaurant_id}
+                    handleReviewAdded={handleReviewAdded}/>
                     <div className="fixed top-0 left-0 bg-black opacity-50 w-screen h-screen"></div>
                 </div>
             ) : null}
