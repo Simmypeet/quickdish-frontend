@@ -26,6 +26,7 @@ const ReviewBody = () => {
             temp["username"] = username.username; 
             temp["date"] = dateFormatted(date) + ", " + timeFormatted(date); 
             temp["menu"] = menu.name; 
+            temp["menu_id"] = r.menu_id;
             temp["rating"] = (r.tastiness + r.hygiene + r.quickness)/3; 
             temp["comment"] = r.review; 
             review_edit.push(temp);
@@ -48,6 +49,7 @@ const ReviewBody = () => {
                         username={review.username} 
                         date={review.date}
                         menu={review.menu}
+                        menu_id={review.menu_id}
                         numStar={review.rating} 
                         comment={review.comment} />
                         ); 

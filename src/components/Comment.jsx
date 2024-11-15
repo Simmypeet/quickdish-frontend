@@ -57,7 +57,7 @@ const Comment = ({ username, date, menu, menu_id, numStar, comment }) => {
 
                     <h2 className="mb-3 text-lg break-words text-blue-950">{comment}</h2>
                     {/* //see more if comment is too long */}
-                    <div className="overflow-hidden rounded-md h-1/3 bg-slate-300 ">
+                    <div className="overflow-hidden rounded-md h-52 bg-slate-300 ">
                         {/* foog img */}
                         <img className="object-cover w-full h-full" src={menuImg} alt="" />
                     </div>
