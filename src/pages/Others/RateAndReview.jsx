@@ -3,22 +3,25 @@ import Comment from "../../components/Comment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faLocationDot, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import CommentWindow from "../../components/CommentWindow";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getMenu } from "../../api/restaurantApi";
 import { getUser } from "../../api/customerApi";
 import axios from "axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { dateFormatted, timeFormatted } from "../../utils/datetimeFormatter";
 
 
 //rating
 //reviews and number of reviews
 const RateAndReview = () => {
     const location  = useLocation();
-    const { restaurant_id, name, canteen } = location.state || {}; //add menu id
+    const { restaurant_id, name, canteen, menu_id } = location.state || {}; //add menu id
     const navigate = useNavigate();
     const [showModal, setShowModal] = React.useState(false);
     const closeModal = () => setShowModal(!showModal);
     const [reviews, setReviews] = React.useState([]);
+    const axiosPrivate = useAxiosPrivate();
+    
 
     const switchtoDashboard = () => {
         const path = "/dashboard/purchase_history";
@@ -30,16 +33,16 @@ const RateAndReview = () => {
         const response = await axios.get(`http://127.0.0.1:8000/restaurants/reviews/${restaurant_id}`); 
         if (response.status !== 200){
             throw new Error(
-                `Error fetching restaurant data status: ${response.status};
-                body: ${response.data}`
+                `Error fetching restaurant data status: ${response.status};`
             ); 
         }
         for(let r of response.data){
             let temp = {}; 
             const menu = await getMenu(r.menu_id); 
-            const username = await getUser();
+            const username = await getUser(axiosPrivate);
+            const date = new Date(r.created_at);
             temp["username"] = username.username; 
-            temp["date"] = r.created_at; 
+            temp["date"] = dateFormatted(date) + ", " + timeFormatted(date); 
             temp["menu"] = menu.name; 
             temp["rating"] = (r.tastiness + r.hygiene + r.quickness)/3; 
             temp["comment"] = r.review; 
@@ -55,7 +58,7 @@ const RateAndReview = () => {
 
     useEffect(() => {   
         getAllReviews(restaurant_id); 
-    }, []);
+    }, [restaurant_id]);
 
     return (
         <div className="gradient-color-orange h-screen overflow-hidden">
@@ -102,18 +105,17 @@ const RateAndReview = () => {
                         <div className="flex flex-col items-center overflow-y-auto h-[400px] p-4">
                             {
                                 reviews.map((review, index) => {
-                                    <Comment 
+                                    return (<Comment 
                                     key={index}
                                     username={review.username} 
                                     date={review.date}
                                     menu={review.menu}
                                     numStar={review.rating} 
                                     comment={review.comment} />
+                                    ); 
                                 })
                             }
-                            {/* {/* <Comment username="Arhway" date="15 Sep 2020" menu="Fried Dog" numStar="4" comment="fdksljafe wiaoiroiowqiropim operciosiklmakdoa;iwmerop[qmwo;iepqowp[eorpwoqperw[aoproqwprocpqow" /> */}
-                            {/* <Comment username="Arhway" date="15 Sep 2020" menu="Fried Dog" numStar="4" comment="I Love it. So flavourful" />  */}
-                            {/* Add more <Comment /> components here */}
+                         
                         </div>
 
                         {/* Button to add a new comment */}
@@ -129,7 +131,7 @@ const RateAndReview = () => {
             {/* Modal for adding a new comment */}
             {showModal ? (
                 <div>
-                    <CommentWindow closeModal={closeModal} menuId={0} restaurant_id={restaurant_id}/>
+                    <CommentWindow closeModal={closeModal} menuId={menu_id} restaurant_id={restaurant_id}/>
                     <div className="fixed top-0 left-0 bg-black opacity-50 w-screen h-screen"></div>
                 </div>
             ) : null}
@@ -138,3 +140,6 @@ const RateAndReview = () => {
 }
 
 export default RateAndReview;
+
+//load when finish adding
+//get menu photo

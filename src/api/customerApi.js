@@ -1,10 +1,8 @@
-import useAxiosPrivate  from "../hooks/useAxiosPrivate";
 
 
-export const getUser = async () => {
-    const axiosPrivate = useAxiosPrivate();
+export const getUser = async (axiosPrivate) => {
     const response = await axiosPrivate.get(
-        process.env.QUICKDISH_BACKEND_URL + `/customers/me`
+        'http://127.0.0.1:8000/customers/me'
     );
     if (response.status !== 200) {
         throw new Error(

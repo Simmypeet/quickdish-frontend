@@ -2,12 +2,93 @@
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faXmark, faUpload} from "@fortawesome/free-solid-svg-icons";
+import useAxiosPrivate  from '../hooks/useAxiosPrivate';
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
+import StarIcon from '@mui/icons-material/Star';
+import useAuth from '../hooks/useAuth';
 
-const CommentWindow = ({closeModal}) => {
-    const categories = ["tastiness", "hygiene", "quickness"];
-    
-    
+const CommentWindow = ({closeModal, menuId, restaurant_id}) => {
+    const { auth, setAuth } = useAuth();
+    const axiosPrivate = useAxiosPrivate();
+    const [review, setReview] = React.useState("");
+    const [tastiness, setTastiness] = React.useState(0);
+    const [hygiene, setHygiene] = React.useState(0);
+    const [quickness, setQuickness] = React.useState(0);
 
+    const submitReview = async (e) => {
+        
+        e.preventDefault();
+        const reviewData = {
+            restaurant_id: restaurant_id,
+            menu_id: menuId,
+            review: review,
+            tastiness: Math.ceil(tastiness),
+            hygiene: Math.ceil(hygiene),
+            quickness: Math.ceil(quickness)
+        }; 
+
+        try{
+            const response = await axiosPrivate.post(
+                '/customers/add_reviews',
+                reviewData
+                
+            )
+            closeModal(); 
+        }catch(error){
+            if (error.response) {
+                console.error('Error:', error.response.data);  // Log error from server response
+                alert(`Error: ${error.response.data.detail || 'An error occurred while submitting your review.'}`);
+            } else {
+                console.error('Error:', error.message);
+                alert('Network or server error, please try again.');
+            }
+        }
+
+    }
+
+    const labels = {
+        0.5: 'Useless',
+        1: 'Useless+',
+        1.5: 'Poor',
+        2: 'Poor+',
+        2.5: 'Ok',
+        3: 'Ok+',
+        3.5: 'Good',
+        4: 'Good+',
+        4.5: 'Excellent',
+        5: 'Excellent+',
+      };
+      
+      function getLabelText(value) {
+        return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
+      }
+      
+      function HoverRating({value, onChanges}) {
+        const [hover, setHover] = React.useState(-1);
+      
+        return (
+          <Box sx={{ width: 200, display: 'flex', alignItems: 'center' }}>
+            <Rating
+              name="hover-feedback"
+              value={value}
+              precision={0.5}
+              getLabelText={getLabelText}
+              onChange={(event, newValue) => {
+                onChanges(newValue);
+              }}
+              onChangeActive={(event, newHover) => {
+                setHover(newHover);
+              }}
+              emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+            />
+            {value !== null && (
+              <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
+            )}
+          </Box>
+        );
+      }
+    
     return (
         <div className='fixed top-40 left-1/4 w-3/6 max-w-3/5 min-w-2/5 p-2 z-10'>
             <div className="bg-slate-100 p-2 rounded-3xl flex flex-col shadow-xl">
@@ -20,61 +101,67 @@ const CommentWindow = ({closeModal}) => {
                         </button>
                     </div>
                     <hr className="border-t-2 border-black mt-3 mb-3"/>
-                    
-                    {
-                        categories.map((category, index) => (
-                            <div key={index} className="flex flex-col sm:flex-row justify-center mt-2">
-                                <h1 className='comment-sub-heading-bold-font mt-1'>{category}</h1>
-                                <div>
-                                    {
-                                        [
-                                             //potential error : the same key
-                                            ...Array(3).fill(0).map((_, i) => (
-                                                <FontAwesomeIcon icon={faStar} key={i} className="m-1 size-7 text-yellow-500"/>
-                                            )),
-                                            ...Array(2).fill(0).map((_, i) => (
-                                                <FontAwesomeIcon icon={faStar} key={i} className="m-1 size-7 text-blue-950"/>
-                                            ))
-                                        ]
-                                    }
-                                </div>
-                            </div> 
-                        ))
-                    }
 
-                    <h1 className="comment-sub-heading-bold-font">Review</h1>
-                    {/* add comment */}
-                    <textarea className="rounded-xl p-2 w-full" name="" id="" placeholder='write your comment'></textarea>
-                    
-                    
-                    <div className="col-span-full ">
-                        <label htmlFor="cover-photo" className="block comment-sub-heading-bold-font">
-                            Food Image
-                        </label>
-                        <div className="mt-2 flex justify-center rounded-lg border border-dashed bg-slate-200 border-gray-900/25 px-6 py-10">
-                            <div className="text-center">
-                                <FontAwesomeIcon aria-hidden="true" className="mx-auto h-12 w-12 text-gray-300" icon={faUpload} />
-                                <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                    <label
-                                    htmlFor="file-upload"
-                                    className="relative cursor-pointer rounded-md font-semibold text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                    >
-                                    <span>Upload a file</span>
-                                    <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                                    </label>
-                                    <p className="pl-1">or drag and drop</p>
-                                </div>
-                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                    <div className="flex flex-col sm:flex-row justify-center mt-2">
+                        <h1 className='comment-sub-heading-bold-font mt-1'>Tastiness</h1>
+                            <div className='mt-1 ml-1'>
+                                <HoverRating value={tastiness} onChanges={setTastiness}></HoverRating>
                             </div>
+                     </div> 
+                     <div className="flex flex-col sm:flex-row justify-center mt-2">
+                        <h1 className='comment-sub-heading-bold-font mt-1'>Hygiene</h1>
+                            <div className='mt-1 ml-1'>
+                                <HoverRating value={hygiene} onChanges={setHygiene}></HoverRating>
+                            </div>
+                     </div> 
+                     <div className="flex flex-col sm:flex-row justify-center mt-2">
+                        <h1 className='comment-sub-heading-bold-font mt-1'>Quickness</h1>
+                            <div className='mt-1 ml-1'>
+                                <HoverRating value={quickness} onChanges={setQuickness}></HoverRating>
+                            </div>
+                     </div> 
+                    
+
+                    <form onSubmit={submitReview}>
+                        <h1 className="comment-sub-heading-bold-font mt-5">Review</h1>
+                        {/* add comment */}
+                        <textarea 
+                        className="rounded-xl p-2 w-full" 
+                        name="" 
+                        id="" 
+                        onChange={(e) => setReview(e.target.value)}
+                        placeholder='write your comment'></textarea>
+                        
+                        
+                        <div className="col-span-full ">
+                            <label htmlFor="cover-photo" className="block comment-sub-heading-bold-font">
+                                Food Image(Optional)
+                            </label>
+                            <div className="mt-2 flex justify-center rounded-lg border border-dashed bg-slate-200 border-gray-900/25 px-6 py-10">
+                                <div className="text-center">
+                                    <FontAwesomeIcon aria-hidden="true" className="mx-auto h-12 w-12 text-gray-300" icon={faUpload} />
+                                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                        <label
+                                        htmlFor="file-upload"
+                                        className="relative cursor-pointer rounded-md font-semibold text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                        >
+                                        <span>Upload a file</span>
+                                        <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                                        </label>
+                                        <p className="pl-1">or drag and drop</p>
+                                    </div>
+                                <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </div>
+
                         </div>
 
-                    </div>
-
-                    <div className="flex justify-end">
-                        <button className='general-button mt-2' type="button">
-                            <h1>Submit</h1>
-                        </button>
-                    </div>
+                        <div className="flex justify-end">
+                            <button className='general-button mt-2' type="submit">
+                                <h1>Submit</h1>
+                            </button>
+                        </div>
+                    </form>
                     
                 </div>
                 

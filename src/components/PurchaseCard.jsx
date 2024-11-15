@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { getRestaurantImage } from '../api/restaurantApi';
 
 
-const PurchaseCard = ({restaurant_id, date, time, name, price, canteen, orderStatus}) => {
+const PurchaseCard = ({restaurant_id, date, time, name, menu_id, price, canteen, orderStatus}) => {
     // date : 1 Sep 24, 11:09
     const navigate = useNavigate();
     const switchToReview = () => {
         // switch to review page
         navigate("/user_review", {
-            state: {restaurant_id, name, canteen}
+            state: {restaurant_id, name, canteen, menu_id}
         });
     }
 

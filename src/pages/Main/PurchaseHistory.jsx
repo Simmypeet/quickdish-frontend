@@ -90,6 +90,7 @@ const PurchaseHistory = () => {
                             name={order.restaurant_name}
                             price={order.price_paid}
                             canteen={order.canteen_name}
+                            menu_id={order.menu_id}
                             orderStatus={order.order_status}/>
                         ))
                     ) : (<img src="./empty-folder.png" className="w-60 h-72" alt="" ></img>)
