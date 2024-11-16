@@ -1,17 +1,13 @@
 // @ts-check
 
-import React, { createContext, Fragment, useRef, useState } from 'react';
+import React, { createContext, Fragment, useState } from 'react';
 
 import merge from '../../utils/className';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCheck,
-    faCircleInfo,
     faClock,
     faClose,
-    faDeleteLeft,
-    faDownload,
-    faEdit,
     faInfoCircle,
     faPlus,
     faTag,
@@ -19,34 +15,14 @@ import {
     faUpload,
     faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
-import { faUserSlash } from '@fortawesome/free-solid-svg-icons/faUserSlash';
+import { Subtitle, Title } from '../../components/Title';
+import Modal, { TopicBox } from '../../components/Modal';
+import GradientTextButton from '../../components/GradientTextButton';
+import InputBoxWithIcon from '../../components/InputBoxWithIcon';
 
 /**
  * @import { CustomizationCreate } from '../../types/restaurant'
- * @import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
  */
-
-/**
- * @param {{
- *  text: string,
- *  onclick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
- *  className?: string,
- * }} param0
- */
-const GradientTextButton = ({ text, onclick, className }) => {
-    return (
-        <button
-            onClick={onclick}
-            className={merge(
-                `rounded-md bg-gradient-to-r from-orange-300 to-red-500 
-                px-2 py-1 text-sm font-semibold text-white drop-shadow-md`,
-                className
-            )}
-        >
-            {text}
-        </button>
-    );
-};
 
 /**
  * @typedef {Object} NewMenuContextValue
@@ -132,48 +108,6 @@ const useNewMenu = () => {
         throw new Error('useNewMenu must be used within a NewMenuProvider');
     }
     return context;
-};
-
-/**
- *
- * @param {{children?: React.ReactNode}} prop
- * @returns {React.ReactNode}
- */
-const SubTitle = ({ children }) => {
-    return <h2 className="text-xl font-semibold">{children}</h2>;
-};
-
-/**
- *
- * @param {{
- *  title: string,
- *  description: string,
- *  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
- *  checked: boolean
- * }} param0
- * @returns
- */
-const OptionCheckBox = ({ title, description, onChange, checked }) => {
-    return (
-        <div className="flex flex-col gap-y-1">
-            <div className="flex flex-row justify-between gap-x-2">
-                <div>
-                    <div className="">{title}</div>
-                    <div className="line-clamp-1 text-sm text-slate-600">
-                        {description}
-                    </div>
-                </div>
-                <input
-                    type="checkbox"
-                    checked={checked}
-                    onChange={(e) => {
-                        onChange(e);
-                    }}
-                />
-            </div>
-            <hr />
-        </div>
-    );
 };
 
 /**
@@ -283,110 +217,6 @@ const CustomizationOption = ({ index }) => {
 };
 
 /**
- * @param {{index: number}} prop
- * @returns {React.ReactNode}
- */
-const CustomizationBox = ({ index }) => {
-    const { customizations, setCustomizations } = useNewMenu();
-
-    const customizationTitleRef = useRef(
-        /**@type{HTMLInputElement | null}*/ (null)
-    );
-
-    return (
-        <form>
-            <div
-                className="
-                    w-full rounded-md bg-slate-50 px-2 py-2 shadow-inner
-                "
-            >
-                <div className="flex flex-row gap-x-2">
-                    <input
-                        type="text"
-                        value={customizations[index].title}
-                        placeholder="Customization Name"
-                        onChange={(e) => {
-                            const newCustomizations = [...customizations];
-                            newCustomizations[index].title = e.target.value;
-                            setCustomizations(newCustomizations);
-                        }}
-                        className="
-                            w-full grow bg-transparent text-lg 
-                            font-semibold focus:outline-none
-                        "
-                        ref={customizationTitleRef}
-                    />
-                    <FontAwesomeIcon
-                        icon={faEdit}
-                        className="
-                            my-auto cursor-text text-xs text-slate-600
-                        "
-                        onClick={() => {
-                            if (customizationTitleRef.current) {
-                                customizationTitleRef.current.focus();
-                            }
-                        }}
-                    />
-                    <FontAwesomeIcon
-                        icon={faTrash}
-                        className="
-                            my-auto cursor-text text-xs text-slate-600
-                        "
-                        onClick={() => {
-                            if (customizationTitleRef.current) {
-                                customizationTitleRef.current.focus();
-                            }
-                        }}
-                    />
-                </div>
-                <hr />
-
-                <div
-                    className="
-                        my-2 flex flex-col gap-y-2 rounded-md px-2  
-                    "
-                >
-                    <OptionCheckBox
-                        title={'Unique'}
-                        description={'Allows only one option to be selected'}
-                        onChange={(e) => {
-                            const newCustomizations = [...customizations];
-                            newCustomizations[index].unique = e.target.checked;
-                            setCustomizations(newCustomizations);
-                        }}
-                        checked={customizations[index].unique}
-                    />
-                    <OptionCheckBox
-                        title={'Required'}
-                        description={'At least one option must be selected'}
-                        onChange={(e) => {
-                            const newCustomizations = [...customizations];
-                            newCustomizations[index].required =
-                                e.target.checked;
-                            setCustomizations(newCustomizations);
-                        }}
-                        checked={customizations[index].required}
-                    />
-                    <TextBox
-                        icon={faCircleInfo}
-                        value={customizations[index].description ?? ''}
-                        onChange={(e) => {
-                            const newCustomizations = [...customizations];
-                            newCustomizations[index].description =
-                                e.target.value;
-                            setCustomizations(newCustomizations);
-                        }}
-                        placeholder={'Description of Customization'}
-                        type={'text'}
-                    />
-                    <CustomizationOption index={index} />
-                </div>
-            </div>
-        </form>
-    );
-};
-
-/**
  * @returns {React.ReactNode}
  */
 const MenuImageUpload = () => {
@@ -396,7 +226,7 @@ const MenuImageUpload = () => {
     );
 
     return (
-        <TopicBox title={<SubTitle>Menu Image</SubTitle>}>
+        <TopicBox title={<Subtitle>Menu Image</Subtitle>}>
             <div className="aspect-square h-auto w-full p-3">
                 <div
                     className={merge(
@@ -514,11 +344,12 @@ const MenuImageUpload = () => {
 /**
  * @returns {React.ReactNode}
  */
+/*
 const Customizations = () => {
     const { customizations, setCustomizations } = useNewMenu();
 
     return (
-        <TopicBox title={<SubTitle>Customization</SubTitle>}>
+        <TopicBox title={<Subtitle>Customization</Subtitle>}>
             <div className="mx-auto flex min-h-32 w-full flex-col rounded-md ">
                 {customizations.length == 0 ? (
                     <div
@@ -553,42 +384,7 @@ const Customizations = () => {
         </TopicBox>
     );
 };
-
-/**
- *
- * @param {{
- *  icon: IconDefinition,
- *  value: string,
- *  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
- *  placeholder: string,
- *  type: 'text' | 'number',
- *  className?: string
- * }} param0
- * @returns
- */
-const TextBox = ({ icon, value, onChange, placeholder, type, className }) => {
-    return (
-        <div className={merge('relative flex flex-col gap-y-1', className)}>
-            <input
-                type={type}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                className="
-                    w-full rounded-md border border-slate-300 px-2 py-1
-                    pl-7 text-sm focus:border-blue-300 
-                    focus:outline-none focus:ring-1 focus:ring-blue-300
-                "
-            />
-            <div className="absolute left-0 top-0 flex h-full p-2">
-                <FontAwesomeIcon
-                    icon={icon}
-                    className="my-auto text-sm text-slate-500"
-                />
-            </div>
-        </div>
-    );
-};
+*/
 
 /**
  * @returns {React.ReactNode}
@@ -606,7 +402,7 @@ const BasicInformation = () => {
     } = useNewMenu();
 
     return (
-        <TopicBox title={<SubTitle>Basic Information</SubTitle>}>
+        <TopicBox title={<Subtitle>Basic Information</Subtitle>}>
             <form
                 className="
                     mx-autobg-blue-200 justify-between2 mx-auto 
@@ -614,28 +410,28 @@ const BasicInformation = () => {
                     flex-col gap-y-2
                 "
             >
-                <TextBox
+                <InputBoxWithIcon
                     icon={faUtensils}
                     value={menuName}
                     onChange={(e) => setMenuName(e.target.value)}
                     placeholder={'Menu Name'}
                     type={'text'}
                 />
-                <TextBox
+                <InputBoxWithIcon
                     icon={faTag}
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     placeholder={'Price'}
                     type={'number'}
                 />
-                <TextBox
+                <InputBoxWithIcon
                     icon={faClock}
                     value={estimatedTime}
                     onChange={(e) => setEstimatedTime(e.target.value)}
                     placeholder={'Estimated Preparation Time'}
                     type={'number'}
                 />
-                <TextBox
+                <InputBoxWithIcon
                     icon={faInfoCircle}
                     value={menuDescription}
                     onChange={(e) => setMenuDescription(e.target.value)}
@@ -648,28 +444,6 @@ const BasicInformation = () => {
 };
 
 /**
- *
- * @param {{
- * title: React.ReactNode,
- * children?: React.ReactNode,
- * className?: string
- * }} props
- *
- * @returns {React.ReactNode}
- */
-const TopicBox = ({ title, children, className }) => {
-    return (
-        <div className={merge(`rounded-md`, className)}>
-            {title}
-
-            <hr className="my-2 w-full"></hr>
-
-            {children}
-        </div>
-    );
-};
-
-/**
  * @param {{}} prop
  *
  * @returns {React.ReactNode}
@@ -677,48 +451,29 @@ const TopicBox = ({ title, children, className }) => {
 export default ({}) => {
     return (
         <NewMenuProvider>
-            <div
-                className="
-                    fixed left-0 top-0 grid h-full w-full bg-black 
-                    bg-opacity-10
-                "
+            <Modal
+                onClose={undefined}
+                title={<Title>New Menu</Title>}
+                className="flex w-fit min-w-96 flex-col"
             >
-                <div
-                    className="
-                        relative mx-auto my-auto flex h-[90%] w-fit 
-                        min-w-96 flex-col rounded-md bg-white p-4
-                    "
-                >
-                    <h1 className="text-2xl font-semibold">New Menu</h1>
-                    <hr className="my-2" />
-                    <FontAwesomeIcon
-                        icon={faClose}
+                <div className="flex h-full flex-col px-2">
+                    <div
                         className="
-                            absolute right-5 top-5 cursor-pointer font-light 
-                            text-slate-600
+                            flex h-0 grow flex-col gap-y-2 overflow-y-auto
                         "
-                    />
-                    <div className="flex h-full flex-col px-2">
-                        <div
-                            className="
-                                flex h-0 grow flex-col gap-y-2 
-                                overflow-y-auto
-                            "
-                        >
-                            <BasicInformation />
-                            <MenuImageUpload />
-                            {/* <Customizations /> */}
+                    >
+                        <BasicInformation />
+                        <MenuImageUpload />
+                        {/* <Customizations /> */}
 
-                            <div className="h-0 grow"></div>
+                        <div className="h-0 grow"></div>
 
-                            <GradientTextButton
-                                text="Confirm"
-                                className="sticky bottom-0"
-                            />
-                        </div>
+                        <GradientTextButton className="sticky bottom-0">
+                            Confirm
+                        </GradientTextButton>
                     </div>
                 </div>
-            </div>
+            </Modal>
         </NewMenuProvider>
     );
 };
