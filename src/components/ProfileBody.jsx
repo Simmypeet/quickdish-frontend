@@ -9,8 +9,7 @@ const ProfileBody = () => {
             <div className="flex">
                 {/* header */}
                 <div className="relative w-2/12 h-6/12 ml-16">
-                    <FontAwesomeIcon className="text-2xl absolute top-0 left-0 bg-white rounded-full border-2 border-blue-950 p-3" icon={faCameraRetro} />
-                    <img src="" className="w-32 h-32 rounded-full bg-slate-400 border-3 border-blue-950" alt=""/>
+                    <img src="" className="w-28 h-28 rounded-full bg-slate-400 border-3 border-blue-950" alt=""/>
                 </div>
                 {/* person detail */}
                 <ProfileForm/>

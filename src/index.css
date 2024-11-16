@@ -49,7 +49,7 @@
 
 
 .big-title {
-  @apply text-3xl font-bold text-black;
+  @apply text-2xl font-bold text-black;
 }
 
 .title {
@@ -121,7 +121,7 @@
 }
 
 .profile-text-box{
-  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-slate-100 dark:border-slate-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500
+  @apply  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-slate-200 dark:border-slate-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500
 }
 
 .grid-container {

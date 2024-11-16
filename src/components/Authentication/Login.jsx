@@ -7,7 +7,7 @@ import useAuth from "../../hooks/useAuth";
 
 const Login = ({toggle}) => {
     const { auth, setAuth } = useAuth(); 
-
+   
     const navigate = useNavigate();
     const location = useLocation(); 
     const from = location.state?.from?.pathname || "/"; //get path where user is coming from
@@ -17,6 +17,7 @@ const Login = ({toggle}) => {
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ errMsg, setErrMsg ] = useState('');
+
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
@@ -38,7 +39,6 @@ const Login = ({toggle}) => {
             const role = "user";
 
             setAuth({ username: username, password: password, role: role, accessToken: accessToken });
-
             // navigate(from, {replace: true}); 
             navigate("/dashboard"); 
 
