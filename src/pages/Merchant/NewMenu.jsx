@@ -391,7 +391,9 @@ const CustomizationBox = ({ index }) => {
  */
 const MenuImageUpload = () => {
     const { setImage, image } = useNewMenu();
-    const [uploadMoreThanOneImage, setUploadMoreThanOneImage] = useState(false);
+    const [error, setError] = useState(
+        /**@type{'oneImage'|'notImage'|undefined} */ (undefined)
+    );
 
     return (
         <TopicBox title={<SubTitle>Menu Image</SubTitle>}>
@@ -412,29 +414,37 @@ const MenuImageUpload = () => {
                         // expect only one image file
 
                         if (e.dataTransfer.items.length > 1) {
-                            setUploadMoreThanOneImage(true);
+                            setError('oneImage');
                             return;
                         }
 
                         const file = e.dataTransfer.items[0].getAsFile();
 
-                        setUploadMoreThanOneImage(false);
+                        if (!file) return;
+
+                        // must be an image
+                        if (!file.type.startsWith('image')) {
+                            setError('notImage');
+                            return;
+                        }
+
+                        setError(undefined);
                         setImage(file);
                     }}
                     onDragOver={(e) => {
                         e.preventDefault();
                     }}
-                    onClick={(e) => {
+                    onClick={() => {
                         if (image) return;
 
                         const input = document.createElement('input');
                         input.type = 'file';
                         input.accept = 'image/*';
-                        input.onchange = (e) => {
+                        input.onchange = () => {
                             if (!input.files) return;
 
                             if (input.files.length > 1) {
-                                setUploadMoreThanOneImage(true);
+                                setError('oneImage');
                                 return;
                             }
 
@@ -468,25 +478,31 @@ const MenuImageUpload = () => {
                         {image && (
                             <h1
                                 className="
-                                    line-clamp-1 flex max-w-[70%]
-                                    flex-row gap-x-2 rounded-sm border 
-                                    border-slate-300 bg-white p-1 px-2 
-                                    text-sm text-slate-600 shadow-inner
+                                    line-clamp-1 flex max-w-full flex-row 
+                                    gap-x-2 rounded-sm border border-slate-300 
+                                    bg-white p-1 px-2 text-sm text-slate-600 
+                                    shadow-inner
                                 "
                             >
-                                <div className="max-w-[80%]">{image.name}</div>
                                 <FontAwesomeIcon
                                     icon={faClose}
                                     className="my-auto cursor-pointer"
                                     onClick={() => setImage(null)}
                                 />
+                                <div>{image.name}</div>
                             </h1>
                         )}
 
-                        {uploadMoreThanOneImage && (
+                        {error === 'oneImage' ? (
                             <div className="text-center italic text-red-400">
-                                *can only upload one image.{' '}
+                                *can only upload one image.
                             </div>
+                        ) : error === 'notImage' ? (
+                            <div className="text-center italic text-red-400">
+                                *file must be an image.
+                            </div>
+                        ) : (
+                            <></>
                         )}
                     </div>
                 </div>
