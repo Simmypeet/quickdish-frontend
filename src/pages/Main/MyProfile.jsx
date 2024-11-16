@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClockRotateLeft, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 const MyProfile = () => {
-    const menulist = ['Profile Overview', 'Reviews', 'Photos', 'Notification'];
+    const menulist = ['Profile Overview', 'Reviews', 'Photos'];
 
     return (
         <div className="p-8 ml-10 mr-20 h-screen">
@@ -18,7 +18,7 @@ const MyProfile = () => {
             </div>
         
             <div className="flex">
-                <div className="fixed top-80 left-10 mt-5 md:left-44 sm:left-10 w-1/4 p-2 md:h-72 sm:h-96 flex flex-col bg-white border-2 border-slate-400 border-opacity-50 rounded-xl">
+                <div className="fixed top-80 left-10 mt-5 md:left-44 sm:left-10 w-1/4 p-2 md:h-64 sm:h-96 flex flex-col bg-white border-2 border-slate-400 border-opacity-50 rounded-xl">
                     <div className="m-3 title">
                         ACTIVITIES
                     </div>
@@ -38,7 +38,6 @@ const MyProfile = () => {
                     <div className="md:w-4/5 md:ml-48 sm:ml-10 sm:w-full ml-10 w-full">
                         <div className="relative w-full flex flex-col rounded-2xl z-0">
                             <ProfileBody/>
-                            {/* <ReviewBody/>  */}
                             {/* <PhotoBody/> */}
                             {/* <NotiBody/> */}
 
@@ -46,13 +45,15 @@ const MyProfile = () => {
                         </div>
                     </div>
                 </div>
-                
-
             </div>
-            
-            
         </div>
     )
 }
 
 export default MyProfile;
+
+//make change user data
+//when type in pw = pw extends
+//add profile_img, bg_img col to user db
+//add reviews number
+//change page when click on different button 

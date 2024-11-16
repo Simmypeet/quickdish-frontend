@@ -9,11 +9,13 @@ const ProfileHeader = () => {
                 {/* <div className="absolute top-0 w-full rounded-3xl">
                     <img className="w-full h-full" src="./food.png" alt="" />
                 </div> */}
-                <img className="absolute top-0 w-full h-full object-cover" src="./img1.jpg" alt="" />
+                {/* img not display */}
+                <img className="absolute top-0 w-full h-full object-cover" src="/food2.png" alt="" />  
                 <div className="absolute flex flex-col md:flex-row sm:flex-col justify-between top-0 w-full h-full rounded-3xl bg-gradient-to-b from-transparent to-black opacity-80 z-0">
                     <div className="flex items-center space-x-8 ml-5">
                         <div className="items-start relative">
-                            <img className="md:w-40 md:h-40 w-32 h-32 rounded-full bg-slate-700 border-solid border-4 border-white z-20" src="" alt="" />
+                            {/* img not display */}
+                            <img className="md:w-40 md:h-40 w-32 h-32 rounded-full bg-slate-700 border-solid border-4 border-white z-20" src="/profile.jpg" alt="" />
                             <FontAwesomeIcon className="text-2xl absolute top-0 left-0 bg-white rounded-full border-2 border-blue-950 p-3" icon={faCameraRetro} />
                         </div>
                         {/* <img className="md:w-40 md:h-40 w-32 h-32 rounded-full bg-slate-700 border-solid border-4 border-white z-20" src="" alt="" /> */}

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useUser from '../hooks/useUser';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 const ProfileForm = () => { 
+    const axiosPrivate = useAxiosPrivate();
     const { user, setUser } = useUser();
     const [ name, setName ] = useState(user.firstname);
     const [ username, setUsername ] = useState(user.username);
@@ -15,6 +17,10 @@ const ProfileForm = () => {
     const [ password, setPassword ] = useState('');
     const [ validPassword, setValidPassword ] = useState(false);
     const [ passwordFocus, setPasswordFocus ] = useState(false);
+
+    const [ newPassword, setNewPassword ] = useState('');
+    const [ validNewPassword, setValidNewPassword ] = useState(false);
+    const [ newPasswordFocus, setNewPasswordFocus ] = useState(false);
 
     const [ success, setSuccess ] = useState(false);
 
@@ -34,6 +40,11 @@ const ProfileForm = () => {
     }, [password])
 
     useEffect(() => {
+        const result = PASSWORD_REGEX.test(newPassword);
+        setValidNewPassword(result);
+    }, [newPassword])
+
+    useEffect(() => {
         const result = EMAIL_REGEX.test(email);
         setValidEmail(result);
     }, [email])
@@ -41,33 +52,30 @@ const ProfileForm = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault(); 
-        const response = await useAxiosPrivate.post('/customers/customer/update', //change
-            JSON.stringify(
-                { username: username,
-                  password: password,
-                  email: email
-            }), 
-            {
-                headers: {'Content-Type': 'application/json'},
-            }       
+        let detail = {
+            username: username,
+            email: email,
+            new_password: newPassword,
+            password: password
+        };
+        console.log(detail);
+        const response = await axiosPrivate.post(
+            '/customers/update', //change
+            detail  
         )
+
+        if(response.status === 200){
+            // successModal(); 
+        }else{
+            // failModal(response.data.message);
+            console.log(response.data.message);
+        }
         setSuccess(true);
     }
 
     return (
         <div className="">
             <form onSubmit={handleSubmit}>
-                <div className="mb-6">
-                    <label htmlFor="displayName" className="block mb-2 profile-heading-font ">Name</label>
-                    
-                    <input 
-                        type="text" 
-                        id="displayName" 
-                        className="profile-text-box" 
-                        defaultValue={user.firstname} 
-                        onChange={(event) => {setName(event.target.value)}}
-                        required />
-                </div> 
                 <div className="mb-6">
                     <label htmlFor="username" className="block mb-2 profile-heading-font">Username</label>
                     <p className={ usernameFocus && username && !validUsername ? "warning" : "offscreen"}>
@@ -113,6 +121,21 @@ const ProfileForm = () => {
                             onBlur={() => setPasswordFocus(false)}
                             defaultValue="John" required />
                     </div>
+
+                    <div>
+                        <label htmlFor="displayName" className="block mb-2 profile-heading-font">New Password</label>
+                        <p className={ newPasswordFocus && newPassword && !validNewPassword ? "warning" : "offscreen"}>
+                            8-24 characters,lowercase,uppercase, digit,special character
+                        </p>
+                        <input 
+                            type="newPassword" 
+                            id="newPassword" 
+                            className="profile-text-box"
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            onFocus={() => setNewPasswordFocus(true)}
+                            onBlur={() => setNewPasswordFocus(false)}
+                            defaultValue="John" required />
+                    </div>
                     
                     <div className=""></div>
                     <button type="submit" className="general-button">Update Changes</button>
@@ -126,3 +149,6 @@ const ProfileForm = () => {
 }
 
 export default ProfileForm;
+
+
+//case pw not match 
