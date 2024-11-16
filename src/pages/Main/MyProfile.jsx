@@ -10,6 +10,11 @@ import { faClockRotateLeft, faPenToSquare } from '@fortawesome/free-solid-svg-ic
 
 const MyProfile = () => {
     const menulist = ['Profile Overview', 'Reviews', 'Photos'];
+    const [ currentMenu, setCurrentMenu ] = React.useState('Profile Overview');
+
+    const onClickMenu = (menu) => {
+        setCurrentMenu(menu);
+    }
 
     return (
         <div className="p-8 ml-10 mr-20 h-screen">
@@ -25,7 +30,11 @@ const MyProfile = () => {
                     {
                         menulist.map((menu) => {
                             return (
-                                <div key={menu} className=" p-3 hover:border-l-4 hover:border-orange-500 hover:bg-gradient-to-r hover:from-transparent hover:to-orange-500 hover:rounded-r-lg text-slate-500 hover:text-red-500">
+                                <div 
+                                key={menu} 
+                                className=" p-3 hover:border-l-4 hover:border-orange-500 hover:bg-gradient-to-r hover:from-transparent hover:to-orange-500 hover:rounded-r-lg text-slate-500 hover:text-red-500"
+                                onClick={() => onClickMenu(menu)}
+                                >
                                     <h1 className=''>{menu}</h1>
                                 </div>
                             )
@@ -37,11 +46,17 @@ const MyProfile = () => {
                 <div className="fixed flex-1 overflow-scroll top-80 left-1/4 w-3/4 h-full flex mt-5 ">
                     <div className="md:w-4/5 md:ml-48 sm:ml-10 sm:w-full ml-10 w-full">
                         <div className="relative w-full flex flex-col rounded-2xl z-0">
-                            <ProfileBody/>
-                            {/* <PhotoBody/> */}
-                            {/* <NotiBody/> */}
-
-                            {/* photo, notification, security */}
+                            {
+                                currentMenu === 'Profile Overview' ? 
+                                <ProfileBody/>
+                                : currentMenu === 'Reviews' ? 
+                                <ReviewBody/>
+                                : currentMenu === 'Photos' ? 
+                                <PhotoBody/>
+                                : null
+                                //<NotiBody/>
+                            }
+                          
                         </div>
                     </div>
                 </div>
@@ -52,8 +67,6 @@ const MyProfile = () => {
 
 export default MyProfile;
 
-//make change user data
-//when type in pw = pw extends
 //add profile_img, bg_img col to user db
 //add reviews number
-//change page when click on different button 
+

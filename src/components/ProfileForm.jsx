@@ -132,12 +132,12 @@ const ProfileForm = () => {
                         defaultValue={user.email} required />
                 </div> 
 
-                <div className="grid gap-6 mb-6 md:grid-cols-2">
+                <div className="grid gap-6 mb-6 md:grid-cols-2 md:w-96">
                     <div>
                         <label htmlFor="displayName" className="block mb-2 profile-heading-font">Password</label>
-                        <p className={ passwordFocus && password && !validPassword ? "warning" : "offscreen"}>
-                            8-24 characters,lowercase,uppercase, digit,special character
-                        </p>
+                            <p className={ passwordFocus && password && !validPassword ? "warning" : "offscreen"}>
+                                8-24 characters,lower and uppercase, digit,special character
+                            </p>
                         <input 
                             type="password" 
                             id="password" 

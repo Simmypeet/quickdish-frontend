@@ -7,7 +7,7 @@ export const UserProvider = ({ children }) => {
         firstname: '', 
         lastname: '',
         username:'', 
-        email: '', 
+        email: '',
         customer_id: 0});
     return (
        <UserContext.Provider value={{ user, setUser }}>
