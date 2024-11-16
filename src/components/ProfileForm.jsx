@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import useUser from '../hooks/useUser';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 const ProfileForm = () => { 
     const axiosPrivate = useAxiosPrivate();
@@ -23,6 +27,10 @@ const ProfileForm = () => {
     const [ newPasswordFocus, setNewPasswordFocus ] = useState(false);
 
     const [ success, setSuccess ] = useState(false);
+
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_].{3,23}$/;
     const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -59,19 +67,37 @@ const ProfileForm = () => {
             password: password
         };
         console.log(detail);
-        const response = await axiosPrivate.post(
-            '/customers/update', //change
-            detail  
-        )
+        try{
+            const response = await axiosPrivate.post(
+                '/customers/update', //change
+                detail  
+            )
 
-        if(response.status === 200){
-            // successModal(); 
-        }else{
-            // failModal(response.data.message);
-            console.log(response.data.message);
+            console.log(response.status);
+
+            if(response.status === 200){
+                console.log("success");
+                setSuccess(true);
+            }
+        }catch(error){
+            console.error('Error:', error.response.status);
+            setSuccess(false);
+        }finally{
+            handleOpen();
         }
-        setSuccess(true);
     }
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        'border-radius': 25,
+        boxShadow: 24,
+        p: 4
+    };
 
     return (
         <div className="">
@@ -138,11 +164,31 @@ const ProfileForm = () => {
                     </div>
                     
                     <div className=""></div>
-                    <button type="submit" className="general-button">Update Changes</button>
+                    <button type="submit" className="general-button" >Update Changes</button>
 
                 </div>
                 
             </form>
+
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  {
+                        success ? "Success Updating" : "Failed Updating"
+                  }
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  {
+                        success ? "Your profile has been updated" : "Mismatched password"
+                  }
+                </Typography>
+              </Box>
+            </Modal>
         
         </div>
     ); 
