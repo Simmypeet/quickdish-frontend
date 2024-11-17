@@ -1,26 +1,53 @@
-import CanteenCard from '../../components/CanteenCard';
+// @ts-check
+
 import RestaurantCard from '../../components/RestaurantCard';
 import CarouselComponent from '../../components/CarouselComponent';
-import Banner from '../../components/Banner';
 import QueueCard from '../../components/QueueCard';
-import Header from '../../components/Header';
 import CarouselAutomate from '../../components/CarouselAutomate';
 import React, { useEffect, useState } from 'react';
+
 import axios from 'axios'; //temp -> axiosPrivate
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useLocation from '../../hooks/useLocation';
 import { getCanteenByRestId } from '../../api/canteenApi';
 import { getRestaurantImage } from '../../api/restaurantApi';
 
+// @ts-expect-error
+import defaultRestaurant from '../../assets/defaultRestaurant.jpeg';
+import { getOnGoingOrders, getOrderQueue } from '../../api/orderApi';
+import { getRestaurant } from '../../api/restaurantApi';
+import { EventHandlerProvider } from '../../context/EventProvider';
+
+/**
+ * @import { Order, Queue } from '../../types/order';
+ * @import { Restaurant } from '../../types/restaurant';
+ */
+
+/**
+ * @returns {React.ReactNode}
+ */
+
 //get user's queue, rank canteens from near to far, nearest canteen, GET restaurants info from the canteen
 //how to make fn only run/render once to improve performance
 const Home = () => {
+    /**
+     * @typedef {Object} OngoingOrder
+     *
+     * @property {Queue} queue
+     * @property {Order} order
+     * @property {string} restaurantName
+     */
+
+
     //back : filter restaurants by canteen id 
     const [restaurants, setRestaurants] = useState([]);
     const axiosPrivate = useAxiosPrivate();
     const {userLocation, setUserLocation} = useLocation();
     const [ canteen, setCanteen ] = useState(null);
     const [ restImgs , setRestImgs ] = useState({});
+    const [ongoingOrders, setOngoingOrders] = useState(
+        /** @type{undefined | OngoingOrder[]} */ (undefined)
+    );
 
     const getRestaurants = async () => {
         console.log("latitude ", userLocation.latitude);
@@ -63,6 +90,40 @@ const Home = () => {
            
         }
     }, [userLocation.latitude, userLocation.longtitude]);
+  
+    useEffect(() => {
+        async function fetchData() {
+            const restaurants = /** @type {{[key: number]: Restaurant}} */ ({});
+            const orders = await getOnGoingOrders(axiosPrivate);
+            let ongoingOrders = [];
+
+            for (let i = 0; i < orders.length; i++) {
+                const queue = await getOrderQueue(axiosPrivate, orders[i].id);
+
+                if (!restaurants[orders[i].restaurant_id]) {
+                    restaurants[orders[i].restaurant_id] = await getRestaurant(
+                        orders[i].restaurant_id
+                    );
+                }
+
+                ongoingOrders.push({
+                    queue,
+                    order: orders[i],
+                    restaurantName: restaurants[orders[i].restaurant_id].name,
+                });
+            }
+
+            // sort by the date
+            ongoingOrders.sort(
+                (a, b) => a.order.ordered_at - b.order.ordered_at
+            );
+
+            setOngoingOrders(ongoingOrders);
+        }
+
+        fetchData();
+    }, []);
+
 
     return (
         <div className="flex flex-col">
@@ -71,16 +132,23 @@ const Home = () => {
                 <CarouselAutomate />
             </div>
 
-            <div className="mt-8 flex w-full flex-col">
-                <h1 className="heading-font mb-5">My Queue(1)</h1>
-                <div className="flex">
-                    <div className="flex w-0 grow overflow-x-auto">
-                        <QueueCard />
-                        <QueueCard />
+            {ongoingOrders && ongoingOrders.length > 0 && (
+                <EventHandlerProvider>
+                    <div className="mt-8 flex w-full flex-col">
+                        <h1 className="heading-font mb-5">
+                            {`My Queue (${ongoingOrders.length})`}
+                        </h1>
+                        <div className="flex">
+                            <div className="flex w-0 grow overflow-x-auto">
+                                {ongoingOrders.map((order, index) => (
+                                    <QueueCard key={index} {...order} />
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        
+                  </EventHandlerProvider>
+
+ 
             { 
             restaurants.length != 0 ?
                 <>
@@ -88,6 +156,7 @@ const Home = () => {
                         <h1 className="heading-font mt-10">Nearby Canteen</h1>
                         <CarouselComponent />
                     </div>
+
 
                     <div className="flex flex-col gap-y-6">
                         <div className="">
@@ -98,7 +167,15 @@ const Home = () => {
                         {
 
                             restaurants.map((shop) => (
-                                <RestaurantCard key={shop.id} storeName={shop.name} img={restImgs[shop.id]} status={shop.status} queues={shop.queues} rating={shop.rating} price={shop.price}/>
+                                <RestaurantCard 
+                                  key={shop.id} 
+                                  name={shop.name} 
+                                  image={restImgs[shop.id]} 
+                                  canteenName={'First Canteen'} //problem : add canteen name
+                                  busyness={shop.status} 
+                                  queues={shop.queues} 
+                                  rating={shop.rating} 
+                                  />
                             ))
                         }
                     
@@ -108,9 +185,11 @@ const Home = () => {
                 <div className="w-full flex items-center justify-center">
                     <img src="./loading_main.svg" className='w-28'></img>
                 </div>
+
             }
 
             
+
         </div>
     );
 };

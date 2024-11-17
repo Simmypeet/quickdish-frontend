@@ -1,19 +1,45 @@
+// @ts-check
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import IdleTag from './idleTag';
+import React from 'react';
 
+/**
+ *
+ * @param {{
+ *  name: string,
+ *  food: string,
+ *  image: string,
+ *  canteenName: string,
+ *  busyness: string,
+ *  queue: number,
+ *  rating: number
+ *  flag?: boolean
+ *  onFlag?: (toFlag: boolean) => void
+ * }} param0
+ * @returns
+ */
 const RestaurantCard = ({
-    storeName,
-    img,
-    status, //quite busy, busy, not busy
-    queues,
-    rating, // 1-5
-    price //$$-$$$
+    name,
+    food,
+    image,
+    canteenName,
+    busyness,
+    queue,
+    rating,
+    flag,
+    onFlag,
+
 }) => {
-    const [flag, setFlag] = useState(false);
+    const [flagValue, setFlagvalue] = useState(flag ?? false);
     const handleFlag = () => {
-        setFlag(!flag);
+        if (onFlag) {
+            onFlag(!flagValue);
+        }
+
+        setFlagvalue(!flagValue);
     };
 
     return (
@@ -25,15 +51,17 @@ const RestaurantCard = ({
         >
             <img
                 className="aspect-square h-full w-auto rounded-xl object-cover object-center"
-                src={img}
+                src={image}
                 alt=""
             />
             <div className="mx-2 flex grow flex-col justify-between md:mx-4 md:my-2">
                 <div className="flex items-center justify-between">
-                    <h2 className="sub-title line-clamp-1">{storeName}</h2>
+
+                    <h2 className="sub-title line-clamp-1">{name}</h2>
+
                     <button type="button" onClick={handleFlag}>
                         {/* change to black when click  */}
-                        {flag ? (
+                        {flagValue ? (
                             <FontAwesomeIcon className="size-4" icon={faFlag} />
                         ) : (
                             <svg
@@ -50,15 +78,19 @@ const RestaurantCard = ({
                 <div className="mx-1 flex w-full grow flex-col py-2 md:justify-evenly md:space-y-2">
                     <div className="flex justify-between">
                         <h2 className="card-info">Status:</h2>
-                        <h2 className="card-info">{status}</h2>
+
+                        <h2 className="card-info">{busyness}</h2>
                     </div>
                     <div className="flex justify-between">
                         <h2 className="card-info">Queue:</h2>
-                        <h2 className="card-info">{queues}</h2>
+                        <h2 className="card-info">{queue}</h2>
                     </div>
                     <div className="hidden justify-between md:flex">
                         <h2 className="card-info">Rating:</h2>
-                        <h2 className="card-info">{rating}/5</h2>
+                        <h2 className="card-info">{`${rating.toFixed(
+                            1
+                        )}/5`}</h2>
+
                     </div>
                     <div className="hidden justify-between md:flex">
                         <h2 className="card-info">Price:</h2>
@@ -69,7 +101,7 @@ const RestaurantCard = ({
                 <div className="mx-1 flex">
                     <div className="flex w-0 grow overflow-x-clip">
                         <IdleTag name="Thai" />
-                        <IdleTag name="CanteenA" />
+                        <IdleTag name={canteenName} />
                     </div>
                 </div>
             </div>

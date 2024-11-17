@@ -35,9 +35,14 @@
 }
 
 /* sidebar */
-.sidebar-icon {
-  @apply size-6 self-center mx-auto; 
+.icon-size {
+  @apply size-6
 }
+
+.sidebar-icon {
+  @apply icon-size self-center mx-auto; 
+}
+
 .bottom-bar-icon {
   @apply size-6 self-center mx-auto; 
 }

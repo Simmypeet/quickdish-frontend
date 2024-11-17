@@ -1,4 +1,5 @@
 
+
 import React, { useEffect } from "react";
 import SideBar from "../../components/SideBar";
 import Header from "../../components/Header";
@@ -13,6 +14,8 @@ import RequireAuth from "../../components/RequireAuth";
 import useUser from "../../hooks/useUser";
 import { getUser } from "../../api/customerApi";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { OrderDetail } from './OrderDetail';
+
 
 
 //sidebar, header, link to other pages
@@ -57,7 +60,7 @@ const Dashboard = () => {
     }, []); 
 
 
-    return (
+     return (
         <>
             <div className="flex w-full h-svh overflow-y-auto ">
                 <div className="
@@ -89,7 +92,7 @@ const Dashboard = () => {
                                     <Route path="myprofile" element={<MyProfile/>}/>
                                     <Route path="favourites" element={<Favourite/>}/>
                                     <Route path="notification" element={<Notification/>}></Route>
-                                </Route>
+                                    <Route path="orders/:orderID" element={<OrderDetail/>}></Route>
 
                             </Routes>
                         </div>
@@ -102,5 +105,6 @@ const Dashboard = () => {
         </> 
     )
 }; 
+
 
 export default Dashboard;

@@ -10,7 +10,7 @@ const Login = ({toggle}) => {
    
     const navigate = useNavigate();
     const location = useLocation(); 
-    const from = location.state?.from?.pathname || "/"; //get path where user is coming from
+    const from = location.state?.from?.pathname
 
     console.log(location.state);
 
@@ -39,8 +39,17 @@ const Login = ({toggle}) => {
             const role = "user";
 
             setAuth({ username: username, password: password, role: role, accessToken: accessToken });
-            // navigate(from, {replace: true}); 
-            navigate("/dashboard"); 
+
+          //easy way : feature/authen
+           // navigate("/dashboard"); 
+
+
+            if (from) {
+                navigate(from, {replace: true});
+            } else {
+                navigate("/dashboard"); 
+            }
+
 
         //edit backend to return various error message
         }catch(err){
