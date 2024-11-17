@@ -10,6 +10,7 @@ import axios from 'axios'; //temp -> axiosPrivate
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useLocation from '../../hooks/useLocation';
 import { getCanteenByRestId } from '../../api/canteenApi';
+import { getRestaurantImage } from '../../api/restaurantApi';
 
 //get user's queue, rank canteens from near to far, nearest canteen, GET restaurants info from the canteen
 //how to make fn only run/render once to improve performance
@@ -19,6 +20,7 @@ const Home = () => {
     const axiosPrivate = useAxiosPrivate();
     const {userLocation, setUserLocation} = useLocation();
     const [ canteen, setCanteen ] = useState(null);
+    const [ restImgs , setRestImgs ] = useState({});
 
     const getRestaurants = async () => {
         console.log("latitude ", userLocation.latitude);
@@ -30,6 +32,13 @@ const Home = () => {
 
             const canteen = await getCanteenByRestId(response.data[0].id);
             setCanteen(canteen.name);
+
+            for (let restaurant of response.data) {
+                const img = await getRestaurantImage(restaurant.id);
+                if (img) {
+                    restImgs[restaurant.id] = URL.createObjectURL(img);
+                }
+            }
             
             // return response.data;
         }catch(error){
@@ -76,20 +85,20 @@ const Home = () => {
             restaurants.length != 0 ?
                 <>
                     <div className="">
-                        <h1 className="heading-font mt-10">Nearby Canteen:</h1>
+                        <h1 className="heading-font mt-10">Nearby Canteen</h1>
                         <CarouselComponent />
                     </div>
 
                     <div className="flex flex-col gap-y-6">
                         <div className="">
                             <h1 className="heading-font">
-                                Food from your nearest: <span className='text-green-500'>{canteen}</span>
+                                Food from your nearest: <span className='text-orange-500'>{canteen}</span>
                             </h1>
                         </div>
                         {
 
                             restaurants.map((shop) => (
-                                <RestaurantCard key={shop.id} storeName={shop.name} img={shop.img} status={shop.status} queues={shop.queues} rating={shop.rating} price={shop.price}/>
+                                <RestaurantCard key={shop.id} storeName={shop.name} img={restImgs[shop.id]} status={shop.status} queues={shop.queues} rating={shop.rating} price={shop.price}/>
                             ))
                         }
                     
