@@ -109,8 +109,6 @@ const Home = () => {
                     <img src="./loading_main.svg" className='w-28'></img>
                 </div>
             }
-
-            
         </div>
     );
 };
