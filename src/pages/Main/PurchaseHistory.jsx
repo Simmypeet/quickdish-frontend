@@ -74,10 +74,10 @@ const PurchaseHistory = () => {
 
                     </button>
                 </div>
-                <hr className="border-t-2 border-gray-300 mb-3"/>
+                <hr className="border-t-2 border-gray-600 mb-3"/>
                 { loading ? (
                     <div className="flex justify-center items-center h-48">
-                        <img src="./loading_main.svg" className='w-28'></img>
+                        <img src="/loading_main.svg" className='w-28'></img>
                     </div>
                 ) : (
                     orders.length > 0 ? (
@@ -93,7 +93,12 @@ const PurchaseHistory = () => {
                             menu_id={order.menu_id}
                             orderStatus={order.order_status}/>
                         ))
-                    ) : (<img src="./empty-folder.png" className="w-60 h-72" alt="" ></img>)
+                    ) : (
+                    <div className="flex flex-col items-center justify-center mt-24">
+                         <img src="/empty-folder.png" className="w-40" alt="" ></img>
+                        <h1 className="text-2xl text-slate-500 ml-3">No orders found</h1>
+                    </div>
+                )
                 )}
             </div>
         </div>
