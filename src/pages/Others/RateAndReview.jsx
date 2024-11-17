@@ -41,6 +41,7 @@ const RateAndReview = () => {
             const username = await getUser(axiosPrivate);
             const date = new Date(r.created_at);
             temp["username"] = username.username; 
+            temp["customer_id"] = r.customer_id;
             temp["date"] = dateFormatted(date) + ", " + timeFormatted(date); 
             temp["menu"] = menu.name; 
             temp["menu_id"] = r.menu_id;
@@ -121,6 +122,7 @@ const RateAndReview = () => {
                                     return (<Comment 
                                     key={index}
                                     username={review.username} 
+                                    customer_id={review.customer_id}
                                     date={review.date}
                                     menu={review.menu}
                                     menu_id = {review.menu_id}

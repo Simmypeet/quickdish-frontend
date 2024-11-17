@@ -5,8 +5,24 @@ import { getMenuImage } from "../api/restaurantApi";
 import { useEffect, useState } from "react";
 
 
-const Comment = ({ username, date, menu, menu_id, numStar, comment }) => {
+const Comment = ({ username, customer_id, date, menu, menu_id, numStar, comment }) => {
     const [menuImg, setMenuImg] = useState(null);
+    const [profile, setProfile] = useState(null);
+
+    const getProfileImg = async (customer_id) => {
+        try{
+            const response = await axiosPrivate.get(`/customers/${customer_id}/get_profile_img`, {
+                responseType: 'blob',
+            });
+            const url = URL.createObjectURL(response.data);
+            if(profile){
+                setProfile(url);
+            }
+            
+        } catch (error) {
+            console.error("Error fetching profile image: ", error);
+        }        
+    }
 
     useEffect(() => {
         const fetchImage = async () => {
@@ -19,6 +35,7 @@ const Comment = ({ username, date, menu, menu_id, numStar, comment }) => {
             }
         }
         fetchImage();
+        getProfileImg(customer_id); 
     }, [menu_id]);
     
 
@@ -27,7 +44,9 @@ const Comment = ({ username, date, menu, menu_id, numStar, comment }) => {
             {/* header */}
                 <div className="p-2">
                     <div className="flex">
-                        <img className="w-12 h-12 rounded-full bg-slate-500 ml-0"/>
+                        <img 
+                            className="w-12 h-12 rounded-full bg-slate-500 ml-0"
+                            src={profile}/>
                         <div className="ml-2">
                             <h2 className="text-md text-blue-950 font-bold">{username}</h2>
                             <h2 className="text-sm text-slate-500">{date}</h2>

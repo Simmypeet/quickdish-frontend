@@ -19,14 +19,31 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 const Dashboard = () => {
     const { user, setUser } = useUser();
     const axiosPrivate = useAxiosPrivate();
+
+    const getProfileImg = async (customer_id) => {
+        try{
+            const response = await axiosPrivate.get(`/customers/${customer_id}/get_profile_img`, {
+                responseType: 'blob',
+            });
+            const url = URL.createObjectURL(response.data);
+            return url;
+        } catch (error) {
+            console.error("Error fetching profile image: ", error);
+            return null;
+        }        
+    }
+
     const getUserInfo = async () => {
+    
         try{
             const response = await getUser(axiosPrivate); 
+            const profile = await getProfileImg(response.id);
             setUser({
                 firstname: response.first_name,
                 lastname: response.last_name,  
                 username: response.username, 
                 email: response.email, 
+                profile: profile,
                 customer_id: response.id
             }
             ); 
@@ -36,6 +53,8 @@ const Dashboard = () => {
             console.log("Error fetching user: ", err); 
         }
     }
+
+    
 
     useEffect(() => {
         getUserInfo();
