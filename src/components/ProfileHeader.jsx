@@ -140,7 +140,7 @@ const ProfileHeader = () => {
                             <h1>Reviews</h1>
                             </div>
                             <div className="flex flex-col text-white border-x-2 px-3 items-center">
-                            <h1>0</h1>
+                            <h1>2</h1>
                             <h1>Photos</h1>
                             </div>
                             <div className="flex flex-col text-white justify-items-center items-center">

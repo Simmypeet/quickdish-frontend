@@ -15,9 +15,8 @@ const Comment = ({ username, customer_id, date, menu, menu_id, numStar, comment 
                 responseType: 'blob',
             });
             const url = URL.createObjectURL(response.data);
-            if(profile){
-                setProfile(url);
-            }
+            setProfile(url);
+            
             
         } catch (error) {
             console.error("Error fetching profile image: ", error);
