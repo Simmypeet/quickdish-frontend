@@ -23,7 +23,6 @@ const RestaurantCard = ({
                 bg-white p-2 hover:shadow-lg md:h-60 lg:shadow-md
             "
         >
-            {/* <img src={ img } alt="" /> */}
             <img
                 className="aspect-square h-full w-auto rounded-xl object-cover object-center"
                 src={img}

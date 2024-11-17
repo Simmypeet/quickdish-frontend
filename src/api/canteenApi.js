@@ -21,15 +21,21 @@ export const getCanteenImgFromId = async (canteenId) => {
         process.env.QUICKDISH_BACKEND_URL + `/canteens/${canteenId}/img`,
         { responseType: 'blob'}
     ); 
+    if(response.status === 204){
+        return null;
+    }
     return response.data;
 }
     // const response = await axios.get(
     //     `http://
 
-//not done
-export const getCanteenFromId = async (canteenId) => {
-    const response = await axios.get(`/getcanteens/${canteenId}`); 
-    return response.data; 
+export const getCanteenByRestId = async (restId) => {
+    try{
+        const response = await axios.get(process.env.QUICKDISH_BACKEND_URL + `/canteens/restaurants/${restId}`); 
+        return response.data; 
+    }catch(error){
+        console.error("Error fetching canteen:", error); 
+    }
 }
 
 

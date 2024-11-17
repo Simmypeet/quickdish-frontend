@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'; //temp -> axiosPrivate
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useLocation from '../../hooks/useLocation';
+import { getCanteenByRestId } from '../../api/canteenApi';
 
 //get user's queue, rank canteens from near to far, nearest canteen, GET restaurants info from the canteen
 //how to make fn only run/render once to improve performance
@@ -17,13 +18,19 @@ const Home = () => {
     const [restaurants, setRestaurants] = useState([]);
     const axiosPrivate = useAxiosPrivate();
     const {userLocation, setUserLocation} = useLocation();
+    const [ canteen, setCanteen ] = useState(null);
 
     const getRestaurants = async () => {
         console.log("latitude ", userLocation.latitude);
+        
         try{
             const response = await axiosPrivate.get(`http://127.0.0.1:8000/canteens/canteen/restaurants?user_lat=${userLocation.latitude}&user_long=${userLocation.longtitude}`); //replace 
             console.log("get restaurant: ", response.data);
             setRestaurants(response.data);
+
+            const canteen = await getCanteenByRestId(response.data[0].id);
+            setCanteen(canteen.name);
+            
             // return response.data;
         }catch(error){
             console.error("Error fetching restaurants:", error);
@@ -44,6 +51,7 @@ const Home = () => {
     useEffect(() => {
         if(userLocation.latitude > 0 && userLocation.longtitude > 0){
             getRestaurants();
+           
         }
     }, [userLocation.latitude, userLocation.longtitude]);
 
@@ -68,14 +76,14 @@ const Home = () => {
             restaurants.length != 0 ?
                 <>
                     <div className="">
-                        <h1 className="heading-font mt-10">Nearby Canteen</h1>
+                        <h1 className="heading-font mt-10">Nearby Canteen:</h1>
                         <CarouselComponent />
                     </div>
 
                     <div className="flex flex-col gap-y-6">
                         <div className="">
                             <h1 className="heading-font">
-                                Food from your nearest: Canteen A
+                                Food from your nearest: <span className='text-green-500'>{canteen}</span>
                             </h1>
                         </div>
                         {
