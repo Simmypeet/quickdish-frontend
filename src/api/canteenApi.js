@@ -16,6 +16,16 @@ export const getCanteenFromRestaurantId = async (resId) => {
     return response.data; 
 }
 
+export const getCanteenImgFromId = async (canteenId) => {
+    const response = await axios.get(
+        process.env.QUICKDISH_BACKEND_URL + `/canteens/${canteenId}/img`,
+        { responseType: 'blob'}
+    ); 
+    return response.data;
+}
+    // const response = await axios.get(
+    //     `http://
+
 //not done
 export const getCanteenFromId = async (canteenId) => {
     const response = await axios.get(`/getcanteens/${canteenId}`); 

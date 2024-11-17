@@ -47,14 +47,10 @@ const Dashboard = () => {
                 customer_id: response.id
             }
             ); 
-            
-
         }catch(err){
             console.log("Error fetching user: ", err); 
         }
     }
-
-    
 
     useEffect(() => {
         getUserInfo();

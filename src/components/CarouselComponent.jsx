@@ -6,6 +6,7 @@ import axios from 'axios'; //temp -> axiosPrivate
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useLocation from "../hooks/useLocation";
 import { getRestaurantImage } from "../api/restaurantApi";
+import { getCanteenImgFromId } from "../api/canteenApi";
 
 
 const CarouselComponent = () => {
@@ -14,39 +15,48 @@ const CarouselComponent = () => {
     const axiosPrivate = useAxiosPrivate();
     const { userLocation, setUserLocation } = useLocation();
 
+   
     const getCanteens = async () => {
-        try{
-            const response = await axiosPrivate.get(`http://127.0.0.1:8000/canteens/?user_lat=${userLocation.latitude}&user_long=${userLocation.longtitude}`); //replace
+        try {
+            const response = await axiosPrivate.get(`http://127.0.0.1:8000/canteens/?user_lat=${userLocation.latitude}&user_long=${userLocation.longtitude}`);
             setCanteens(response.data);
-            // return response.data;
-            const images = {}; 
-            for(let canteen of response.data){
-                const img = await fetchCanteenImg(canteen.id);
-                images[canteen.id] = URL.createObjectURL(img);
+    
+            const images = {};
+            for (let canteen of response.data) {
+                // const img = await fetchCanteenImg(canteen.id);
+                const img = await getCanteenImgFromId(canteen.id);
+
+                if (img) {
+                    images[canteen.id] = URL.createObjectURL(img);
+                }
             }
+            console.log("Images fetched: ", images);
             setCanteenImg(images);
-        }catch{
-            console.log('error');
+        } catch (error) {
+            console.log('Error fetching canteens or images:', error);
         }
-    }
+    };
+    
 
-    // blo
-
-    const fetchCanteenImg = async (canteenId) => {
-        const response = await axios.get(`http://127.0.0.1:8000/canteens/${canteenId}/img`, 
-            { responseType: 'blob'}
-        );
-        if(response.status === 200){
-            return response.data; 
-        }else if(response.status === 204){
-            return null; 
-        }
+    // const fetchCanteenImg = async (canteenId) => {
+    //     const response = await axios.get(`/canteens/${canteenId}/img`, 
+    //         { responseType: 'blob'}
+    //     );
+    //     console.log("canteen img response: ", response);
+    //     if(response.status === 200){
+    //         return response.data; 
+    //     }else if(response.status === 204){
+    //         return null; 
+    //     }
+    //     // return response.data; 
         
-        throw new Error(
-            `Error fetching restaurant image status: ${response.status};
-            body : ${response.data}`
-        ); 
-    }; 
+    //     throw new Error(
+    //         `Error fetching restaurant image status: ${response.status};
+    //         body : ${response.data}`
+    //     ); 
+
+        
+    // }; 
 
     useEffect(() => {
         if(userLocation.latitude > 0 && userLocation.longtitude > 0){

@@ -96,7 +96,7 @@ const PurchaseHistory = () => {
                     ) : (
                     <div className="flex flex-col items-center justify-center mt-24">
                          <img src="/empty-folder.png" className="w-40" alt="" ></img>
-                        <h1 className="text-2xl text-slate-500 ml-3">No orders found</h1>
+                        <h1 className="text-xl text-slate-500 ml-3">No orders found</h1>
                     </div>
                 )
                 )}
