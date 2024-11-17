@@ -1,29 +1,41 @@
 import axios from 'axios'; 
 
-export const getCanteenData = async () => {
-    try{
-        const response = await axios.get("https://8caccc42-a1cd-4bba-845c-7dedfe4de271.mock.pstmn.io/getcanteens"); 
-        console.log("response: ", response.data);
-        return response.data; 
-    } catch (error) {
-        console.log("Error fetching: ", error);
-        return null; 
-    }
-}
-
-export const getNearestCanteen = async (userLocation) => { //latitute and longitude
-    //call getCanteenData, rank canteens based on distance from userLocation, return canteen id
-
-}
-
-export const getRestaurantsFromCanteenId = async (canteenId) => {
-
-}
-
-//not done
-export const getCanteenFromId = async (canteenId) => {
-    const response = await axios.get(`/getcanteens/${canteenId}`); 
+export const getCanteenFromRestaurantId = async (resId) => {
+    const response = await axios.get(
+        process.env.QUICKDISH_BACKEND_URL + `/canteens/restaurants/${resId}`
+    ); 
+    // const response = await axios.get(`http://127.0.0.1:8000/canteens/restaurants/${resId}`
+    // ); 
+    if (response.status !== 200){
+        throw new Error(
+            `Error fetching restaurant data status: ${response.status};
+            body: ${response.data}`
+        ); 
+    };
+    console.log("canteen response: ", response.data); 
     return response.data; 
+}
+
+export const getCanteenImgFromId = async (canteenId) => {
+    const response = await axios.get(
+        process.env.QUICKDISH_BACKEND_URL + `/canteens/${canteenId}/img`,
+        { responseType: 'blob'}
+    ); 
+    if(response.status === 204){
+        return null;
+    }
+    return response.data;
+}
+    // const response = await axios.get(
+    //     `http://
+
+export const getCanteenByRestId = async (restId) => {
+    try{
+        const response = await axios.get(process.env.QUICKDISH_BACKEND_URL + `/canteens/restaurants/${restId}`); 
+        return response.data; 
+    }catch(error){
+        console.error("Error fetching canteen:", error); 
+    }
 }
 
 

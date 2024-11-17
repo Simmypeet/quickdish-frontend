@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 
 //send refresh token to server to get new access token
 //return new access token
-
 const useRefreshToken = () => {
     const { auth, setAuth } = useAuth(); 
     const navigate = useNavigate(); 

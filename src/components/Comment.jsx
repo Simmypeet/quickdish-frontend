@@ -1,16 +1,51 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { getMenuImage } from "../api/restaurantApi";
+import { useEffect, useState } from "react";
 
 
-const Comment = ({ username, date, menu, numStar, comment }) => {
+const Comment = ({ username, customer_id, date, menu, menu_id, numStar, comment }) => {
+    const [menuImg, setMenuImg] = useState(null);
+    const [profile, setProfile] = useState(null);
+
+    const getProfileImg = async (customer_id) => {
+        try{
+            const response = await axiosPrivate.get(`/customers/${customer_id}/get_profile_img`, {
+                responseType: 'blob',
+            });
+            const url = URL.createObjectURL(response.data);
+            setProfile(url);
+            
+            
+        } catch (error) {
+            console.error("Error fetching profile image: ", error);
+        }        
+    }
+
+    useEffect(() => {
+        const fetchImage = async () => {
+            try {
+                const response = await getMenuImage(menu_id);
+                const url = URL.createObjectURL(response);
+                setMenuImg(url);
+            }catch(error){
+                console.error("Error fetching menu image: ", error);
+            }
+        }
+        fetchImage();
+        getProfileImg(customer_id); 
+    }, [menu_id]);
+    
+
     return (
-       
             <div className="bg-slate-100 w-5/6 p-2 rounded-3xl mb-6 ml-7 flex flex-col shadow-xl">
             {/* header */}
-                <div className="m-2">
+                <div className="p-2">
                     <div className="flex">
-                        <img className="w-12 h-12 rounded-full bg-slate-500 ml-0"/>
+                        <img 
+                            className="w-12 h-12 rounded-full bg-slate-500 ml-0"
+                            src={profile}/>
                         <div className="ml-2">
                             <h2 className="text-md text-blue-950 font-bold">{username}</h2>
                             <h2 className="text-sm text-slate-500">{date}</h2>
@@ -38,11 +73,11 @@ const Comment = ({ username, date, menu, numStar, comment }) => {
                     </div>
                     
 
-                    <h2 className="mb-3 text-lg text-blue-950">{comment}</h2>
+                    <h2 className="mb-3 text-lg break-words text-blue-950">{comment}</h2>
                     {/* //see more if comment is too long */}
-                    <div className="overflow-hidden rounded-md h-2/4 bg-slate-300 ">
+                    <div className="overflow-hidden rounded-md h-52 bg-slate-300 ">
                         {/* foog img */}
-                        <img className="object-cover w-full h-36" src="https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg?cs=srgb&dl=pexels-ella-olsson-572949-1640772.jpg&fm=jpg" alt="" />
+                        <img className="object-cover w-full h-full" src={menuImg} alt="" />
                     </div>
 
                     <div className="w-full flex rounded-md mt-3 justify-center">

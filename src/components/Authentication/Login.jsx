@@ -7,7 +7,7 @@ import useAuth from "../../hooks/useAuth";
 
 const Login = ({toggle}) => {
     const { auth, setAuth } = useAuth(); 
-
+   
     const navigate = useNavigate();
     const location = useLocation(); 
     const from = location.state?.from?.pathname
@@ -17,6 +17,7 @@ const Login = ({toggle}) => {
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ errMsg, setErrMsg ] = useState('');
+
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
@@ -39,11 +40,16 @@ const Login = ({toggle}) => {
 
             setAuth({ username: username, password: password, role: role, accessToken: accessToken });
 
+          //easy way : feature/authen
+           // navigate("/dashboard"); 
+
+
             if (from) {
                 navigate(from, {replace: true});
             } else {
                 navigate("/dashboard"); 
             }
+
 
         //edit backend to return various error message
         }catch(err){

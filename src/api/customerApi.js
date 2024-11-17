@@ -1,3 +1,4 @@
+
 /**
  * @import {AxiosInstance} from 'axios'
  */
@@ -40,3 +41,14 @@ export const removeFavoriteRestaurant = async (axiosInst, restaurantIds) => {
 
     return response.data;
 };
+
+export const getUser = async (axiosPrivate) => {
+    // const response = await axiosPrivate.get(
+    //     'http://127.0.0.1:8000/customers/me'
+    // );
+    const response = await axiosPrivate.get(
+        '/customers/me'
+    );
+    return response.data; 
+}; 
+

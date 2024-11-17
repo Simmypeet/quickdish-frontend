@@ -2,23 +2,68 @@ import React, { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import CanteenCard from "./CanteenCard";
+import axios from 'axios'; //temp -> axiosPrivate
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useLocation from "../hooks/useLocation";
+import { getRestaurantImage } from "../api/restaurantApi";
+import { getCanteenImgFromId } from "../api/canteenApi";
+
 
 const CarouselComponent = () => {
     const [canteens, setCanteens] = useState(null); 
-    useEffect(() => {
-        const fetchData = async() => {
-            try{
-                const data = Array(10).fill(0).map((_, i) => ({
-                    id: i,
-                    name: `Canteen ${i+1}`,
-                }));
-                setCanteens(data);
-            }catch(error){
-                console.log("Error fetching: ", error);
+    const [canteenImg, setCanteenImg] = useState({});
+    const axiosPrivate = useAxiosPrivate();
+    const { userLocation, setUserLocation } = useLocation();
+
+   
+    const getCanteens = async () => {
+        try {
+            const response = await axiosPrivate.get(`http://127.0.0.1:8000/canteens/?user_lat=${userLocation.latitude}&user_long=${userLocation.longtitude}`);
+            setCanteens(response.data);
+    
+            const images = {};
+            for (let canteen of response.data) {
+                // const img = await fetchCanteenImg(canteen.id);
+                const img = await getCanteenImgFromId(canteen.id);
+
+                if (img) {
+                    images[canteen.id] = URL.createObjectURL(img);
+                }
             }
-        };
-        fetchData();
-    }, []);  //empty arry = run once on mount
+            console.log("Images fetched: ", images);
+            setCanteenImg(images);
+        } catch (error) {
+            console.log('Error fetching canteens or images:', error);
+        }
+    };
+    
+
+    // const fetchCanteenImg = async (canteenId) => {
+    //     const response = await axios.get(`/canteens/${canteenId}/img`, 
+    //         { responseType: 'blob'}
+    //     );
+    //     console.log("canteen img response: ", response);
+    //     if(response.status === 200){
+    //         return response.data; 
+    //     }else if(response.status === 204){
+    //         return null; 
+    //     }
+    //     // return response.data; 
+        
+    //     throw new Error(
+    //         `Error fetching restaurant image status: ${response.status};
+    //         body : ${response.data}`
+    //     ); 
+
+        
+    // }; 
+
+    useEffect(() => {
+        if(userLocation.latitude > 0 && userLocation.longtitude > 0){
+            getCanteens();
+        }
+    }, [userLocation.latitude, userLocation.longtitude]);
+
 
     if (canteens == null){
         return (
@@ -26,12 +71,6 @@ const CarouselComponent = () => {
                 Loading... 
             </div>);
     }
-
-    const item = canteens.map(canteen => ({
-        id: canteen.id,
-        name: canteen.name,
-        img: canteen.img
-    }))
 
     const responsive = {
         superLargeDesktop: {
@@ -62,9 +101,9 @@ const CarouselComponent = () => {
                 partialVisible={false}
                 partialVisbile={false}
             >
-                {item.map(it => (
+                {canteens.map(canteen => (
                     // <CanteenCard key={it.id} canteenName={it.name} img={it.img}/>
-                    <CanteenCard key={it.id} canteenName={it.name}/>
+                    <CanteenCard key={canteen.id} canteenName={canteen.name} img={canteenImg[canteen.id]}/>
                 ))}
             </Carousel>
     );

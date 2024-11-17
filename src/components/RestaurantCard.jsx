@@ -31,6 +31,7 @@ const RestaurantCard = ({
     rating,
     flag,
     onFlag,
+
 }) => {
     const [flagValue, setFlagvalue] = useState(flag ?? false);
     const handleFlag = () => {
@@ -48,7 +49,6 @@ const RestaurantCard = ({
                 bg-white p-2 hover:shadow-lg md:h-60 lg:shadow-md
             "
         >
-            {/* <img src={ img } alt="" /> */}
             <img
                 className="aspect-square h-full w-auto rounded-xl object-cover object-center"
                 src={image}
@@ -56,7 +56,9 @@ const RestaurantCard = ({
             />
             <div className="mx-2 flex grow flex-col justify-between md:mx-4 md:my-2">
                 <div className="flex items-center justify-between">
+
                     <h2 className="sub-title line-clamp-1">{name}</h2>
+
                     <button type="button" onClick={handleFlag}>
                         {/* change to black when click  */}
                         {flagValue ? (
@@ -76,6 +78,7 @@ const RestaurantCard = ({
                 <div className="mx-1 flex w-full grow flex-col py-2 md:justify-evenly md:space-y-2">
                     <div className="flex justify-between">
                         <h2 className="card-info">Status:</h2>
+
                         <h2 className="card-info">{busyness}</h2>
                     </div>
                     <div className="flex justify-between">
@@ -87,10 +90,11 @@ const RestaurantCard = ({
                         <h2 className="card-info">{`${rating.toFixed(
                             1
                         )}/5`}</h2>
+
                     </div>
                     <div className="hidden justify-between md:flex">
                         <h2 className="card-info">Price:</h2>
-                        <h2 className="card-info">$$$</h2>
+                        <h2 className="card-info">{price}</h2>
                     </div>
                 </div>
                 {/* needed: fetch from db */}
