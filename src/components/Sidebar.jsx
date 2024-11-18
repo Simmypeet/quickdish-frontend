@@ -5,7 +5,6 @@ import { faHouse, faBookmark, faComment,faClockRotateLeft,faUser, faUtensils, fa
 import useAuth from '../hooks/useAuth';
 
 const SideBar = () => {
-
     const { setAuth } = useAuth();
     const logout = () => {
         setAuth({});

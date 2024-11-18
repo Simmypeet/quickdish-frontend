@@ -30,7 +30,7 @@ const CarouselComponent = () => {
                     images[canteen.id] = URL.createObjectURL(img);
                 }
             }
-            console.log("Images fetched: ", images);
+            console.log("Canteen Images fetched: ", images);
             setCanteenImg(images);
         } catch (error) {
             console.log('Error fetching canteens or images:', error);

@@ -50,7 +50,7 @@ const Home = () => {
     );
 
     const getRestaurants = async () => {
-        console.log("latitude ", userLocation.latitude);
+        console.log("home latitude ", userLocation.latitude);
         
         try{
             const response = await axiosPrivate.get(`http://127.0.0.1:8000/canteens/canteen/restaurants?user_lat=${userLocation.latitude}&user_long=${userLocation.longtitude}`); //replace 
@@ -61,6 +61,17 @@ const Home = () => {
             setCanteen(canteen.name);
 
             for (let restaurant of response.data) {
+                // const rest = []; 
+                // rest["id"] = restaurant.id;
+                // rest["name"] = restaurant.name;
+
+                // rest["status"] = restaurant.status;
+                // rest["queues"] = restaurant.queues;
+                // rest["canteenName"] = restaurant.queues;
+                // rest["busyness"] = restaurant.queues;
+                // rest["queues"] = restaurant.queues;
+                // rest["rating"] = restaurant.queues;
+                
                 const img = await getRestaurantImage(restaurant.id);
                 if (img) {
                     restImgs[restaurant.id] = URL.createObjectURL(img);
@@ -147,10 +158,11 @@ const Home = () => {
                         </div>
                     </div>
                   </EventHandlerProvider>
+        )} 
 
  
             { 
-            restaurants.length != 0 ?
+                restaurants.length != 0 ?
                 <>
                     <div className="">
                         <h1 className="heading-font mt-10">Nearby Canteen</h1>
@@ -172,10 +184,10 @@ const Home = () => {
                                   name={shop.name} 
                                   image={restImgs[shop.id]} 
                                   canteenName={'First Canteen'} //problem : add canteen name
-                                  busyness={shop.status} 
-                                  queues={shop.queues} 
-                                  rating={shop.rating} 
-                                  />
+                                  busyness={'busy'} 
+                                  queues={123}
+                                  rating={3.5} 
+                                />
                             ))
                         }
                     
