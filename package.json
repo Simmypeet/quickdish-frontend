@@ -22,17 +22,17 @@
     "@server-sent-stream/web": "^1.0.3",
 
     "axios": "^1.7.7",
+    "clsx": "^2.1.1",
     "decimal.js": "^10.4.3",
     "dotenv": "^16.4.5",
+    "moment": "^2.30.1",
+    "moment-timezone": "^0.5.46",
     "react": "^18.3.1",
     "react-cookie": "^7.2.0",
     "react-dom": "^18.3.1",
     "react-multi-carousel": "^2.8.5",
-
-    "moment-timezone": "^0.5.46",
-    "moment": "^2.30.1",
-
-    "react-router-dom": "^6.26.2"
+    "react-router-dom": "^6.26.2",
+    "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
