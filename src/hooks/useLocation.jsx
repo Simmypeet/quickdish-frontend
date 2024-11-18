@@ -1,8 +1,23 @@
-import { useContext } from 'react'; 
+// @ts-check
+
+import { useContext } from 'react';
 import LocationContext from '../context/LocationProvider';
 
+/**
+ * @import {LocationContextType} from '../context/LocationProvider'
+ */
+
+/**
+ * @returns {LocationContextType}
+ */
 const useLocation = () => {
-    return useContext(LocationContext);
-}; 
+    const location = useContext(LocationContext);
+
+    if (!location) {
+        throw new Error('useLocation must be used within a LocationProvider');
+    }
+
+    return location;
+};
 
 export default useLocation;
