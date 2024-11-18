@@ -25,7 +25,8 @@ export default ({ onClose, children, title, className }) => {
         >
             <div
                 className={merge(
-                    `relative mx-auto my-auto h-[90%] rounded-md bg-white p-4`,
+                    `relative mx-auto my-auto h-[90%] rounded-md bg-white p-4
+                    drop-shadow-md`,
                     className
                 )}
             >

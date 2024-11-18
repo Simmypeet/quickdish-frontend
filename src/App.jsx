@@ -14,6 +14,7 @@ import AuthContext from './context/AuthProvider';
 import Unauthorized from './pages/Others/Unauthorize';
 import RequireAuth from './components/RequireAuth';
 import NewMenu from './pages/Merchant/NewMenu';
+import NewCustomizations from './pages/Merchant/NewCustomizations';
 
 
 import LoadingPage from './components/LoadingPage'
