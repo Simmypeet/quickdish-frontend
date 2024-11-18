@@ -1,6 +1,6 @@
 import SideBar from "../../components/Merchant/Sidebar";
 import Header from "../../components/Merchant/Header";
-import Home from "../../components/Merchant/Home";
+import Mhome from "./Mhome";
 
 //sidebar, header, link to other pages
 const MerchantDashboard = () => {
@@ -17,7 +17,7 @@ const MerchantDashboard = () => {
                     <Header/>
                 </div>
                 <div className="absolute top-32 left-72 right-10">
-                    <Home/>
+                    <Mhome/>
                 </div>
             </div>
         </div>
