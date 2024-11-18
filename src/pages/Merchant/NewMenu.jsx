@@ -5,22 +5,25 @@ import React, { createContext, Fragment, useRef, useState } from 'react';
 import merge from '../../utils/className';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+    faCheck,
     faCircleInfo,
     faClock,
     faClose,
+    faDeleteLeft,
+    faDownload,
     faEdit,
     faInfoCircle,
     faPlus,
-    faPlusCircle,
-    faStore,
     faTag,
     faTrash,
+    faUpload,
     faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
 import { faUserSlash } from '@fortawesome/free-solid-svg-icons/faUserSlash';
 
 /**
- * @import {Customization} from '../../types/restaurant'
+ * @import { CustomizationCreate } from '../../types/restaurant'
+ * @import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
  */
 
 /**
@@ -56,8 +59,10 @@ const GradientTextButton = ({ text, onclick, className }) => {
  * @property {React.Dispatch<React.SetStateAction<string>>} setEstimatedTime
  * @property {string} price
  * @property {React.Dispatch<React.SetStateAction<string>>} setPrice
- * @property {Customization[]} customizations
- * @property {React.Dispatch<React.SetStateAction<Customization[]>>} setCustomizations
+ * @property {CustomizationCreate[]} customizations
+ * @property {React.Dispatch<React.SetStateAction<CustomizationCreate[]>>} setCustomizations
+ * @property {File | null} image
+ * @property {React.Dispatch<React.SetStateAction<File | null>>} setImage
  */
 
 const NewMenuContext = createContext(
@@ -69,14 +74,14 @@ const NewMenuProvider = ({ children }) => {
     const [menuDescription, setMenuDescription] = useState('');
     const [estimatedTime, setEstimatedTime] = useState('');
     const [price, setPrice] = useState('');
+    const [image, setImage] = useState(/**@type{File | null}*/ (null));
     const [customizations, setCustomizations] = useState(
-        /**@type{Customization[]}*/ ([
+        /**@type{CustomizationCreate[]}*/ ([
             {
                 title: 'Size',
                 description: 'Choose a size',
                 unique: true,
                 required: true,
-                id: 1,
                 options: [
                     {
                         name: 'Small',
@@ -109,6 +114,8 @@ const NewMenuProvider = ({ children }) => {
                 setPrice,
                 customizations,
                 setCustomizations,
+                image,
+                setImage,
             }}
         >
             {children}
@@ -129,11 +136,11 @@ const useNewMenu = () => {
 
 /**
  *
- * @param {{title: string}} prop
- * @returns
+ * @param {{children?: React.ReactNode}} prop
+ * @returns {React.ReactNode}
  */
-const SubTitle = ({ title }) => {
-    return <h2 className="text-xl font-semibold">{title}</h2>;
+const SubTitle = ({ children }) => {
+    return <h2 className="text-xl font-semibold">{children}</h2>;
 };
 
 /**
@@ -382,11 +389,120 @@ const CustomizationBox = ({ index }) => {
 /**
  * @returns {React.ReactNode}
  */
+const MenuImageUpload = () => {
+    const { setImage, image } = useNewMenu();
+    const [uploadMoreThanOneImage, setUploadMoreThanOneImage] = useState(false);
+
+    return (
+        <TopicBox title={<SubTitle>Menu Image</SubTitle>}>
+            <div className="aspect-square h-auto w-full p-3">
+                <div
+                    className={merge(
+                        `flex aspect-square h-auto w-full rounded-md border 
+                        border-dashed border-slate-300 bg-slate-50 
+                        shadow-inner`,
+                        image == null ? 'cursor-pointer' : ''
+                    )}
+                    onDrop={(e) => {
+                        e.preventDefault();
+
+                        // already have an image
+                        if (image) return;
+
+                        // expect only one image file
+
+                        if (e.dataTransfer.items.length > 1) {
+                            setUploadMoreThanOneImage(true);
+                            return;
+                        }
+
+                        const file = e.dataTransfer.items[0].getAsFile();
+
+                        setUploadMoreThanOneImage(false);
+                        setImage(file);
+                    }}
+                    onDragOver={(e) => {
+                        e.preventDefault();
+                    }}
+                    onClick={(e) => {
+                        if (image) return;
+
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.onchange = (e) => {
+                            if (!input.files) return;
+
+                            if (input.files.length > 1) {
+                                setUploadMoreThanOneImage(true);
+                                return;
+                            }
+
+                            const file = input.files[0];
+
+                            setImage(file);
+                        };
+                        input.click();
+                    }}
+                >
+                    <div
+                        className="
+                            mx-auto my-auto flex flex-col items-center gap-y-2
+                        "
+                    >
+                        <FontAwesomeIcon
+                            icon={image ? faCheck : faUpload}
+                            className="text-4xl text-slate-300"
+                        />
+
+                        <div className="text-center text-sm text-slate-600">
+                            {image ? (
+                                <b>Image Uploaded</b>
+                            ) : (
+                                <>
+                                    <b>Choose a file</b> or drag it here
+                                </>
+                            )}
+                        </div>
+
+                        {image && (
+                            <h1
+                                className="
+                                    line-clamp-1 flex max-w-[70%]
+                                    flex-row gap-x-2 rounded-sm border 
+                                    border-slate-300 bg-white p-1 px-2 
+                                    text-sm text-slate-600 shadow-inner
+                                "
+                            >
+                                <div className="max-w-[80%]">{image.name}</div>
+                                <FontAwesomeIcon
+                                    icon={faClose}
+                                    className="my-auto cursor-pointer"
+                                    onClick={() => setImage(null)}
+                                />
+                            </h1>
+                        )}
+
+                        {uploadMoreThanOneImage && (
+                            <div className="text-center italic text-red-400">
+                                *can only upload one image.{' '}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </TopicBox>
+    );
+};
+
+/**
+ * @returns {React.ReactNode}
+ */
 const Customizations = () => {
     const { customizations, setCustomizations } = useNewMenu();
 
     return (
-        <TopicBox title={<SubTitle title="Customizations" />}>
+        <TopicBox title={<SubTitle>Customization</SubTitle>}>
             <div className="mx-auto flex min-h-32 w-full flex-col rounded-md ">
                 {customizations.length == 0 ? (
                     <div
@@ -425,7 +541,7 @@ const Customizations = () => {
 /**
  *
  * @param {{
- *  icon: import('@fortawesome/fontawesome-svg-core').IconDefinition,
+ *  icon: IconDefinition,
  *  value: string,
  *  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
  *  placeholder: string,
@@ -474,7 +590,7 @@ const BasicInformation = () => {
     } = useNewMenu();
 
     return (
-        <TopicBox title=<SubTitle title="Basic Information" />>
+        <TopicBox title={<SubTitle>Basic Information</SubTitle>}>
             <form
                 className="
                     mx-autobg-blue-200 justify-between2 mx-auto 
@@ -527,7 +643,7 @@ const BasicInformation = () => {
  */
 const TopicBox = ({ title, children, className }) => {
     return (
-        <div className={merge(`flex flex-col rounded-md`, className)}>
+        <div className={merge(`rounded-md`, className)}>
             {title}
 
             <hr className="my-2 w-full"></hr>
@@ -574,7 +690,8 @@ export default ({}) => {
                             "
                         >
                             <BasicInformation />
-                            <Customizations />
+                            <MenuImageUpload />
+                            {/* <Customizations /> */}
 
                             <div className="h-0 grow"></div>
 

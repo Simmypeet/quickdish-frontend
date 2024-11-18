@@ -13,6 +13,7 @@ import Authentication from './pages/Others/Authentication';
 import AuthContext from './context/AuthProvider';
 import Unauthorized from './pages/Others/Unauthorize';
 import RequireAuth from './components/RequireAuth';
+import NewMenu from './pages/Merchant/NewMenu';
 
 
 import LoadingPage from './components/LoadingPage'
