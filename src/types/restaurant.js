@@ -51,4 +51,23 @@
  * @property {Option[]} options
  */
 
+/**
+ * @typedef {Object} CustomizationCreate
+ * 
+ * @property {string} title
+ * @property {string | null} description
+ * @property {boolean} unique
+ * @property {boolean} required
+ * @property {number} menu_id
+ * @property {OptionCreate[]} options
+ */
+
+/**
+ * @typedef {Object} OptionCreate
+ * 
+ * @property {string} name
+ * @property {string | null} description
+ * @property {string | null} extra_price
+ */
+
 export {};

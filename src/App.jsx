@@ -14,9 +14,6 @@ import AuthContext from './context/AuthProvider';
 import Unauthorized from './pages/Others/Unauthorize';
 import RequireAuth from './components/RequireAuth';
 
-
-import LoadingPage from './components/LoadingPage'
-
 const App = () => {
   const auth = useContext(AuthContext); 
   return (
