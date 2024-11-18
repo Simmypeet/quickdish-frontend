@@ -61,17 +61,6 @@ const Home = () => {
             setCanteen(canteen.name);
 
             for (let restaurant of response.data) {
-                // const rest = []; 
-                // rest["id"] = restaurant.id;
-                // rest["name"] = restaurant.name;
-
-                // rest["status"] = restaurant.status;
-                // rest["queues"] = restaurant.queues;
-                // rest["canteenName"] = restaurant.queues;
-                // rest["busyness"] = restaurant.queues;
-                // rest["queues"] = restaurant.queues;
-                // rest["rating"] = restaurant.queues;
-                
                 const img = await getRestaurantImage(restaurant.id);
                 if (img) {
                     restImgs[restaurant.id] = URL.createObjectURL(img);

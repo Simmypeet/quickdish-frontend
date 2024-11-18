@@ -3,9 +3,11 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { getMenuImage } from "../api/restaurantApi";
 import { useEffect, useState } from "react";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 
 const Comment = ({ username, customer_id, date, menu, menu_id, numStar, comment }) => {
+    const axiosPrivate = useAxiosPrivate();
     const [menuImg, setMenuImg] = useState(null);
     const [profile, setProfile] = useState(null);
 
@@ -16,6 +18,7 @@ const Comment = ({ username, customer_id, date, menu, menu_id, numStar, comment 
             });
             const url = URL.createObjectURL(response.data);
             setProfile(url);
+            console.log("Profile image fetched: ", url);
             
             
         } catch (error) {
@@ -35,7 +38,7 @@ const Comment = ({ username, customer_id, date, menu, menu_id, numStar, comment 
         }
         fetchImage();
         getProfileImg(customer_id); 
-    }, [menu_id]);
+    }, [customer_id]);
     
 
     return (
@@ -45,7 +48,7 @@ const Comment = ({ username, customer_id, date, menu, menu_id, numStar, comment 
                     <div className="flex">
                         <img 
                             className="w-12 h-12 rounded-full bg-slate-500 ml-0"
-                            src={profile}/>
+                            src={profile !== null ? profile : "/unset-profile.jpg"}/>
                         <div className="ml-2">
                             <h2 className="text-md text-blue-950 font-bold">{username}</h2>
                             <h2 className="text-sm text-slate-500">{date}</h2>

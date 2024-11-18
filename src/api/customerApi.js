@@ -52,3 +52,10 @@ export const getUser = async (axiosPrivate) => {
     return response.data; 
 }; 
 
+export const getUserById = async (axiosPrivate, userId) => {
+    const response = await axiosPrivate.get(
+        `/customers/${userId}`
+    );
+    return response.data; 
+}
+
