@@ -73,7 +73,7 @@ const Dashboard = () => {
                 <div 
                     className="flex flex-col w-0 grow"
                 >
-                    <div className="grow">
+                    <div className="flex flex-col grow">
                         <Routes>
                             <Route path="/" element={
                                 <div className='md:-ml-4 sticky top-0 z-10'>
@@ -82,7 +82,7 @@ const Dashboard = () => {
                             }/>
                         </Routes>
 
-                        <div className="p-2 md:pr-4 md:pl-0">
+                        <div className="h-full p-2 md:pr-4 md:pl-0">
                             <Routes>
 
                                 {/* for several roles = ['user', 'admin', 'staff'] */}
