@@ -26,9 +26,9 @@ const CarouselComponent = () => {
                 // const img = await fetchCanteenImg(canteen.id);
                 const img = await getCanteenImgFromId(canteen.id);
 
-                if (img) {
-                    images[canteen.id] = URL.createObjectURL(img);
-                }
+                images[canteen.id] = img
+                    ? URL.createObjectURL(img)
+                    : defaultCanteen;
             }
             console.log("Canteen Images fetched: ", images);
             setCanteenImg(images);

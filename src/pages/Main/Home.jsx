@@ -73,9 +73,9 @@ const Home = () => {
                 // rest["rating"] = restaurant.queues;
                 
                 const img = await getRestaurantImage(restaurant.id);
-                if (img) {
-                    restImgs[restaurant.id] = URL.createObjectURL(img);
-                }
+                restImgs[restaurant.id] = img
+                    ? URL.createObjectURL(img)
+                    : defaultRestaurant;
             }
             
             // return response.data;
