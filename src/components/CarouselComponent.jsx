@@ -1,28 +1,39 @@
-import React, { useState, useEffect } from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import CanteenCard from "./CanteenCard";
-import axios from 'axios'; //temp -> axiosPrivate
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import useLocation from "../hooks/useLocation";
-import { getRestaurantImage } from "../api/restaurantApi";
-import { getCanteenImgFromId } from "../api/canteenApi";
+// @ts-check
 
+import React, { useState, useEffect } from 'react';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import CanteenCard from './CanteenCard';
+import useLocation from '../hooks/useLocation';
+import { getCanteenImgFromId, getNearestCanteens } from '../api/canteenApi';
+
+// @ts-expect-errors
+import defaultCanteen from '../../public/defaultCanteen.jpg';
+
+/**
+ * @import {Canteen} from '../types/canteen'
+ * @import {Location} from '../types/location'
+ */
 
 const CarouselComponent = () => {
-    const [canteens, setCanteens] = useState(null); 
+    const [canteens, setCanteens] = useState(/** @type{Canteen[]} */ ([]));
     const [canteenImg, setCanteenImg] = useState({});
-    const axiosPrivate = useAxiosPrivate();
-    const { userLocation, setUserLocation } = useLocation();
+    const { location } = useLocation();
 
-   
-    const getCanteens = async () => {
+    /**
+     *
+     * @param {Location} location
+     */
+    const getCanteens = async (location) => {
         try {
-            const response = await axiosPrivate.get(`http://127.0.0.1:8000/canteens/?user_lat=${userLocation.latitude}&user_long=${userLocation.longtitude}`);
-            setCanteens(response.data);
-    
+            const canteens = await getNearestCanteens(
+                location.latitude,
+                location.longtitude
+            );
+            setCanteens(canteens);
+
             const images = {};
-            for (let canteen of response.data) {
+            for (let canteen of canteens) {
                 // const img = await fetchCanteenImg(canteen.id);
                 const img = await getCanteenImgFromId(canteen.id);
 
@@ -30,46 +41,21 @@ const CarouselComponent = () => {
                     ? URL.createObjectURL(img)
                     : defaultCanteen;
             }
-            console.log("Canteen Images fetched: ", images);
+            console.log('Canteen Images fetched: ', images);
             setCanteenImg(images);
         } catch (error) {
             console.log('Error fetching canteens or images:', error);
         }
     };
-    
-
-    // const fetchCanteenImg = async (canteenId) => {
-    //     const response = await axios.get(`/canteens/${canteenId}/img`, 
-    //         { responseType: 'blob'}
-    //     );
-    //     console.log("canteen img response: ", response);
-    //     if(response.status === 200){
-    //         return response.data; 
-    //     }else if(response.status === 204){
-    //         return null; 
-    //     }
-    //     // return response.data; 
-        
-    //     throw new Error(
-    //         `Error fetching restaurant image status: ${response.status};
-    //         body : ${response.data}`
-    //     ); 
-
-        
-    // }; 
 
     useEffect(() => {
-        if(userLocation.latitude > 0 && userLocation.longtitude > 0){
-            getCanteens();
+        if (location) {
+            getCanteens(location);
         }
-    }, [userLocation.latitude, userLocation.longtitude]);
+    }, []);
 
-
-    if (canteens == null){
-        return (
-            <div className="w-full h-full"> 
-                Loading... 
-            </div>);
+    if (canteens == null) {
+        return <div className="h-full w-full">Loading...</div>;
     }
 
     const responsive = {
@@ -88,25 +74,29 @@ const CarouselComponent = () => {
         },
         mobile: {
             breakpoint: { max: 600, min: 0 },
-            items: 1, 
-        }
+            items: 1,
+        },
     };
 
     return (
-            <Carousel 
-                className="z-0" 
-                responsive={responsive} 
-                renderDotsOutside={true} 
-                itemClass="carousel-item-spacing"
-                partialVisible={false}
-                partialVisbile={false}
-            >
-                {canteens.map(canteen => (
-                    // <CanteenCard key={it.id} canteenName={it.name} img={it.img}/>
-                    <CanteenCard key={canteen.id} canteenName={canteen.name} img={canteenImg[canteen.id]}/>
-                ))}
-            </Carousel>
+        <Carousel
+            className="z-0"
+            responsive={responsive}
+            renderDotsOutside={true}
+            itemClass="carousel-item-spacing"
+            partialVisible={false}
+            partialVisbile={false}
+        >
+            {canteens.map((canteen) => (
+                // <CanteenCard key={it.id} canteenName={it.name} img={it.img}/>
+                <CanteenCard
+                    key={canteen.id}
+                    canteenName={canteen.name}
+                    img={canteenImg[canteen.id]}
+                />
+            ))}
+        </Carousel>
     );
-}
+};
 
 export default CarouselComponent;
