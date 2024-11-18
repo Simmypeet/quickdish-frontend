@@ -14,28 +14,30 @@ import AuthContext from './context/AuthProvider';
 import Unauthorized from './pages/Others/Unauthorize';
 import RequireAuth from './components/RequireAuth';
 
-const App = () => {
-    const auth = useContext(AuthContext);
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Authentication />}></Route>
-                <Route
-                    path="/dashboard/*"
-                    element={auth ? <DashBoard /> : <Navigate to="/" />}
-                ></Route>
-                <Route
-                    path="/user_review"
-                    element={auth ? <RateAndReview /> : <Navigate to="/" />}
-                ></Route>
-                <Route path="/unauthorized" element={<Unauthorized />}></Route>
 
-                <Route element={<RequireAuth allowedRoles={'user'} />}>
-                    <Route
-                        path="/restaurants/:restaurantID"
-                        element={<Menu />}
-                    ></Route>
-                </Route>
+import LoadingPage from './components/LoadingPage'
+
+const App = () => {
+  const auth = useContext(AuthContext); 
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Authentication/>}></Route>
+        <Route path="/dashboard/*" element={auth ? <DashBoard/> : <Navigate to="/"/>}></Route>
+        <Route path="/user_review" element={auth ? <RateAndReview/> : <Navigate to="/"/>}></Route>
+        {/* <Menu restaurantID={8}></Menu> */}
+        <Route path="/unauthorized" element={<Unauthorized/>}></Route>
+        <Route element={<RequireAuth allowedRoles={'user'} />}>
+               <Route path="/restaurants/:restaurantID" element={<Menu/>}</Route>
+        </Route>
+      </Routes>
+    </Router>
+    // <img className="w-96" src="https://drive.google.com/drive-viewer/AKGpihanXGmn5_n0b5VJMoHbTYIS5HGYHJ-OYGhUXsGefYBZ1CwaIrtpB1M11_JDFnI8cXR3Mfcx6jtfU-girxGtiYdPW4czIxskBA=s1600-rw-v1"></img>
+  )
+}
+
+
+                
             </Routes>
         </Router>
     );

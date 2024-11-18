@@ -9,8 +9,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClockRotateLeft, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 const MyProfile = () => {
-    const menulist = ['Profile Overview', 'Reviews', 'Photos', 'Notification','Security'];
-    //try call api and manage 
+    const menulist = ['Profile Overview', 'Reviews', 'Photos'];
+    const [ currentMenu, setCurrentMenu ] = React.useState('Profile Overview');
+
+    const onClickMenu = (menu) => {
+        setCurrentMenu(menu);
+    }
+
     return (
         <div className="p-8 ml-10 mr-20 h-screen">
             <div className="">
@@ -18,14 +23,18 @@ const MyProfile = () => {
             </div>
         
             <div className="flex">
-                <div className="fixed top-80 left-10 mt-5 md:left-44 sm:left-10 w-1/4 p-2 md:h-80 sm:h-96 flex flex-col bg-white border-2 border-slate-400 border-opacity-50 rounded-xl">
+                <div className="fixed top-80 left-10 mt-5 md:left-44 sm:left-10 w-1/4 p-2 md:h-64 sm:h-96 flex flex-col bg-white border-2 border-slate-400 border-opacity-50 rounded-xl">
                     <div className="m-3 title">
                         ACTIVITIES
                     </div>
                     {
                         menulist.map((menu) => {
                             return (
-                                <div key={menu} className=" p-3 hover:border-l-4 hover:border-orange-500 hover:bg-gradient-to-r hover:from-transparent hover:to-orange-500 hover:rounded-r-lg text-slate-500 hover:text-red-500">
+                                <div 
+                                key={menu} 
+                                className=" p-3 hover:border-l-4 hover:border-orange-500 hover:bg-gradient-to-r hover:from-transparent hover:to-orange-500 hover:rounded-r-lg text-slate-500 hover:text-red-500"
+                                onClick={() => onClickMenu(menu)}
+                                >
                                     <h1 className=''>{menu}</h1>
                                 </div>
                             )
@@ -37,22 +46,27 @@ const MyProfile = () => {
                 <div className="fixed flex-1 overflow-scroll top-80 left-1/4 w-3/4 h-full flex mt-5 ">
                     <div className="md:w-4/5 md:ml-48 sm:ml-10 sm:w-full ml-10 w-full">
                         <div className="relative w-full flex flex-col rounded-2xl z-0">
-                            {/* <ProfileBody/> */}
-                            {/* <ReviewBody/> */}
-                            {/* <PhotoBody/> */}
-                            <NotiBody/>
-
-                            {/* photo, notification, security */}
+                            {
+                                currentMenu === 'Profile Overview' ? 
+                                <ProfileBody/>
+                                : currentMenu === 'Reviews' ? 
+                                <ReviewBody/>
+                                : currentMenu === 'Photos' ? 
+                                <PhotoBody/>
+                                : null
+                                //<NotiBody/>
+                            }
+                          
                         </div>
                     </div>
                 </div>
-                
-
             </div>
-            
-            
         </div>
     )
 }
 
 export default MyProfile;
+
+//add profile_img, bg_img col to user db
+//add reviews number
+

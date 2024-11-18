@@ -12,8 +12,12 @@ import Tag from './Tag';
 import { remove } from '../utils/array';
 import SearchBar from './SearchBar';
 import useLocation from '../hooks/useLocation';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import useUser from '../hooks/useUser';
+
 
 const Header = () => {
+    const { user, setUser } = useUser();
     const [focus, setFocus] = useState(false);
     const [closeTag, setCloseTag] = useState(false);
     const [clickedFood, setclickedFood] = useState([]);
@@ -23,6 +27,7 @@ const Header = () => {
     const [location, setLocation] = useState(null); 
     const { userLocation, setUserLocation } = useLocation();
     const [ inputLocation, setInputLocation] = useState(userLocation.location || '');
+    const axiosPrivate = useAxiosPrivate();
 
     const handleFocus = () => {
         console.log('focus');
@@ -52,6 +57,15 @@ const Header = () => {
         console.log("click");
     }
 
+    // const getCustomerData = async() => {
+    //     try{
+    //         const response = await axiosPrivate.get('http://127.0.0.1:8000/customers/me'); 
+    //         setUser(response.data);
+    //     }catch(err){
+    //         console.log("Error fetching: ", err);
+    //     }
+    // }
+
     //problem
     //ask permission only once
     //store user location in local storage ? 
@@ -61,8 +75,11 @@ const Header = () => {
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
-                    setLatitude(position.coords.latitude); 
-                    setLongitude(position.coords.longitude); 
+                    const lat = position.coords.latitude;
+                    const long = position.coords.longitude;
+
+                    setLatitude(lat); 
+                    setLongitude(long); 
                     try{
                         const response = await fetch(
                             `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json` 
@@ -70,7 +87,9 @@ const Header = () => {
                         const data = await response.json(); 
                         if(data && data.display_name){
                             setLocation(data.display_name); 
-                            setUserLocation({ location: data.display_name, latitude: latitude, longitude: longitude });
+                            setUserLocation({ location: data.display_name, latitude: lat, longtitude: long });
+                            console.log("user lat: ", userLocation.latitude);
+                            console.log("user long: ", userLocation.longtitude);
                         }else{
                             console.error("Address not found"); 
                         }
@@ -85,6 +104,12 @@ const Header = () => {
             console.log("Geolocation is not supported by this browser"); 
         }
     }
+
+    // useEffect(() => {
+    //     if(user == null){
+    //         getCustomerData();
+    //     }
+    // }, [user]);
 
     //problem : ask user permission teise
     // useEffect(() => {
@@ -145,11 +170,14 @@ const Header = () => {
                 
                 <div className="hidden justify-end lg:flex">
                     <img
-                        src=""
+                        src={user.profile}
                         className="h-12 w-12 rounded-full bg-slate-500"
                         alt=""
                     />
-                    <h1 className="title ml-3 mt-3">Arhway</h1>
+                    {
+                       user ?  <h1 className="title ml-3 mt-3">{user.username}</h1> :  <h1 className="title ml-3 mt-3">Login</h1>
+                    }
+                    
                 </div>
 
                 { focus && !closeTag ? 
@@ -174,14 +202,10 @@ const Header = () => {
                                     <Tag key={foodName} name={foodName} handleButtonClick={handleButtonClick}/>
                                 ))
                             }
-                            
                         </div>
-                        
                     </div> : null
                 }
-
             </div>
-
              {/* location */}
             {
                 openModel ? 
@@ -190,7 +214,6 @@ const Header = () => {
                        {
                         userLocation.location ? <FontAwesomeIcon className='text-orange-600 mr-1' icon={faLocationCrosshairs} /> : <img className="text-sm mr-1" src="./loading.svg"></img> //loading effect
                        }
-                       
                         <button onClick={getLocation}>
                             <h2 className='text-orange-600 font-semibold'>Detect current location</h2>
                         </button>
