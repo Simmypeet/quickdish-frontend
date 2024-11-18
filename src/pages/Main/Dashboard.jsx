@@ -87,12 +87,12 @@ const Dashboard = () => {
                                 <Route path="/" element={<Home/>}/>
 
                                 {/* for several roles = ['user', 'admin', 'staff'] */}
-                                <Route element={<RequireAuth allowedRoles={'user'}/>}> 
-                                    <Route path="purchase_history" element={<PurchaseHistory/>}/>
-                                    <Route path="myprofile" element={<MyProfile/>}/>
-                                    <Route path="favourites" element={<Favourite/>}/>
-                                    <Route path="notification" element={<Notification/>}></Route>
-                                    <Route path="orders/:orderID" element={<OrderDetail/>}></Route>
+                                <Route element={<RequireAuth allowedRoles={'user'}/>}></Route>
+                                <Route path="purchase_history" element={<PurchaseHistory/>}/>
+                                <Route path="myprofile" element={<MyProfile/>}/>
+                                <Route path="favourites" element={<Favourite/>}/>
+                                <Route path="notification" element={<Notification/>}></Route>
+                                <Route path="orders/:orderID" element={<OrderDetail/>}></Route>
 
                             </Routes>
                         </div>

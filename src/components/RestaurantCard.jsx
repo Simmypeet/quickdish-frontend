@@ -92,10 +92,7 @@ const RestaurantCard = ({
                         )}/5`}</h2>
 
                     </div>
-                    <div className="hidden justify-between md:flex">
-                        <h2 className="card-info">Price:</h2>
-                        <h2 className="card-info">{price}</h2>
-                    </div>
+                   
                 </div>
                 {/* needed: fetch from db */}
                 <div className="mx-1 flex">
