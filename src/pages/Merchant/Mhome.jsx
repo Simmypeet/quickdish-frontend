@@ -15,9 +15,10 @@ const Mhome = () => {
     const { auth } = useAuth();
     const { merchant } = useMerchant();
     const axiosPrivate = useAxiosPrivate();
-    const currentDate = new Date(); 
+    const currentDate = new Date();
     const options = { month: 'short', day: 'numeric', year: 'numeric' };
     const formattedDate = currentDate.toLocaleDateString('en-US', options);
+    const [upIncomingOrders, setUpIncomingOrders] = useState(false); //temp
 
     //logic
     const [state, setState] = React.useState("PREPARING"); //default state change 
@@ -25,11 +26,14 @@ const Mhome = () => {
     const [loading, setLoading] = React.useState(true);
 
     //Preparing, Ready, Settled
-    const updateAllOrder = async () => {
+    const updateIncomingOrders = async () => {
         //update all orders to preparing
-        for(let order of orders){
-            await updateOrderState(order.order_id, "READY"); 
+        const response = await axiosPrivate.get(`http://127.0.0.1:8000/orders/?restaurant_id=${merchant.restaurant_id}&status=ORDERED`);
+        for(let order of response.data){
+            console.log("order id: ", order.id);
+            // await updateOrderState(order.id, "PREPARING");
         }
+        console.log("response incoming orders: ", response.data);
     }
 
     const fetchAllOrder = async (status) => {
@@ -42,7 +46,7 @@ const Mhome = () => {
             console.log("response: ", response.data);
             for(let order of response.data){
                 let temp = {};
-                let menu_id = order.items[0]["menu_id"]; 
+                let menu_id = order.items[0]["menu_id"];
                 let menu_response = await getMenu(menu_id);
                 let menu_img = URL.createObjectURL(await getMenuImage(menu_id));
                 temp["order_id"] = order.id; 
@@ -66,33 +70,8 @@ const Mhome = () => {
         }
     }
 
-    // const updateOrderState = async (order_id, status) => {
-    //     const change = await axios.put(`http://127.0.0.1:8000/orders/${order_id}/status`, status, {
-    //         type: status, 
-    //         reason: "Done cooking"
-    //     }, {
-    //         headers: {
-    //             Authorization: `Bearer ${auth.accessToken}`, // Replace with your token
-    //             'Content-Type': 'application/json',
-    //             Accept: 'application/json',
-    //         }
-    //     })
-
-    //     //pop first order from orders
-    //     if(change){
-    //         let temp = [...orders]; 
-    //         temp.shift(); 
-    //         setOrders(temp);
-    //     }
-        
-        
-    // }
     const updateOrderState = async (order_id, status) => {
         try {
-            console.log("Updating order with:", {
-                type: status.type,
-                reason: status.reason,
-            });
     
             const response = await axios.put(
                 `http://127.0.0.1:8000/orders/${order_id}/status`,
@@ -119,14 +98,20 @@ const Mhome = () => {
         }
     };
     
-    
-
     useEffect(() => {
         // Run fetchAllOrder("ORDERED") when component mounts
         if(merchant.restaurant_id){
             fetchAllOrder("PREPARING");
         }
     }, [merchant.restaurant_id]);
+
+    useEffect(() => {
+        if(!upIncomingOrders){
+            console.log("Updating incoming orders");
+            updateIncomingOrders();
+            setUpIncomingOrders(true);
+        }
+    }, [])
         
 
     return (
