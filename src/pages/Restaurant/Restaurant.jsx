@@ -1000,7 +1000,7 @@ const Restaurant = () => {
         };
 
         getData();
-    }, []);
+    }, [restaurantIDString]);
 
     if (restaurant === undefined) {
         return <LoadingPage opacity={true} />;
