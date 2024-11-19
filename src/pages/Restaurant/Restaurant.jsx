@@ -766,8 +766,8 @@ const MainPage = () => {
 
             <div
                 className="
-                    mx-4 mt-20 flex grow flex-col justify-center gap-x-2 gap-y-2
-                    md:flex-row md:flex-wrap
+                    mx-4 mt-20 flex grow flex-col gap-x-2 gap-y-2 md:flex-row
+                    md:flex-wrap md:justify-center
                 "
             >
                 {Object.entries(restaurant.menus).map(
