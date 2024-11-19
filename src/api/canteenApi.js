@@ -86,3 +86,40 @@ export const getNearestCanteens = async (latitude, longtitude) => {
 
     return response.data;
 };
+
+/**
+ * @param {number} canteenId
+ *
+ * @returns {Promise<Canteen>}
+ */
+export const getCanteenById = async (canteenId) => {
+    const response = await axios.get(
+        process.env.QUICKDISH_BACKEND_URL + `/canteens/${canteenId}`,
+        {
+            validateStatus: (status) => {
+                return status === 200;
+            },
+        }
+    );
+
+    return response.data;
+};
+
+/**
+ * @param {number} canteenId
+ *
+ * @returns {Promise<number[]>}
+ */
+export const getRestaurantsByCanteenId = async (canteenId) => {
+    const response = await axios.get(
+        process.env.QUICKDISH_BACKEND_URL +
+            `/canteens/${canteenId}/restaurants`,
+        {
+            validateStatus: (status) => {
+                return status === 200;
+            },
+        }
+    );
+
+    return response.data;
+};
