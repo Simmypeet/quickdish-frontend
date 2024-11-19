@@ -97,8 +97,8 @@ const Mhome = () => {
             const response = await axios.put(
                 `http://127.0.0.1:8000/orders/${order_id}/status`,
                 {
-                    type: status.type, // E.g., "PREPARING"
-                    reason: status.reason, // E.g., "done cooking"
+                    type: status, // E.g., "PREPARING"
+                    reason: "done cooking", // E.g., "done cooking"
                 },
                 {
                     headers: {
@@ -214,13 +214,13 @@ const Mhome = () => {
                                 </div>
 
                                 {
-                                    state !== "SETTLED" ? (
+                                    state !== "SETTLED" && state !== "READY" ? (
                                         <div className="hidden justify-end md:flex">
                                             <button 
                                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
                                                 onClick={() => updateOrderState(orders[0].order_id, "READY")}
                                             >
-                                                { state === "PREPARING" ? "Order Completed" : state === "READY" ? "Payment received" : null }
+                                                { state === "PREPARING" ? "Order Completed" : null }
                                             </button>
                                         </div>
                                     ) : null
