@@ -321,7 +321,7 @@ const CanteenPage = () => {
     }, [canteenIDString]);
 
     if (canteen === undefined) {
-        return <LoadingPage opacity={true} />;
+        return <LoadingPage opacity={false} />;
     } else if (canteen === null) {
         return <ErrorPage message="We couldn't find the canteen for you" />;
     } else {

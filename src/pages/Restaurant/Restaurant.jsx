@@ -1003,7 +1003,7 @@ const Restaurant = () => {
     }, [restaurantIDString]);
 
     if (restaurant === undefined) {
-        return <LoadingPage opacity={true} />;
+        return <LoadingPage opacity={false} />;
     } else if (restaurant === null) {
         return <ErrorPage message="We couldn't find the restaurant for you" />;
     } else {
