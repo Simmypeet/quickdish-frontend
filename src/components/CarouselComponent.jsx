@@ -7,8 +7,8 @@ import CanteenCard from './CanteenCard';
 import useLocation from '../hooks/useLocation';
 import { getCanteenImgFromId, getNearestCanteens } from '../api/canteenApi';
 
-// @ts-expect-errors
-import defaultCanteen from '../../public/defaultCanteen.jpg';
+// @ts-expect-error
+import defaultCanteen from '/defaultCanteen.jpg';
 
 /**
  * @import {Canteen} from '../types/canteen'

@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Decimal from 'decimal.js';
 
 // @ts-expect-error
-import defaultRestaurantImage from '../../assets/defaultRestaurant.jpeg';
+import defaultRestaurantImage from '/defaultRestaurant.jpeg';
 // @ts-expect-error
-import defaultMenuImage from '../../assets/defaultMenu.webp';
+import defaultMenuImage from '/defaultMenu.webp';
 
 /**
  * @import {

@@ -15,7 +15,7 @@ import {
 import { getRestaurantImage } from '../../api/restaurantApi';
 
 // @ts-expect-error
-import defaultRestaurant from '../../assets/defaultRestaurant.jpeg';
+import defaultRestaurant from '/defaultRestaurant.jpeg';
 import { getOnGoingOrders, getOrderQueue } from '../../api/orderApi';
 import { getRestaurant } from '../../api/restaurantApi';
 import { EventHandlerProvider } from '../../context/EventProvider';

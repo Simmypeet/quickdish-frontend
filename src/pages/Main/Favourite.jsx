@@ -6,7 +6,7 @@ import { LoadingPage } from '../../components/LoadingPage';
 import { getRestaurant, getRestaurantImage } from '../../api/restaurantApi';
 
 // @ts-expect-error
-import defaultRestaurant from '../../assets/defaultRestaurant.jpeg';
+import defaultRestaurant from '/defaultRestaurant.jpeg';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import {
     getFavoriteRestaurants,

@@ -12,7 +12,7 @@ import {
 import { getRestaurant, getRestaurantImage } from '../../api/restaurantApi';
 
 // @ts-expect-error
-import defaultRestaurantImage from '../../assets/defaultRestaurant.jpeg';
+import defaultRestaurantImage from '/defaultRestaurant.jpeg';
 import Header from '../../components/Header';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons/faLocationDot';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
