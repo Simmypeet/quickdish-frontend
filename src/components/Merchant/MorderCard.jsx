@@ -49,7 +49,7 @@ const OrderCard = ({ order_id, order_items,menu_img, price, status, order_at  })
                 <ul className="list-disc list-inside text-indigo-950">
                     {order.items.map((item, index) => (
                         <div key={index}>
-                            <li key={index}>{item.menu_name} x {item.quantity}</li>
+                            <li>{item.menu_name} x {item.quantity}</li>
                             <li>Extra requests: {item.extra_requests}</li> 
                         </div>
                         

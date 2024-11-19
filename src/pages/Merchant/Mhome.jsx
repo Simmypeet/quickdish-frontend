@@ -157,7 +157,6 @@ const Mhome = () => {
 
             {/* body */}
             <div className="w-5/6">
-                {/* big one */}
                 {/* Big Card */}
                 {orders.length > 0 ? (
                     <div
