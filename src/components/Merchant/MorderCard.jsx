@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
-const OrderCard = ({ order_id, menu_id,menu_name, menu_quantity,menu_img, price, status, order_request, order_at  }) => {  
+const OrderCard = ({ order_id, order_items,menu_img, price, status, order_at  }) => {  
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpand = () => {
@@ -47,8 +47,14 @@ const OrderCard = ({ order_id, menu_id,menu_name, menu_quantity,menu_img, price,
             >
                 <p className="text-indigo-950">Order details:</p>
                 <ul className="list-disc list-inside text-indigo-950">
-                    <li>{menu_name} x {menu_quantity}</li>
-                    <li>Extra requests: {order_request}</li>
+                    {order.items.map((item, index) => (
+                        <div key={index}>
+                            <li key={index}>{item.menu_name} x {item.quantity}</li>
+                            <li>Extra requests: {item.extra_requests}</li> 
+                        </div>
+                        
+                    ))}
+                    
                 </ul>
             </div>
         </div>

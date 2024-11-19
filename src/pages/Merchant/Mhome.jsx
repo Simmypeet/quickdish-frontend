@@ -46,22 +46,30 @@ const Mhome = () => {
             console.log("response: ", response.data);
             for(let order of response.data){
                 let temp = {};
-                let menu_id = order.items[0]["menu_id"];
-                let menu_response = await getMenu(menu_id);
-                let menu_img = URL.createObjectURL(await getMenuImage(menu_id));
+                let menu_img = URL.createObjectURL(await getMenuImage(order.items[0].menu_id));
                 temp["order_id"] = order.id; 
-                temp["menu_id"] = menu_id; 
-                temp["menu_name"] = menu_response.name;
-                temp["menu_quantity"] = order.items[0]["quantity"];
-                temp["menu_img"] = menu_img;
-                temp["menu_prep_time"] = menu_response.estimated_prep_time;
-                temp["extra_requests"] = order.items[0]["extra_requests"]; 
+                temp["display_img"] = menu_img;
+
+                let items = []; 
+                for(let item of order.items){
+                    let menu_id = item.menu_id;
+                    let menu_response = await getMenu(menu_id);
+                    let temp_item = {
+                        menu_id: item.menu_id,
+                        quantity: item.quantity,
+                        extra_requests: item.extra_requests,
+                        menu_name: menu_response.name,
+                    };
+                    items.push(temp_item); 
+                }
+
+                temp["items"] = items;
                 temp["price_paid"] = order.price_paid; 
                 temp["order_status"] = status; 
                 temp["ordered_at"] = order.ordered_at;
                 orders_raw.push(temp);
             }
-            
+              
             setOrders(orders_raw);
         }catch(error){
             console.error("Error fetching orders:", error);
@@ -161,7 +169,7 @@ const Mhome = () => {
                     >
                         <img
                             className="aspect-square h-full w-auto rounded-xl object-cover object-center"
-                            src={orders[0].menu_img}
+                            src={orders[0].display_img}
                             alt="Order Image"
                         />
                         <div className="mx-2 flex grow flex-col justify-between md:mx-4 md:my-2">
@@ -176,15 +184,15 @@ const Mhome = () => {
                                     <h2 className="">Order details:</h2>
                                 </div>
                                 <div className="flex justify-between">
-                                    <div className="">
-                                        <h2>
-                                            {` ${orders[0].menu_name} x ${orders[0].menu_quantity}`}
-                                        </h2>
-                                        <h2>Dine-in</h2>
-                                        <h2 className="text-red-500">
-                                            {`Extra requests: ${orders[0].extra_requests}`}
-                                        </h2>
-                                    </div>
+                                {
+                                    orders[0].items.map((item, index) => (
+                                        <div key={index}>
+                                            <h2>{`${item.menu_name} x ${item.quantity}`}</h2>
+                                            <h2>Dine-in</h2>
+                                            <h2 className="text-red-500">{`Extra requests: ${item.extra_requests}`}</h2>
+                                        </div>
+                                    ))
+                                }
                                     
                                     <div className="flex flex-col">
                                        
@@ -226,6 +234,33 @@ const Mhome = () => {
                
 
                 {/* card */}
+                {/* { loading ? (
+                    <div className="flex justify-center items-center h-48">
+                        <img src="/loading_main.svg" className='w-28'></img>
+                    </div>
+                ) : (
+                    orders.map((order, index) => (
+
+                        index > 0 ? (
+                            <OrderCard
+                            key={index}
+                            order_id={order.order_id}
+
+                            menu_id={order.menu_id}
+                            menu_name={order.menu_name}
+                            menu_quantity={order.menu_quantity}
+
+                            menu_img={orders.display_img}
+                            price={order.price_paid}
+                            status={order.order_status}
+
+                            order_request={order.extra_requests}
+                            order_at={order.ordered_at}
+                            />
+                        ) : null
+                    ))
+                )} */}
+
                 { loading ? (
                     <div className="flex justify-center items-center h-48">
                         <img src="/loading_main.svg" className='w-28'></img>
@@ -237,13 +272,10 @@ const Mhome = () => {
                             <OrderCard
                             key={index}
                             order_id={order.order_id}
-                            menu_id={order.menu_id}
-                            menu_name={order.menu_name}
-                            menu_quantity={order.menu_quantity}
-                            menu_img={order.menu_img}
+                            order_items={order.items}
+                            menu_img={order.display_img}
                             price={order.price_paid}
                             status={order.order_status}
-                            order_request={order.extra_requests}
                             order_at={order.ordered_at}
                             />
                         ) : null
