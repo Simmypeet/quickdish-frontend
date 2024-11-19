@@ -13,6 +13,7 @@ import Authentication from './pages/Others/Authentication';
 import AuthContext from './context/AuthProvider';
 import Unauthorized from './pages/Others/Unauthorize';
 import RequireAuth from './components/RequireAuth';
+import Canteen from './pages/Canteen/Canteen';
 
 const App = () => {
   const auth = useContext(AuthContext); 
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/unauthorized" element={<Unauthorized/>}></Route>
         <Route element={<RequireAuth allowedRoles={'user'} />}>
           <Route path="/restaurants/:restaurantID" element={<Menu/>}></Route>
+          <Route path="/canteens/:canteenID" element={<Canteen/>}></Route>
         </Route>
       </Routes>
     </Router>
