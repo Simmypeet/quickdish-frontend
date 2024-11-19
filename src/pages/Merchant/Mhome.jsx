@@ -4,10 +4,12 @@ import OrderCard from '../../components/Merchant/MorderCard';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAuth from '../../hooks/useAuth';
 import useMerchant from '../../hooks/useMerchant';
+import { getMenuImage, getMenu } from '../../api/restaurantApi';
 import axios from 'axios'; //temp -> axiosPrivate
 
-
+//get total queue
 //new endpoint : update order status 
+
 const Mhome = () => {
     const { auth } = useAuth();
     const { merchant } = useMerchant();
@@ -31,9 +33,15 @@ const Mhome = () => {
             console.log("response: ", response.data);
             for(let order of response.data){
                 let temp = {};
-               
+                let menu_id = order.items[0]["menu_id"]; 
+                let menu_response = await getMenu(menu_id);
+                let menu_img = URL.createObjectURL(await getMenuImage(menu_id));
                 temp["order_id"] = order.id; 
-                temp["menu_id"] = order.items[0]["menu_id"]; 
+                temp["menu_id"] = menu_id; 
+                temp["menu_name"] = menu_response.name;
+                temp["menu_quantity"] = order.items[0]["quantity"];
+                temp["menu_img"] = menu_img;
+                temp["menu_prep_time"] = menu_response.estimated_prep_time;
                 temp["extra_requests"] = order.items[0]["extra_requests"]; 
                 temp["price_paid"] = order.price_paid; 
                 temp["order_status"] = status; 
@@ -108,7 +116,7 @@ const Mhome = () => {
                     >
                         <img
                             className="aspect-square h-full w-auto rounded-xl object-cover object-center"
-                            src="/profile.jpg"
+                            src={orders[0].menu_img}
                             alt="Order Image"
                         />
                         <div className="mx-2 flex grow flex-col justify-between md:mx-4 md:my-2">
@@ -120,21 +128,29 @@ const Mhome = () => {
                             <hr className="mt-2 md:mt-3"></hr>
                             <div className="mx-1 flex w-full grow flex-col py-2 md:justify-evenly md:space-y-2">
                                 <div className="flex justify-between">
-                                    <h2 className="card-info">Price</h2>
-                                    <h2 className="card-info">Status</h2>
+                                    <h2 className="">Order details:</h2>
                                 </div>
-                                <div className="flex flex-col">
-                                    <div className="flex justify-between">
-                                        <h2 className="card-info">
-                                            {state === "ORDERED" ? `${orders[0].price_paid} ฿` : "N/A"}
+                                <div className="flex justify-between">
+                                    <div className="">
+                                        <h2>
+                                            {state === "ORDERED" ? ` ${orders[0].menu_name} x ${orders[0].menu_quantity}` : "No details available"}
                                         </h2>
-                                        <h2 className="card-info">
-                                            {state === "ORDERED" ? orders[0].order_status : "N/A"}
+                                        <h2>Dine-in</h2>
+                                        <h2 className="text-red-500">
+                                            {state === "ORDERED" ? `Extra requests: ${orders[0].extra_requests}` : "No details available"}
                                         </h2>
                                     </div>
-                                    <h2 className="card-info">
-                                        {state === "ORDERED" ? `Details: ${orders[0].extra_requests}` : "No details available"}
-                                    </h2>
+                                    
+                                    <div className="flex flex-col">
+                                       
+                                        <h2 >
+                                        Price : {state === "ORDERED" ? `${orders[0].price_paid} ฿` : "N/A"}
+                                        </h2>
+                                        <h2 className="text-green-500">
+                                        Status : {state === "ORDERED" ? 'Preparing' : "N/A"}
+                                        </h2>
+                                    </div>
+                                    
                                 </div>
 
                                 {state === "ORDERED" && (
@@ -172,12 +188,17 @@ const Mhome = () => {
                             key={index}
                             order_id={order.order_id}
                             menu_id={order.menu_id}
+                            menu_name={order.menu_name}
+                            menu_quantity={order.menu_quantity}
+                            menu_img={order.menu_img}
                             price={order.price_paid}
                             status={order.order_status}
                             order_request={order.extra_requests}
                             order_at={order.ordered_at}
                             />
                         ) : null
+
+         
                         
                     ))
                 )}
