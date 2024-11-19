@@ -19,6 +19,7 @@ import defaultRestaurant from '/defaultRestaurant.jpeg';
 import { getOnGoingOrders, getOrderQueue } from '../../api/orderApi';
 import { getRestaurant } from '../../api/restaurantApi';
 import { EventHandlerProvider } from '../../context/EventProvider';
+import { getFavoriteRestaurants } from '../../api/customerApi';
 
 /**
  * @import { Order, Queue } from '../../types/order';
@@ -51,6 +52,9 @@ const Home = () => {
     const [restImgs, setRestImgs] = useState({});
     const [ongoingOrders, setOngoingOrders] = useState(
         /** @type{undefined | OngoingOrder[]} */ (undefined)
+    );
+    const [favoriteRestaurants, setFavoriteRestaurants] = useState(
+        /** @type{undefined | number[]} */ (undefined)
     );
 
     /**
@@ -115,6 +119,9 @@ const Home = () => {
 
     useEffect(() => {
         async function fetchData() {
+            const favoriteRestaurants = await getFavoriteRestaurants(
+                axiosPrivate
+            );
             const restaurants = /** @type {{[key: number]: Restaurant}} */ ({});
             const orders = await getOnGoingOrders(axiosPrivate);
             let ongoingOrders = [];
@@ -141,6 +148,7 @@ const Home = () => {
             );
 
             setOngoingOrders(ongoingOrders);
+            setFavoriteRestaurants(favoriteRestaurants);
         }
 
         fetchData();
@@ -170,7 +178,7 @@ const Home = () => {
                 </EventHandlerProvider>
             )}
 
-            {restaurants.length != 0 ? (
+            {restaurants.length != 0 && favoriteRestaurants != undefined ? (
                 <>
                     <div className="">
                         <h1 className="heading-font mt-10">Nearby Canteen</h1>
@@ -186,16 +194,14 @@ const Home = () => {
                                 </span>
                             </h1>
                         </div>
+
                         {restaurants.map((shop) => (
                             <RestaurantCard
                                 key={shop.id}
-                                name={shop.name}
-                                image={restImgs[shop.id]}
-                                canteenName={'First Canteen'} //problem : add canteen name
-                                busyness={'busy'}
-                                queue={123}
-                                rating={3.5}
-                                food="Krapao"
+                                restaurantID={shop.id}
+                                userFavorite={favoriteRestaurants.includes(
+                                    shop.id
+                                )}
                             />
                         ))}
                     </div>
