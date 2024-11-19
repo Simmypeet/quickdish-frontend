@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OrderCard from '../../components/Merchant/MorderCard';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAuth from '../../hooks/useAuth';
-
+import useMerchant from '../../hooks/useMerchant';
 import axios from 'axios'; //temp -> axiosPrivate
 
 
 //new endpoint : update order status 
 const Mhome = () => {
     const { auth } = useAuth();
+    const { merchant } = useMerchant();
     const axiosPrivate = useAxiosPrivate();
     const currentDate = new Date(); 
     const options = { month: 'short', day: 'numeric', year: 'numeric' };
@@ -19,16 +20,15 @@ const Mhome = () => {
     const [state, setState] = React.useState("ORDERED"); //default state change 
     const [orders, setOrders] = React.useState([]); //pop first order when merchant clicks finish order
     const [loading, setLoading] = React.useState(true);
-    const handleState = (status) => {
-        setState(status);
-    }
 
     const fetchAllOrder = async (status) => {
-        handleState(status);
+        setState(status);
+        setLoading(true); 
         try{
             const orders_raw = []; 
             //get restaurant id
-            const response = await axiosPrivate.get(`http://127.0.0.1:8000/orders/restaurant_id=${restaurant_id}&?status=${status}`); 
+            const response = await axiosPrivate.get(`http://127.0.0.1:8000/orders/?restaurant_id=${merchant.restaurant_id}&status=${status}`); 
+            console.log("response: ", response.data);
             for(let order of response.data){
                 let temp = {};
                
@@ -52,6 +52,14 @@ const Mhome = () => {
     const updateOrderState = async (order_id, status) => {
 
     }
+
+    useEffect(() => {
+        // Run fetchAllOrder("ORDERED") when component mounts
+        if(merchant.restaurant_id){
+            fetchAllOrder("ORDERED");
+        }
+    }, [merchant.restaurant_id]);
+        
 
     return (
         <div className="">
@@ -89,66 +97,78 @@ const Mhome = () => {
             {/* body */}
             <div className="w-5/6">
                 {/* big one */}
-                {
-                    state === "ORDERED" ?
+                {/* Big Card */}
+                {orders.length > 0 ? (
                     <div
-                    className="
-                        relative flex h-40 rounded-xl border-2 
-                        bg-white p-2 hover:shadow-lg md:h-60 lg:shadow-md
-                        shadow-green-600/60
-                    "
+                        className="
+                            relative flex h-40 rounded-xl border-2 
+                            bg-white p-2 hover:shadow-lg md:h-60 lg:shadow-md
+                            shadow-green-600/60
+                        "
                     >
                         <img
                             className="aspect-square h-full w-auto rounded-xl object-cover object-center"
                             src="/profile.jpg"
-                            alt=""
+                            alt="Order Image"
                         />
                         <div className="mx-2 flex grow flex-col justify-between md:mx-4 md:my-2">
                             <div className="flex items-center justify-between">
-                                <h2 className="sub-title line-clamp-1">Burger</h2>
-                                
+                                <h2 className="sub-title line-clamp-1">
+                                    {state === "ORDERED" ? `Order ID: ${orders[0].order_id}` : "Not Available"}
+                                </h2>
                             </div>
                             <hr className="mt-2 md:mt-3"></hr>
                             <div className="mx-1 flex w-full grow flex-col py-2 md:justify-evenly md:space-y-2">
                                 <div className="flex justify-between">
-                                    <h2 className="card-info">Details</h2>
+                                    <h2 className="card-info">Price</h2>
                                     <h2 className="card-info">Status</h2>
                                 </div>
                                 <div className="flex flex-col">
                                     <div className="flex justify-between">
-                                        <h2 className="card-info">Foodname x Quantity</h2>
-                                        <h2 className="card-info">Price</h2>
+                                        <h2 className="card-info">
+                                            {state === "ORDERED" ? `${orders[0].price_paid} ฿` : "N/A"}
+                                        </h2>
+                                        <h2 className="card-info">
+                                            {state === "ORDERED" ? orders[0].order_status : "N/A"}
+                                        </h2>
                                     </div>
-                                    <h2 className="card-info">Order details</h2>
+                                    <h2 className="card-info">
+                                        {state === "ORDERED" ? `Details: ${orders[0].extra_requests}` : "No details available"}
+                                    </h2>
                                 </div>
-                            
-                                <div className="hidden justify-end md:flex">
-                                    <button 
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+
+                                {state === "ORDERED" && (
+                                    <div className="hidden justify-end md:flex">
+                                        <button 
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
                                         >
-                                        Order Completed
-                                    </button>
-                                </div>
+                                            Order Completed
+                                        </button>
+                                    </div>
+                                )}
                             </div>
-                            {/* needed: fetch from db */}
-                        
                         </div>
-                    </div> : 
-
-                    null
-
+                    </div>
+                ) : 
+                   null
                 }
+
 
                 <div className="">
                     <h1 className='heading-font my-6'>Ongoing Orders</h1>
-                    <h1>filter</h1>
                 </div>
                
 
                 {/* card */}
-                {
+                { loading ? (
+                    <div className="flex justify-center items-center h-48">
+                        <img src="/loading_main.svg" className='w-28'></img>
+                    </div>
+                ) : (
                     orders.map((order, index) => (
-                        <OrderCard
+
+                        index > 0 ? (
+                            <OrderCard
                             key={index}
                             order_id={order.order_id}
                             menu_id={order.menu_id}
@@ -156,9 +176,11 @@ const Mhome = () => {
                             status={order.order_status}
                             order_request={order.extra_requests}
                             order_at={order.ordered_at}
-                        />
+                            />
+                        ) : null
+                        
                     ))
-                }
+                )}
                 {/* <OrderCard order_id={1} menu_id={2} price={90} status="Cooking" order_request={"Not spicy"} order_at={"12.00"} ></OrderCard> */}
                 {/* card */}
 
