@@ -1009,7 +1009,7 @@ const Restaurant = () => {
     } else {
         return (
             <RestaurantProvider restaurant={restaurant}>
-                <MainPage />;
+                <MainPage />
             </RestaurantProvider>
         );
     }
