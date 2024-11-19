@@ -20,7 +20,7 @@ const SideBar = () => {
 
         {/* Menu Items */}
         <div className="flex flex-col items-start space-y-6">
-        <NavLink to="/dashboard/favourites" className="w-full">
+        <NavLink to="/merchant/" className="w-full">
             <div
               className="
                 flex items-center space-x-3 hover:bg-white hover:text-black 
@@ -33,7 +33,7 @@ const SideBar = () => {
           </NavLink>
     
           
-          <NavLink to="/dashboard/favourites" className="w-full">
+          <NavLink to="/merchant/menu" className="w-full">
             <div
               className="
                 flex items-center space-x-3 hover:bg-white hover:text-black 
@@ -44,7 +44,7 @@ const SideBar = () => {
               <h2 className="text-white text-lg">Menus</h2>
             </div>
           </NavLink>
-          <NavLink to="/dashboard/notification" className="w-full">
+          <NavLink to="/merchant/sales" className="w-full">
             <div
               className="
                 flex items-center space-x-3 hover:bg-white hover:text-black 
@@ -55,7 +55,7 @@ const SideBar = () => {
               <h2 className="text-white text-lg">Sales</h2>
             </div>
           </NavLink>
-          <NavLink to="/dashboard/purchase_history" className="w-full">
+          <NavLink to="/merchant/review" className="w-full">
             <div
               className="
                 flex items-center space-x-3 hover:bg-white hover:text-black 
@@ -66,7 +66,7 @@ const SideBar = () => {
               <h2 className="text-white text-lg">User reviews</h2>
             </div>
           </NavLink>
-          <NavLink to="/dashboard/myprofile" className="w-full">
+          {/* <NavLink to="/dashboard/myprofile" className="w-full">
             <div
               className="
                 flex items-center space-x-3 hover:bg-white hover:text-black 
@@ -76,7 +76,7 @@ const SideBar = () => {
               <FontAwesomeIcon icon={faUser} className="text-2xl text-white" />
               <h2 className="text-white text-lg">Profile</h2>
             </div>
-          </NavLink>
+          </NavLink> */}
         </div>
 
         {/* Logout */}

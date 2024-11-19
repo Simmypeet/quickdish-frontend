@@ -10,10 +10,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 
-const Header = () => {
+const Header = ({username}) => {
     // const { user, setUser } = useUser();
     const [ user, setUser ] = useState({
-        username: 'merchant',
+        username: username,
         profile: '/profile.jpg'
     }); 
 

@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OrderCard from '../../components/Merchant/MorderCard';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAuth from '../../hooks/useAuth';
+
 import axios from 'axios'; //temp -> axiosPrivate
 
 
 //new endpoint : update order status 
 const Mhome = () => {
-    // const [isExpanded, setIsExpanded] = useState(false);
+    const { auth } = useAuth();
+    const axiosPrivate = useAxiosPrivate();
     const currentDate = new Date(); 
     const options = { month: 'short', day: 'numeric', year: 'numeric' };
     const formattedDate = currentDate.toLocaleDateString('en-US', options);
@@ -15,7 +18,6 @@ const Mhome = () => {
     //logic
     const [state, setState] = React.useState("ORDERED"); //default state change 
     const [orders, setOrders] = React.useState([]); //pop first order when merchant clicks finish order
-    const axiosPrivate = useAxiosPrivate();
     const [loading, setLoading] = React.useState(true);
     const handleState = (status) => {
         setState(status);
@@ -26,15 +28,10 @@ const Mhome = () => {
         try{
             const orders_raw = []; 
             //get restaurant id
-            const response = await axios.get(`http://127.0.0.1:8000/orders/restaurant_id=${restaurant_id}&?status=${status}`); 
+            const response = await axiosPrivate.get(`http://127.0.0.1:8000/orders/restaurant_id=${restaurant_id}&?status=${status}`); 
             for(let order of response.data){
                 let temp = {};
-                // const menu_id = order.items[0]["menu_id"];
-                // const get_menu_time = await getMenuWaitTime(menu_id); //return minutes
-                // const pickup = order.ordered_at;
-                //add time to pickup time
-                //convert to 12 hour format
-
+               
                 temp["order_id"] = order.id; 
                 temp["menu_id"] = order.items[0]["menu_id"]; 
                 temp["extra_requests"] = order.items[0]["extra_requests"]; 
@@ -43,7 +40,6 @@ const Mhome = () => {
                 temp["ordered_at"] = order.ordered_at;
                 orders_raw.push(temp);
             }
-            //order_id={1} menu_id={2} price={90} status="Cooking" order_request={"Not spicy"} pickupTime={"12.30 PM"}
             
             setOrders(orders_raw);
         }catch(error){
@@ -56,11 +52,6 @@ const Mhome = () => {
     const updateOrderState = async (order_id, status) => {
 
     }
-
-    useEffect(() => {
-        // Run fetchAllOrder("ORDERED") when component mounts
-        fetchAllOrder("ORDERED");
-    }, []);
 
     return (
         <div className="">

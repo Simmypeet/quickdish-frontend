@@ -41,13 +41,13 @@ const MLogin = ({toggle}) => {
             setAuth({ username: username, password: password, role: role, accessToken: accessToken });
 
           //easy way : feature/authen
-            navigate("/merchant"); 
+            // navigate("/merchant"); 
 
-            // if (from) {
-            //     navigate(from, {replace: true});
-            // } else {
-            //     navigate("/dashboard"); 
-            // }
+            if (from) {
+                navigate(from, {replace: true});
+            } else {
+                navigate("/merchant"); 
+            }
 
 
         //edit backend to return various error message
