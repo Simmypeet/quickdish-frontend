@@ -1,12 +1,17 @@
 import Signup from './Login';
 import Login from './Signup';
+import MLogin from './MLogin';
 import { useState } from 'react';
 
 const Authentication = () => {
-    const [isSignIn, setIsSignIn] = useState(true);
-    const toggle = () => {
-        setIsSignIn(!isSignIn);
-    }
+    const [panel, setPanel] = useState("login");
+    const toggle = (panel) => {
+        setPanel(panel);
+    } 
+    // const [isSignIn, setIsSignIn] = useState(true);
+    // const toggle = () => {
+    //     setIsSignIn(!isSignIn);
+    // }
 
     return (
         <div className='flex justify-center object-cover'>
@@ -15,13 +20,19 @@ const Authentication = () => {
             <div className="w-[900px] h-[600px] flex absolute top-36 rounded-2xl  z-10">
                 <div className="w-full h-full shadow-lg">
                     <div className="absolute w-full h-full opacity-80 bg-white rounded-md z-20">
-                        
+
                     </div>
-                    {
+
+                    {/* {
                         isSignIn ? <Signup toggle={toggle}/> : <Login toggle={toggle}/>
+                    } */}
+                    {
+                        panel === "signup" ? <Login toggle={toggle}/> : panel === "login" ?  <Signup toggle={toggle}/> : <MLogin toggle={toggle}/>
                     }
+                    
 
                     <img className="absolute w-1/2 h-full p-3 z-30" src="./Authen.png" alt="" />
+
                 </div>  
             </div>
         </div>

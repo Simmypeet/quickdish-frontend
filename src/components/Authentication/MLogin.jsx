@@ -5,7 +5,7 @@ import axios from "../../api/axios";
 import axiosPrivate from "../../api/axios"
 import useAuth from "../../hooks/useAuth";
 
-const Login = ({toggle}) => {
+const MLogin = ({toggle}) => {
     const { auth, setAuth } = useAuth(); 
    
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Login = ({toggle}) => {
 
         console.log("submit form"); 
         try{
-            const response = await axios.post('/customers/login', 
+            const response = await axios.post('/merchants/login', 
                 JSON.stringify({ username: username, password: password }), 
                 //header
                 {
@@ -41,14 +41,13 @@ const Login = ({toggle}) => {
             setAuth({ username: username, password: password, role: role, accessToken: accessToken });
 
           //easy way : feature/authen
-           // navigate("/dashboard"); 
+            navigate("/merchant"); 
 
-
-            if (from) {
-                navigate(from, {replace: true});
-            } else {
-                navigate("/dashboard"); 
-            }
+            // if (from) {
+            //     navigate(from, {replace: true});
+            // } else {
+            //     navigate("/dashboard"); 
+            // }
 
 
         //edit backend to return various error message
@@ -72,7 +71,7 @@ const Login = ({toggle}) => {
                 <div className="h-full flex flex-col items-center justify-center py-10 pl-0 pr-2 rounded-md">
                     <div className="max-w-md w-full">
                     <div className="rounded-2xl ">
-                        <h2 className="text-gray-800 text-center text-2xl font-bold">Sign in</h2>
+                        <h2 className="text-gray-800 text-center text-2xl font-bold">Sign in for merchant</h2>
                         <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
                             <div>
                                 <label className="text-gray-800 text-sm mb-2 block">User name</label>
@@ -115,9 +114,7 @@ const Login = ({toggle}) => {
                                     Sign in
                                 </button>
                             </div>
-                            <p className="text-gray-800 text-sm !mt-8 text-center">Don't have an account? <a href="#" className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold" onClick={() => toggle("signup")}>Register here</a></p>
-                            <p className="text-gray-800 text-sm !mt-8 text-center">Login for merchat <a href="#" className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold" onClick={() => toggle("merchant")}>Login here</a></p>
-
+                            <p className="text-gray-800 text-sm !mt-8 text-center">Back to customer login <a href="#" className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold" onClick={() => toggle("login")}>Customer login here</a></p>
                         </form>
 
                     </div>
@@ -128,4 +125,4 @@ const Login = ({toggle}) => {
     )
 }
 
-export default Login;
+export default MLogin;
