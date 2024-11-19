@@ -21,7 +21,7 @@ const OrderCard = ({ order_id, menu_id,menu_name, menu_quantity,menu_img, price,
                 <h1>฿{price}</h1>
                 <h1>
                     {
-                    status === "ORDERED" ? "Preparing" : status === "READY" ? "Pending payment" : "Completed"
+                    status === "PREPARING" ? "Preparing" : status === "READY" ? "Pending payment" : "Completed"
                     }
                     
                 </h1>

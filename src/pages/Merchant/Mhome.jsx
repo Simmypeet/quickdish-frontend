@@ -5,6 +5,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAuth from '../../hooks/useAuth';
 import useMerchant from '../../hooks/useMerchant';
 import { getMenuImage, getMenu } from '../../api/restaurantApi';
+import { updateOrderStatus } from '../../api/orderApi';
 import axios from 'axios'; //temp -> axiosPrivate
 
 //get total queue
@@ -19,9 +20,17 @@ const Mhome = () => {
     const formattedDate = currentDate.toLocaleDateString('en-US', options);
 
     //logic
-    const [state, setState] = React.useState("ORDERED"); //default state change 
+    const [state, setState] = React.useState("PREPARING"); //default state change 
     const [orders, setOrders] = React.useState([]); //pop first order when merchant clicks finish order
     const [loading, setLoading] = React.useState(true);
+
+    //Preparing, Ready, Settled
+    const updateAllOrder = async () => {
+        //update all orders to preparing
+        for(let order of orders){
+            await updateOrderState(order.order_id, "READY"); 
+        }
+    }
 
     const fetchAllOrder = async (status) => {
         setState(status);
@@ -57,14 +66,65 @@ const Mhome = () => {
         }
     }
 
-    const updateOrderState = async (order_id, status) => {
+    // const updateOrderState = async (order_id, status) => {
+    //     const change = await axios.put(`http://127.0.0.1:8000/orders/${order_id}/status`, status, {
+    //         type: status, 
+    //         reason: "Done cooking"
+    //     }, {
+    //         headers: {
+    //             Authorization: `Bearer ${auth.accessToken}`, // Replace with your token
+    //             'Content-Type': 'application/json',
+    //             Accept: 'application/json',
+    //         }
+    //     })
 
-    }
+    //     //pop first order from orders
+    //     if(change){
+    //         let temp = [...orders]; 
+    //         temp.shift(); 
+    //         setOrders(temp);
+    //     }
+        
+        
+    // }
+    const updateOrderState = async (order_id, status) => {
+        try {
+            console.log("Updating order with:", {
+                type: status.type,
+                reason: status.reason,
+            });
+    
+            const response = await axios.put(
+                `http://127.0.0.1:8000/orders/${order_id}/status`,
+                {
+                    type: status.type, // E.g., "PREPARING"
+                    reason: status.reason, // E.g., "done cooking"
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${auth.accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+    
+            console.log("Order status updated successfully:", response.data);
+    
+            // Update local state: remove the first order
+            let temp = [...orders];
+            temp.shift();
+            setOrders(temp);
+        } catch (error) {
+            console.error("Error updating order state:", error.response?.data || error.message);
+        }
+    };
+    
+    
 
     useEffect(() => {
         // Run fetchAllOrder("ORDERED") when component mounts
         if(merchant.restaurant_id){
-            fetchAllOrder("ORDERED");
+            fetchAllOrder("PREPARING");
         }
     }, [merchant.restaurant_id]);
         
@@ -82,8 +142,8 @@ const Mhome = () => {
                 
                 <div className="flex space-x-5 my-5">
                     <button 
-                        className={` ${state === "ORDERED" ? "bg-orange-500 " : "bg-slate-500 "} text-white font-bold py-2 px-4 rounded-full`}
-                        onClick={() => fetchAllOrder("ORDERED")} 
+                        className={` ${state === "PREPARING" ? "bg-orange-500 " : "bg-slate-500 "} text-white font-bold py-2 px-4 rounded-full`}
+                        onClick={() => fetchAllOrder("PREPARING")} 
                         >
                         Current
                     </button>
@@ -94,8 +154,8 @@ const Mhome = () => {
                         Pending Payment
                     </button>
                     <button 
-                    className={` ${state === "COMPLETED" ? "bg-green-500 " : "bg-slate-500 "} text-white font-bold py-2 px-4 rounded-full`}
-                    onClick={() => fetchAllOrder("COMPLETED")}
+                    className={` ${state === "SETTLED" ? "bg-green-500 " : "bg-slate-500 "} text-white font-bold py-2 px-4 rounded-full`}
+                    onClick={() => fetchAllOrder("SETTLED")}
                     >
                         Completed
                     </button>
@@ -122,7 +182,7 @@ const Mhome = () => {
                         <div className="mx-2 flex grow flex-col justify-between md:mx-4 md:my-2">
                             <div className="flex items-center justify-between">
                                 <h2 className="sub-title line-clamp-1">
-                                    {state === "ORDERED" ? `Order ID: ${orders[0].order_id}` : "Not Available"}
+                                    {`Order ID: ${orders[0].order_id}`}
                                 </h2>
                             </div>
                             <hr className="mt-2 md:mt-3"></hr>
@@ -133,35 +193,40 @@ const Mhome = () => {
                                 <div className="flex justify-between">
                                     <div className="">
                                         <h2>
-                                            {state === "ORDERED" ? ` ${orders[0].menu_name} x ${orders[0].menu_quantity}` : "No details available"}
+                                            {` ${orders[0].menu_name} x ${orders[0].menu_quantity}`}
                                         </h2>
                                         <h2>Dine-in</h2>
                                         <h2 className="text-red-500">
-                                            {state === "ORDERED" ? `Extra requests: ${orders[0].extra_requests}` : "No details available"}
+                                            {`Extra requests: ${orders[0].extra_requests}`}
                                         </h2>
                                     </div>
                                     
                                     <div className="flex flex-col">
                                        
                                         <h2 >
-                                        Price : {state === "ORDERED" ? `${orders[0].price_paid} ฿` : "N/A"}
+                                        Price : {`${orders[0].price_paid} ฿`}
                                         </h2>
                                         <h2 className="text-green-500">
-                                        Status : {state === "ORDERED" ? 'Preparing' : "N/A"}
+                                        Status : {state}
                                         </h2>
                                     </div>
                                     
                                 </div>
 
-                                {state === "ORDERED" && (
-                                    <div className="hidden justify-end md:flex">
-                                        <button 
-                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                                        >
-                                            Order Completed
-                                        </button>
-                                    </div>
-                                )}
+                                {
+                                    state !== "SETTLED" ? (
+                                        <div className="hidden justify-end md:flex">
+                                            <button 
+                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                                                onClick={() => updateOrderState(orders[0].order_id, "READY")}
+                                            >
+                                                { state === "PREPARING" ? "Order Completed" : state === "READY" ? "Payment received" : null }
+                                            </button>
+                                        </div>
+                                    ) : null
+                                }
+                                
+                                
                             </div>
                         </div>
                     </div>
@@ -197,12 +262,8 @@ const Mhome = () => {
                             order_at={order.ordered_at}
                             />
                         ) : null
-
-         
-                        
                     ))
                 )}
-                {/* <OrderCard order_id={1} menu_id={2} price={90} status="Cooking" order_request={"Not spicy"} order_at={"12.00"} ></OrderCard> */}
                 {/* card */}
 
             </div>
