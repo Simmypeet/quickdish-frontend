@@ -92,7 +92,7 @@ const NewMenuProvider = ({ children }) => {
                 setCustomizations,
                 image,
                 setImage,
-            }}
+            }} 
         >
             {children}
         </NewMenuContext.Provider>
@@ -337,18 +337,25 @@ const BasicInformation = () => {
     );
 };
 
+const SubmitData = () => {
+    
+}
+
+
 /**
  * @param {{}} prop
- *
+ *@property {(value: boolean) => void } setOpenModal
  * @returns {React.ReactNode}
  */
-export default ({}) => {
+
+export default function NewMenu({ setOpenModal }) {
+   //here
     return (
         <NewMenuProvider>
             <Modal
-                onClose={undefined}
+                onClose={() =>  {setOpenModal(false)} }
                 title={<Title>New Menu</Title>}
-                className="flex w-fit min-w-96 flex-col"
+                className="flex h-3/4 w-fit min-w-96 flex-col top-10 left-36"
             >
                 <div className="flex h-full flex-col px-2">
                     <div
@@ -362,7 +369,11 @@ export default ({}) => {
 
                         <div className="h-0 grow"></div>
 
-                        <GradientTextButton className="sticky bottom-0">
+                        <GradientTextButton 
+                            className="sticky bottom-0"
+                            onClick={() => {
+                                SubmitData(); 
+                            }}>
                             Confirm
                         </GradientTextButton>
                     </div>

@@ -14,6 +14,7 @@ import AuthContext from './context/AuthProvider';
 import Unauthorized from './pages/Others/Unauthorize';
 import RequireAuth from './components/RequireAuth';
 import MerchantDashboard from './pages/Merchant/MdashBoard'
+import NewMenu from './pages/Merchant/NewMenu';
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
         <Route element={<RequireAuth allowedRoles={'user'} />}></Route>
         {/* <Route path="/restaurants/:restaurantID" element={<Menu/>}></Route> */}
         <Route path="/merchant/*" element={auth ? <MerchantDashboard/> : <Navigate to="/"/>}></Route>
+        <Route path="/test" element={ <NewMenu/>}></Route>
 
       </Routes>
     </Router>
