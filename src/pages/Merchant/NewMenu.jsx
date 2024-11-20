@@ -19,6 +19,11 @@ import { Subtitle, Title } from '../../components/Title';
 import Modal, { TopicBox } from '../../components/Modal';
 import GradientTextButton from '../../components/GradientTextButton';
 import InputBoxWithIcon from '../../components/InputBoxWithIcon';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useMerchant from '../../hooks/useMerchant';
+import axios from 'axios';
+import useAuth from '../../hooks/useAuth';
+
 
 /**
  * @import { CustomizationCreate } from '../../types/restaurant'
@@ -337,23 +342,77 @@ const BasicInformation = () => {
     );
 };
 
-const SubmitData = () => {
-    
-}
-
 
 /**
  * @param {{}} prop
  *@property {(value: boolean) => void } setOpenModal
  * @returns {React.ReactNode}
- */
+*/
 
 export default function NewMenu({ setOpenModal }) {
+    const { merchant } = useMerchant();
+    const { auth } = useAuth();
+
+    const { 
+        menuName, 
+        menuDescription, 
+        estimatedTime, 
+        price, 
+        customizations, 
+        image } = useNewMenu();
+
+    const SubmitData = async () => {
+        // const axiosPrivate = useAxiosPrivate();
+        const payload = {
+            name: menuName,
+            description: menuDescription,
+            price: price,
+            estimated_prep_time: estimatedTime
+        };
+    
+        //create new menu
+        let menu_id = 0; 
+        try{
+            const response = await axios.post(
+                `http://127.0.0.1:8000/restaurants/${merchant.restaurant_id}/menus`, 
+                payload,
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'Authorization' : `Bearer ${auth.accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+            menu_id = response.data;
+        }catch(err){
+            console.log("Error creating new menu: ", err);
+        }
+    
+        //upload menu image
+        // const img_payload = new FormData();
+        // img_payload.append('image', image); 
+    
+        // try{
+        //     const response = await axiosPrivate.put(
+        //         `/restaurants/menus/${menu_id}/image`, 
+        //         img_payload, 
+        //         {
+        //             headers: {
+        //                 'Content-Type': 'multipart/form-data'
+        //             }
+        //         }
+        //     );    
+        // }catch(err){
+        //     console.log("Error uploading image: ", err);
+        //}
+    }
    //here
     return (
         <NewMenuProvider>
+           
             <Modal
-                onClose={() =>  {setOpenModal(false)} }
+                onClose={() => { setOpenModal(false) } }
                 title={<Title>New Menu</Title>}
                 className="flex h-3/4 w-fit min-w-96 flex-col top-10 left-36"
             >
@@ -371,14 +430,15 @@ export default function NewMenu({ setOpenModal }) {
 
                         <GradientTextButton 
                             className="sticky bottom-0"
-                            onClick={() => {
-                                SubmitData(); 
-                            }}>
+                            onClick={SubmitData}>
                             Confirm
                         </GradientTextButton>
                     </div>
                 </div>
             </Modal>
+            
         </NewMenuProvider>
     );
 };
+
+
