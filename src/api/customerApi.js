@@ -1,4 +1,3 @@
-
 /**
  * @import {AxiosInstance} from 'axios'
  */
@@ -42,15 +41,35 @@ export const removeFavoriteRestaurant = async (axiosInst, restaurantIds) => {
     return response.data;
 };
 
+/**
+ * @param {AxiosInstance} axiosInst
+ * @param {number[]} restaurantIds
+ *
+ * @returns {Promise<string>}
+ */
+export const addFavoriteRestaurant = async (axiosInst, restaurantIds) => {
+    const response = await axiosInst.post(
+        '/customers/favorite-restaurants',
+        restaurantIds
+    );
+
+    if (response.status !== 200) {
+        throw new Error(
+            `Error adding favorite restaurant status: ${response.status}; 
+            body: ${response.data}`
+        );
+    }
+
+    return response.data;
+};
+
 export const getUser = async (axiosPrivate) => {
     // const response = await axiosPrivate.get(
     //     'http://127.0.0.1:8000/customers/me'
     // );
-    const response = await axiosPrivate.get(
-        '/customers/me'
-    );
-    return response.data; 
-}; 
+    const response = await axiosPrivate.get('/customers/me');
+    return response.data;
+};
 
 export const getUserById = async (axiosPrivate, userId) => {
     const response = await axiosPrivate.get(

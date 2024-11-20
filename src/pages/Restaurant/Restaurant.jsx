@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Decimal from 'decimal.js';
 
 // @ts-expect-error
-import defaultRestaurantImage from '../../assets/defaultRestaurant.jpeg';
+import defaultRestaurantImage from '/defaultRestaurant.jpeg';
 // @ts-expect-error
-import defaultMenuImage from '../../assets/defaultMenu.webp';
+import defaultMenuImage from '/defaultMenu.webp';
 
 /**
  * @import {
@@ -33,6 +33,7 @@ import {
     faSort,
     faMoneyBill,
     faCheck,
+    faFlag,
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import {
@@ -52,6 +53,11 @@ import Header from '../../components/Header';
 import MenuCard from '../../components/MenuCard';
 import OrderCustomization from '../../components/OrderCustomization';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import {
+    addFavoriteRestaurant,
+    getFavoriteRestaurants,
+    removeFavoriteRestaurant,
+} from '../../api/customerApi';
 
 /**
  *
@@ -671,7 +677,9 @@ const MainPage = () => {
         popup: /** @type {Popup | null} */ (null),
     });
 
-    const { restaurant, orderCreate } = useRestaurant();
+    const axiosPrivate = useAxiosPrivate();
+    const { restaurant, orderCreate, isFavorite, setIsFavorite } =
+        useRestaurant();
 
     const totlaQuantity = orderCreate.items.reduce(
         (acc, order) => acc + order.quantity,
@@ -713,10 +721,63 @@ const MainPage = () => {
                             <div className="h-fit text-2xl font-semibold">
                                 {restaurant.restaurant.name}
                             </div>
-                            <FontAwesomeIcon
-                                icon={faLocationDot}
-                                className="self-center"
-                            />
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    try {
+                                        if (isFavorite) {
+                                            removeFavoriteRestaurant(
+                                                axiosPrivate,
+                                                [restaurant.restaurant.id]
+                                            );
+
+                                            setIsFavorite(false);
+                                        } else {
+                                            addFavoriteRestaurant(
+                                                axiosPrivate,
+                                                [restaurant.restaurant.id]
+                                            );
+
+                                            setIsFavorite(true);
+                                        }
+                                    } catch (e) {
+                                        console.error(e);
+                                    }
+                                }}
+                            >
+                                {/* change to black when click  */}
+                                {isFavorite ? (
+                                    <FontAwesomeIcon
+                                        className="size-4"
+                                        icon={faFlag}
+                                    />
+                                ) : (
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="size-4"
+                                        viewBox="0 0 448 512"
+                                    >
+                                        <path
+                                            d="
+                                                M48 24C48 10.7 37.3 0 24 0S0 10.7 0 24L0 
+                                                64 0 350.5 0 400l0 88c0 13.3 10.7 24 24 
+                                                24s24-10.7 24-24l0-100 
+                                                80.3-20.1c41.1-10.3 84.6-5.5 122.5 
+                                                13.4c44.2 22.1 95.5 24.8 141.7 
+                                                7.4l34.7-13c12.5-4.7 20.8-16.6 
+                                                20.8-30l0-279.7c0-23-24.2-38-44.8-27.7l-9.6 
+                                                4.8c-46.3 23.2-100.8 23.2-147.1 
+                                                0c-35.1-17.6-75.4-22-113.5-12.5L48 
+                                                52l0-28zm0 77.5l96.6-24.2c27-6.7 55.5-3.6 
+                                                80.4 8.8c54.9 27.4 118.7 29.7 175 6.8l0 
+                                                241.8-24.4 9.1c-33.7 12.6-71.2 
+                                                10.7-103.4-5.4c-48.2-24.1-103.3-30.1-155.6-17.1L48 
+                                                338.5l0-237z
+                                    "
+                                        />
+                                    </svg>
+                                )}
+                            </button>
                         </div>
                         <hr></hr>
                         <div>
@@ -766,8 +827,8 @@ const MainPage = () => {
 
             <div
                 className="
-                    mx-4 mt-20 flex grow flex-col justify-center gap-x-2 gap-y-2
-                    md:flex-row md:flex-wrap
+                    mx-4 mt-20 flex grow flex-col gap-x-2 gap-y-2 md:flex-row
+                    md:flex-wrap md:justify-center
                 "
             >
                 {Object.entries(restaurant.menus).map(
@@ -860,6 +921,8 @@ const MainPage = () => {
  * @property {OrderCreate} orderCreate
  * @property {(items: OrderItem[]) => void} setOrders
  * @property {RestaurantData} restaurant
+ * @property {boolean} isFavorite
+ * @property {(isFavorite: boolean) => void} setIsFavorite
  */
 
 const RestaurantContext = React.createContext(
@@ -870,6 +933,7 @@ const RestaurantContext = React.createContext(
  * @param {{
  *  children: ReactNode
  *  restaurant: RestaurantData
+ *  isFavorite: boolean
  * }} props
  *
  * @returns {ReactNode}
@@ -879,20 +943,20 @@ const RestaurantProvider = ({ children, restaurant }) => {
         /** @type {ReturnType<typeof useCookies<"order", {[K in "order"]?: OrderCreate}>>} */
         (useCookies(['order']));
 
-    useMemo(() => {
-        if (
-            cookie.order == null ||
-            cookie.order.restaurant_id != restaurant.restaurant.id
-        ) {
-            setCookie(
-                'order',
-                /**@type {OrderCreate} */ ({
-                    restaurant_id: restaurant.restaurant.id,
-                    items: [],
-                })
-            );
-        }
-    }, []);
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    if (
+        cookie.order == null ||
+        cookie.order.restaurant_id != restaurant.restaurant.id
+    ) {
+        setCookie(
+            'order',
+            /**@type {OrderCreate} */ ({
+                restaurant_id: restaurant.restaurant.id,
+                items: [],
+            })
+        );
+    }
 
     if (cookie.order == null) {
         throw new Error('Cookie is null');
@@ -911,6 +975,8 @@ const RestaurantProvider = ({ children, restaurant }) => {
                     }
                 ),
                 restaurant: restaurant,
+                isFavorite,
+                setIsFavorite,
             }}
         >
             {children}
@@ -944,8 +1010,10 @@ const Restaurant = () => {
         /** @type {RestaurantData | undefined | null}*/
         (undefined)
     );
+    const [isFavorite, setIsFavorite] = useState(false);
 
     const restaurantID = parseInt(restaurantIDString);
+    const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
         const getData = async () => {
@@ -953,6 +1021,7 @@ const Restaurant = () => {
                 const restaurant = await getRestaurant(restaurantID);
                 const restaurantImage = await getRestaurantImage(restaurantID);
                 const menus = await getRestaurantMenus(restaurantID);
+                const favorites = await getFavoriteRestaurants(axiosPrivate);
 
                 /** @type {{[id: number]: MenuData}} */
                 let menuDatas = {};
@@ -994,22 +1063,23 @@ const Restaurant = () => {
                     menus: menuDatas,
                     queue: queue,
                 });
+                setIsFavorite(favorites.includes(restaurantID));
             } catch (error) {
                 setRestaurant(null);
             }
         };
 
         getData();
-    }, []);
+    }, [restaurantIDString]);
 
     if (restaurant === undefined) {
-        return <LoadingPage opacity={true} />;
+        return <LoadingPage opacity={false} />;
     } else if (restaurant === null) {
         return <ErrorPage message="We couldn't find the restaurant for you" />;
     } else {
         return (
-            <RestaurantProvider restaurant={restaurant}>
-                <MainPage />;
+            <RestaurantProvider restaurant={restaurant} isFavorite={isFavorite}>
+                <MainPage />
             </RestaurantProvider>
         );
     }

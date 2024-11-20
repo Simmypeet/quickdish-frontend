@@ -13,8 +13,10 @@ import Authentication from './pages/Others/Authentication';
 import AuthContext from './context/AuthProvider';
 import Unauthorized from './pages/Others/Unauthorize';
 import RequireAuth from './components/RequireAuth';
+
 import MerchantDashboard from './pages/Merchant/MdashBoard'
 import NewMenu from './pages/Merchant/NewMenu';
+import Canteen from './pages/Canteen/Canteen';
 
 
 const App = () => {
@@ -27,10 +29,17 @@ const App = () => {
         <Route path="/user_review" element={auth ? <RateAndReview/> : <Navigate to="/"/>}></Route>
         {/* <Menu restaurantID={8}></Menu> */}
         <Route path="/unauthorized" element={<Unauthorized/>}></Route>
+
         <Route element={<RequireAuth allowedRoles={'user'} />}></Route>
         {/* <Route path="/restaurants/:restaurantID" element={<Menu/>}></Route> */}
         <Route path="/merchant/*" element={auth ? <MerchantDashboard/> : <Navigate to="/"/>}></Route>
         <Route path="/test" element={ <NewMenu/>}></Route>
+
+
+        <Route element={<RequireAuth allowedRoles={'user'} />}>
+          <Route path="/restaurants/:restaurantID" element={<Menu/>}></Route>
+          <Route path="/canteens/:canteenID" element={<Canteen/>}></Route>
+        </Route>
 
       </Routes>
     </Router>

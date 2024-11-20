@@ -73,7 +73,7 @@ const Dashboard = () => {
                 <div 
                     className="flex flex-col w-0 grow"
                 >
-                    <div className="grow">
+                    <div className="flex flex-col grow">
                         <Routes>
                             <Route path="/" element={
                                 <div className='md:-ml-4 sticky top-0 z-10'>
@@ -82,17 +82,18 @@ const Dashboard = () => {
                             }/>
                         </Routes>
 
-                        <div className="p-2 md:pr-4 md:pl-0">
+                        <div className="h-full p-2 md:pr-4 md:pl-0">
                             <Routes>
-                                <Route path="/" element={<Home/>}/>
 
                                 {/* for several roles = ['user', 'admin', 'staff'] */}
-                                <Route element={<RequireAuth allowedRoles={'user'}/>}></Route>
-                                <Route path="purchase_history" element={<PurchaseHistory/>}/>
-                                <Route path="myprofile" element={<MyProfile/>}/>
-                                <Route path="favourites" element={<Favourite/>}/>
-                                <Route path="notification" element={<Notification/>}></Route>
-                                <Route path="orders/:orderID" element={<OrderDetail/>}></Route>
+                                <Route element={<RequireAuth allowedRoles={'user'}/>}>
+                                    <Route path="/" element={<Home/>}/>
+                                    <Route path="purchase_history" element={<PurchaseHistory/>}/>
+                                    <Route path="myprofile" element={<MyProfile/>}/>
+                                    <Route path="favourites" element={<Favourite/>}/>
+                                    <Route path="notification" element={<Notification/>}/>
+                                    <Route path="orders/:orderID" element={<OrderDetail/>}/>
+                                </Route>
 
                             </Routes>
                         </div>

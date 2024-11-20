@@ -6,7 +6,7 @@ export const LoadingPage = ({ opacity }) => (
   <div
     className={
       `fixed top-0 left-0 right-0 bottom-0 flex justify-center z-9` +
-      (opacity ? " bg-opacity-50 bg-gray-200 dark:bg-gray-800" : "")
+      (opacity ? " bg-opacity-10 bg-black" : "")
     }
   >
     <div className="flex flex-col self-center items-center">

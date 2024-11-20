@@ -47,7 +47,7 @@ const SideBar = () => {
                         </button>
                     </NavLink>
                 </div>
-                <FontAwesomeIcon className="sidebar-button text-3xl" icon={faArrowRightFromBracket} onClick={logout}/>
+                <FontAwesomeIcon className="sidebar-button text-3xl p-2" icon={faArrowRightFromBracket} onClick={logout}/>
             </div>
             
         </div>

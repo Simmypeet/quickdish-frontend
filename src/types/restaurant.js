@@ -15,6 +15,7 @@
  * @property {Location} location
  * @property {number} id
  * @property {number} merchant_id
+ * @property {number} canteen_id
  * @property {boolean} open
  */
 
@@ -53,7 +54,7 @@
 
 /**
  * @typedef {Object} CustomizationCreate
- * 
+ *
  * @property {string} title
  * @property {string | null} description
  * @property {boolean} unique
@@ -64,7 +65,7 @@
 
 /**
  * @typedef {Object} OptionCreate
- * 
+ *
  * @property {string} name
  * @property {string | null} description
  * @property {string | null} extra_price
