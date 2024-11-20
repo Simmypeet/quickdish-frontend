@@ -1,9 +1,11 @@
 import React from 'react';
 import SearchBar from './SearchBar';
 import useUser from '../hooks/useUser';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const { user } = useUser();
+    const navigate = useNavigate();
 
     // const getCustomerData = async() => {
     //     try{
@@ -29,7 +31,15 @@ const Header = () => {
                 "
             >
                 <div className="">
-                    <h1 className="hidden sm:block sm:text-3xl md:text-4xl">
+                    <h1
+                        className="
+                            hidden cursor-pointer sm:block sm:text-3xl 
+                            md:text-4xl
+                        "
+                        onClick={() => {
+                            navigate('/dashboard', { replace: true });
+                        }}
+                    >
                         <span className="font-bold text-orange-600">Quick</span>
                         <span className="font-bold text-orange-400">Dish</span>
                     </h1>

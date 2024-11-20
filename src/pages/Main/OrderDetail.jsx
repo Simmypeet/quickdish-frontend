@@ -17,7 +17,7 @@ import { getMenu, getMenuImage, getRestaurant } from '../../api/restaurantApi';
 import moment from 'moment-timezone';
 
 // @ts-expect-error
-import defaultMenuImage from '../../assets/defaultMenu.webp';
+import defaultMenuImage from '/defaultMenu.webp';
 import useEvent from '../../hooks/useEvent';
 import { EventHandlerProvider } from '../../context/EventProvider';
 

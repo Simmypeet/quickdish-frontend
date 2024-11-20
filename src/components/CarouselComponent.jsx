@@ -7,8 +7,9 @@ import CanteenCard from './CanteenCard';
 import useLocation from '../hooks/useLocation';
 import { getCanteenImgFromId, getNearestCanteens } from '../api/canteenApi';
 
-// @ts-expect-errors
-import defaultCanteen from '../../public/defaultCanteen.jpg';
+// @ts-expect-error
+import defaultCanteen from '/defaultCanteen.jpg';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * @import {Canteen} from '../types/canteen'
@@ -19,6 +20,7 @@ const CarouselComponent = () => {
     const [canteens, setCanteens] = useState(/** @type{Canteen[]} */ ([]));
     const [canteenImg, setCanteenImg] = useState({});
     const { location } = useLocation();
+    const navigate = useNavigate();
 
     /**
      *
@@ -93,6 +95,11 @@ const CarouselComponent = () => {
                     key={canteen.id}
                     canteenName={canteen.name}
                     img={canteenImg[canteen.id]}
+                    onClick={() => {
+                        navigate(`/canteens/${canteen.id}`, {
+                            replace: true,
+                        });
+                    }}
                 />
             ))}
         </Carousel>

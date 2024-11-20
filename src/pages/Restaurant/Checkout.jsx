@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 
 // @ts-expect-error
-import defaultMenuImage from "../../assets/defaultMenu.webp";
+import defaultMenuImage from "defaultMenu.webp";
 
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import OrderCard from "../../components/OrderCard";
