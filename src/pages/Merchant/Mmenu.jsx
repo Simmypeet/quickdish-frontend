@@ -46,7 +46,7 @@ const Mmenu = () => {
     return (
         <div>
             <h1 className="heading-font"> Menus </h1>
-            <div className="grid grid-cols-3 gap-0 mt-10">
+            <div className="grid grid-cols-3 gap-10 mt-10">
                 {
                     menus.map((menu) => {
                         return <MenuCard menu={menu} key={menu.id} image={menusImg[menu.id]} onClick={showModal}></MenuCard>
@@ -59,7 +59,7 @@ const Mmenu = () => {
                     onClick = {() => { 
                         setOpenModal(true);  
                     }}>
-                    <h2 className='text-3xl'>+</h2>
+                    <h2 className='text-3xl'>+</h2> 
                 </button>
             </div>
 

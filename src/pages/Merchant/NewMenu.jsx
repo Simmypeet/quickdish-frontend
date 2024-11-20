@@ -349,9 +349,10 @@ const BasicInformation = () => {
  * @returns {React.ReactNode}
 */
 
-export default function NewMenu({ setOpenModal }) {
+const Menu = ({ setOpenModal }) => {
     const { merchant } = useMerchant();
     const { auth } = useAuth();
+    const axiosPrivate = useAxiosPrivate();
 
     const { 
         menuName, 
@@ -379,37 +380,37 @@ export default function NewMenu({ setOpenModal }) {
                 {
                     headers: {
                         'accept': 'application/json',
-                        'Authorization' : `Bearer ${auth.accessToken}`,
+                        'Authorization' : `Bearer ${auth.accessToken}`, 
                         'Content-Type': 'application/json'
                     }
                 }
             )
+            console.log("Response menu: ", response.data);
             menu_id = response.data;
         }catch(err){
             console.log("Error creating new menu: ", err);
         }
     
         //upload menu image
-        // const img_payload = new FormData();
-        // img_payload.append('image', image); 
+        const img_payload = new FormData();
+        img_payload.append('image', image); 
     
-        // try{
-        //     const response = await axiosPrivate.put(
-        //         `/restaurants/menus/${menu_id}/image`, 
-        //         img_payload, 
-        //         {
-        //             headers: {
-        //                 'Content-Type': 'multipart/form-data'
-        //             }
-        //         }
-        //     );    
-        // }catch(err){
-        //     console.log("Error uploading image: ", err);
-        //}
+        try{
+            const response = await axiosPrivate.put(
+                `/restaurants/menus/${menu_id}/image`, 
+                img_payload, 
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );    
+        }catch(err){
+            console.log("Error uploading image: ", err);
+        }
     }
    //here
     return (
-        <NewMenuProvider>
            
             <Modal
                 onClose={() => { setOpenModal(false) } }
@@ -437,8 +438,15 @@ export default function NewMenu({ setOpenModal }) {
                 </div>
             </Modal>
             
-        </NewMenuProvider>
     );
 };
+
+export default function NewMenu({ setOpenModal }) {
+    return (
+        <NewMenuProvider>
+            <Menu setOpenModal={setOpenModal}></Menu>
+        </NewMenuProvider>
+    ); 
+}; 
 
 
