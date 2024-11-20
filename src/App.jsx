@@ -30,8 +30,7 @@ const App = () => {
         <Route element={<RequireAuth allowedRoles={'user'} />}></Route>
         {/* <Route path="/restaurants/:restaurantID" element={<Menu/>}></Route> */}
         <Route path="/merchant/*" element={auth ? <MerchantDashboard/> : <Navigate to="/"/>}></Route>
-        <Route path="test" element={ <NewMenu/>}></Route>
-
+        <Route path="/test" element={ <NewMenu/>}></Route>
 
       </Routes>
     </Router>

@@ -9,7 +9,7 @@ import { updateOrderStatus } from '../../api/orderApi';
 import axios from 'axios'; //temp -> axiosPrivate
 
 //get total queue
-//new endpoint : update order status 
+//new endpoint : update order status  
 
 const Mhome = () => {
     const { auth } = useAuth();

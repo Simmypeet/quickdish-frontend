@@ -61,9 +61,6 @@ const RateAndReview = () => {
         getAllReviews(restaurant_id); 
     }
 
-    const getReviewRatings = async () => {
-        // Get avg ratings of all reviews
-    }
 
     const getMenuName = async () => {   
         const response = await getMenu(menu_id);

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import SideBar from "../../components/Merchant/Msidebar";
 import Header from "../../components/Merchant/Mheader";
 import Mhome from "./Mhome";
-import { getMerchant, getMerchant2 } from "../../api/merchantApi";
+import { getMerchant } from "../../api/merchantApi";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useMerchant from "../../hooks/useMerchant";
 import useAuth from '../../hooks/useAuth';
@@ -57,7 +57,7 @@ const MerchantDashboard = () => {
                 ">
                 <SideBar/>
             </div>
-            <div className="flex-grow flex-1 flex flex-col relative">
+            <div className="flex-grow flex-1 flex flex-col relative ">
                 <div className="fixed top-0 lg:left-60 left-0 right-0 z-10">
                     {
                         merchant.username ?
@@ -66,7 +66,7 @@ const MerchantDashboard = () => {
                     }
                     
                 </div>
-                <div className="absolute top-32 left-72 right-10">
+                <div className="absolute top-32 left-72 right-10 ">
                     {/* <Mhome/> */}
                     <Routes>
                         <Route path="/" element={<Mhome/>}/>

@@ -19,6 +19,7 @@ import React from 'react';
  *
  * @returns {React.ReactNode}
  */
+
 const MenuCard = ({ menu, image, onClick }) => {
     return (
         <div
