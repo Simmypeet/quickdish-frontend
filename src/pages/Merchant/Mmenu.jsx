@@ -10,6 +10,7 @@ const Mmenu = () => {
     const [menus, setMenus] = useState([]);
     const { merchant } = useMerchant();
     const [ openModal, setOpenModal ] = useState(false); 
+    const [ editMenuId, setEditMenuId ] = useState(0);
     const getAllMenus = async () => {
         try {
             const response = await getRestaurantMenus(merchant.restaurant_id);
@@ -17,6 +18,11 @@ const Mmenu = () => {
         } catch (err) {
             console.log('Error fetching menus: ', err);
         }
+    }
+
+    const makeModalOpen = (id) => {
+        setEditMenuId(id);
+        setOpenModal(true);
     }
 
     const getMenusImg = async () => {
@@ -43,13 +49,13 @@ const Mmenu = () => {
         getMenusImg(); 
     }, []);
 
-    return (
+    return ( 
         <div>
             <h1 className="heading-font"> Menus </h1>
             <div className="grid grid-cols-3 gap-10 mt-10">
                 {
                     menus.map((menu) => {
-                        return <MenuCard menu={menu} key={menu.id} image={menusImg[menu.id]} onClick={showModal}></MenuCard>
+                        return <MenuCard menu={menu} key={menu.id} image={menusImg[menu.id]} onClick={() => makeModalOpen(menu.id)}></MenuCard>
                     })
                 }
             </div>
@@ -66,10 +72,12 @@ const Mmenu = () => {
             {
                 openModal ? 
                 <div className="fixed top-52">
-                    <NewMenu setOpenModal={setOpenModal}></NewMenu>
+                    <NewMenu setOpenModal={setOpenModal} editMenuId={editMenuId}></NewMenu>
                 </div>
                 : null
             }
+
+            
         </div>
     );
 }

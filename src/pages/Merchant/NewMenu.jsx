@@ -1,10 +1,10 @@
 // @ts-check
 
-import React, { createContext, Fragment, useState } from 'react';
+import React, { createContext, Fragment, useEffect, useState } from 'react';
 
 import merge from '../../utils/className';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
+import { 
     faCheck,
     faClock,
     faClose,
@@ -15,6 +15,7 @@ import {
     faUpload,
     faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
+import { getMenu } from '../../api/restaurantApi';
 import { Subtitle, Title } from '../../components/Title';
 import Modal, { TopicBox } from '../../components/Modal';
 import GradientTextButton from '../../components/GradientTextButton';
@@ -288,7 +289,8 @@ const Customizations = () => {
 /**
  * @returns {React.ReactNode}
  */
-const BasicInformation = () => {
+const BasicInformation = ({ editMenuId }) => {
+
     const {
         menuName,
         setMenuName,
@@ -299,6 +301,25 @@ const BasicInformation = () => {
         price,
         setPrice,
     } = useNewMenu();
+
+    useEffect(() => {
+        const fetchMenu = async () => {
+            if(editMenuId !== 0){
+                try{
+                    const response = await getMenu(editMenuId);
+                    console.log("Response from edit: ", response);
+                    setMenuName(response.name);
+                    setMenuDescription(response.description);
+                    setEstimatedTime(response.estimated_prep_time);
+                    setPrice(response.price);
+                }catch(err){
+                    console.log("Error fetching menu: ", err);
+                }
+            }
+        };
+
+        fetchMenu(); 
+    }, [editMenuId, setMenuName, setMenuDescription, setEstimatedTime, setPrice]); 
 
     return (
         <TopicBox title={<Subtitle>Basic Information</Subtitle>}>
@@ -349,7 +370,7 @@ const BasicInformation = () => {
  * @returns {React.ReactNode}
 */
 
-const Menu = ({ setOpenModal }) => {
+const Menu = ({ setOpenModal, editMenuId }) => {
     const { merchant } = useMerchant();
     const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
@@ -414,7 +435,14 @@ const Menu = ({ setOpenModal }) => {
            
             <Modal
                 onClose={() => { setOpenModal(false) } }
-                title={<Title>New Menu</Title>}
+                title={
+                    <Title>
+                        {
+                            editMenuId === 0 ? 
+                            "New Menu" : 
+                            "Edit Menu"
+                        }
+                    </Title>}
                 className="flex h-3/4 w-fit min-w-96 flex-col top-10 left-36"
             >
                 <div className="flex h-full flex-col px-2">
@@ -422,8 +450,8 @@ const Menu = ({ setOpenModal }) => {
                         className="
                             flex h-0 grow flex-col gap-y-2 overflow-y-auto
                         "
-                    >
-                        <BasicInformation />
+                    >   
+                        <BasicInformation editMenuId={editMenuId}/>
                         <MenuImageUpload />
                         {/* <Customizations /> */}
 
@@ -434,6 +462,16 @@ const Menu = ({ setOpenModal }) => {
                             onClick={SubmitData}>
                             Confirm
                         </GradientTextButton>
+
+                        {
+                            editMenuId !== 0 ?
+                            (
+                                <GradientTextButton >
+                                    Delete
+                                </GradientTextButton>
+                            ) : null
+                        }
+                        
                     </div>
                 </div>
             </Modal>
@@ -441,10 +479,10 @@ const Menu = ({ setOpenModal }) => {
     );
 };
 
-export default function NewMenu({ setOpenModal }) {
+export default function NewMenu({ setOpenModal, editMenuId }) {
     return (
         <NewMenuProvider>
-            <Menu setOpenModal={setOpenModal}></Menu>
+            <Menu setOpenModal={setOpenModal} editMenuId={editMenuId}></Menu>
         </NewMenuProvider>
     ); 
 }; 
