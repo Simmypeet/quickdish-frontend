@@ -228,7 +228,7 @@ const Signup = ({toggle}) => {
                                     Register
                                 </button>
                             </div>
-                            <p className="text-gray-800 text-sm !mt-4 text-center">Already a member? <a href="#" className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold" onClick={toggle} >Login here</a></p>
+                            <p className="text-gray-800 text-sm !mt-4 text-center">Already a member? <a href="#" className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold" onClick={() => toggle("login")} >Login here</a></p>
                             </form>
                         </div>
                     </div>

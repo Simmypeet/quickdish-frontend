@@ -5,7 +5,7 @@ import { faStar, faLocationDot, faArrowLeft } from "@fortawesome/free-solid-svg-
 import CommentWindow from "../../components/CommentWindow";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getMenu } from "../../api/restaurantApi";
-import { getUser } from "../../api/customerApi";
+import { getUserById } from "../../api/customerApi";
 import axios from "axios";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { dateFormatted, timeFormatted } from "../../utils/datetimeFormatter";
@@ -20,6 +20,7 @@ const RateAndReview = () => {
     const closeModal = () => setShowModal(!showModal);
     const [reviews, setReviews] = React.useState([]);
     const [menuName, setMenuName] = React.useState("");
+    const [overall_rate, setOverallRate] = React.useState(0);
     const axiosPrivate = useAxiosPrivate();
 
     const switchtoDashboard = () => {
@@ -29,6 +30,7 @@ const RateAndReview = () => {
 
     const getAllReviews = async (restaurant_id) => {
         const review_edit = []; 
+        let total_rate = 0; 
         const response = await axios.get(`http://127.0.0.1:8000/restaurants/reviews/${restaurant_id}`); 
         if (response.status !== 200){
             throw new Error(
@@ -38,7 +40,7 @@ const RateAndReview = () => {
         for(let r of response.data){
             let temp = {}; 
             const menu = await getMenu(r.menu_id); 
-            const username = await getUser(axiosPrivate);
+            const username = await getUserById(axiosPrivate, r.customer_id);
             const date = new Date(r.created_at);
             temp["username"] = username.username; 
             temp["customer_id"] = r.customer_id;
@@ -48,7 +50,10 @@ const RateAndReview = () => {
             temp["rating"] = (r.tastiness + r.hygiene + r.quickness)/3; 
             temp["comment"] = r.review; 
             review_edit.push(temp);
+            total_rate += temp["rating"];
         }
+        const avgRating = review_edit.length === 0 ? 0 : total_rate/review_edit.length;
+        setOverallRate(Math.ceil(avgRating));
         setReviews(review_edit);
     }
 
@@ -56,9 +61,6 @@ const RateAndReview = () => {
         getAllReviews(restaurant_id); 
     }
 
-    const getReviewRatings = async () => {
-        // Get avg ratings of all reviews
-    }
 
     const getMenuName = async () => {   
         const response = await getMenu(menu_id);
@@ -87,7 +89,7 @@ const RateAndReview = () => {
 
             {/* Main content area */}
             <div className="h-screen flex flex-col items-center mt-28">
-                <div className="bg-slate-100 w-8/12 h-3/4 rounded-3xl mb-6 overflow-hidden">
+                <div className="bg-slate-100 w-8/12 h-4/5 rounded-3xl mb-6 overflow-hidden">
                     {/* Content container with scrollable reviews */}
                     <div className="flex flex-col justify-center bg-slate-100 rounded-3xl">
                         {/* Header information */}
@@ -99,13 +101,13 @@ const RateAndReview = () => {
                                     <h1>{canteen}</h1>
                                 </div>
                                 <hr className="border-t-2 border-black mt-3 mb-3" />
-                                <h1 className="comment-sub-heading-bold-font">Overall Rate(4.7)</h1>
+                                <h1 className="comment-sub-heading-bold-font">Overall Rate({overall_rate})</h1>
                                 <div className="">
                                     {
-                                        [...Array(5).fill(0).map((_, i) => (
+                                        [...Array(overall_rate).fill(0).map((_, i) => (
                                             <FontAwesomeIcon icon={faStar} key={i} className="m-1 size-8 text-yellow-500" />
                                         )),
-                                        ...Array(0).fill(0).map((_, i) => (
+                                        ...Array(5 - overall_rate).fill(0).map((_, i) => (
                                             <FontAwesomeIcon icon={faStar} key={i} className="m-1 size-8" />
                                         ))
                                         ]

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import merge from '../utils/className';
+import useNewMenu from '../pages/Merchant/NewMenu';
 
 /**
  * @param {{
@@ -10,7 +11,9 @@ import merge from '../utils/className';
  *  children?: React.ReactNode
  * }} param0
  */
+
 export default ({ children, onClick, className }) => {
+
     return (
         <button
             onClick={onClick}

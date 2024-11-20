@@ -77,6 +77,8 @@ const Home = () => {
             const canteen = await getCanteenByRestId(restaurants[0].id);
             setCanteen(canteen.name);
 
+
+
             for (let restaurant of restaurants) {
                 // const rest = [];
                 // rest["id"] = restaurant.id;

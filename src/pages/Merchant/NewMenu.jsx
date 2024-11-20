@@ -1,10 +1,10 @@
 // @ts-check
 
-import React, { createContext, Fragment, useState } from 'react';
+import React, { createContext, Fragment, useEffect, useState } from 'react';
 
 import merge from '../../utils/className';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
+import { 
     faCheck,
     faClock,
     faClose,
@@ -15,10 +15,17 @@ import {
     faUpload,
     faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
+import { getMenu } from '../../api/restaurantApi';
 import { Subtitle, Title } from '../../components/Title';
 import Modal, { TopicBox } from '../../components/Modal';
 import GradientTextButton from '../../components/GradientTextButton';
 import InputBoxWithIcon from '../../components/InputBoxWithIcon';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useMerchant from '../../hooks/useMerchant';
+import axios from 'axios';
+import useAuth from '../../hooks/useAuth';
+import { getMenuImage } from '../../api/restaurantApi';
+
 
 /**
  * @import { CustomizationCreate } from '../../types/restaurant'
@@ -92,7 +99,7 @@ const NewMenuProvider = ({ children }) => {
                 setCustomizations,
                 image,
                 setImage,
-            }}
+            }} 
         >
             {children}
         </NewMenuContext.Provider>
@@ -113,7 +120,7 @@ const useNewMenu = () => {
 /**
  * @returns {React.ReactNode}
  */
-const MenuImageUpload = () => {
+const MenuImageUpload = ({editMenuId}) => {
     const { setImage, image } = useNewMenu();
     const [error, setError] = useState(
         /**@type{'oneImage'|'notImage'|undefined} */ (undefined)
@@ -193,8 +200,14 @@ const MenuImageUpload = () => {
                             {image ? (
                                 <b>Image Uploaded</b>
                             ) : (
+
+                                editMenuId === 0 ? 
                                 <>
                                     <b>Choose a file</b> or drag it here
+                                </>
+                                :
+                                <>
+                                    <b>Choose a file to change image</b>
                                 </>
                             )}
                         </div>
@@ -283,7 +296,8 @@ const Customizations = () => {
 /**
  * @returns {React.ReactNode}
  */
-const BasicInformation = () => {
+const BasicInformation = ({ editMenuId }) => {
+
     const {
         menuName,
         setMenuName,
@@ -294,6 +308,25 @@ const BasicInformation = () => {
         price,
         setPrice,
     } = useNewMenu();
+
+    useEffect(() => {
+        const fetchMenu = async () => {
+            if(editMenuId !== 0){
+                try{
+                    const response = await getMenu(editMenuId);
+                    console.log("Response from edit: ", response);
+                    setMenuName(response.name);
+                    setMenuDescription(response.description);
+                    setEstimatedTime(response.estimated_prep_time);
+                    setPrice(response.price);
+                }catch(err){
+                    console.log("Error fetching menu: ", err);
+                }
+            }
+        };
+
+        fetchMenu(); 
+    }, [editMenuId, setMenuName, setMenuDescription, setEstimatedTime, setPrice]); 
 
     return (
         <TopicBox title={<Subtitle>Basic Information</Subtitle>}>
@@ -337,37 +370,168 @@ const BasicInformation = () => {
     );
 };
 
+
 /**
  * @param {{}} prop
- *
+ *@property {(value: boolean) => void } setOpenModal
  * @returns {React.ReactNode}
- */
-export default ({}) => {
+*/
+
+const Menu = ({ setOpenModal, editMenuId }) => {
+    const { merchant } = useMerchant();
+    const { auth } = useAuth();
+    const axiosPrivate = useAxiosPrivate();
+
+    const { 
+        menuName, 
+        menuDescription, 
+        estimatedTime, 
+        price, 
+        customizations, 
+        image,
+        setMenuName,
+        setMenuDescription,
+        setEstimatedTime,
+        setPrice,
+        setImage } = useNewMenu();
+
+    const SubmitData = async () => {
+        // const axiosPrivate = useAxiosPrivate();
+        const payload = {
+            name: menuName,
+            description: menuDescription,
+            price: price,
+            estimated_prep_time: estimatedTime
+        };
+    
+        //create new menu
+        let menu_id = 0; 
+        try{
+            const response = await axios.post(
+                `http://127.0.0.1:8000/restaurants/${merchant.restaurant_id}/menus`, 
+                payload,
+                {
+                    headers: {
+                        'accept': 'application/json',
+                        'Authorization' : `Bearer ${auth.accessToken}`, 
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+            console.log("Response menu: ", response.data);
+            menu_id = response.data;
+        }catch(err){
+            console.log("Error creating new menu: ", err);
+        }
+    
+        //upload menu image
+        UploadImage(menu_id);
+        setOpenModal(false);
+        resetState();
+     
+    }
+
+    const UpdateData = async () => {
+        const payload = {
+            name: menuName,
+            description: menuDescription,
+            price: price,
+            estimated_prep_time: estimatedTime
+        };
+
+        try{
+            const response = await axiosPrivate.put(
+                `/restaurants/menus/${editMenuId}`, 
+                payload
+            );    
+        }catch(err){
+            console.log("Error uploading image: ", err);
+        }
+
+        if(image != null){
+            UploadImage(editMenuId);
+        }  
+        setOpenModal(false);
+        resetState();
+    }
+
+
+    const UploadImage = async (menuId) => {
+        const img_payload = new FormData();
+        img_payload.append('image', image); 
+
+        try{
+            const response = await axiosPrivate.put(
+                `/restaurants/menus/${menuId}/image`, 
+                img_payload, 
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );    
+        }catch(err){
+            console.log("Error uploading image: ", err);
+        }
+    }
+
+    const resetState = () => {
+        setMenuName('');
+        setMenuDescription('');
+        setEstimatedTime('');
+        setPrice('');
+        setImage(null);
+    }
+   //here
     return (
-        <NewMenuProvider>
+           
             <Modal
-                onClose={undefined}
-                title={<Title>New Menu</Title>}
-                className="flex w-fit min-w-96 flex-col"
+                onClose={() => { setOpenModal(false) } }
+                title={
+                    <Title>
+                        {
+                            editMenuId === 0 ? 
+                            "New Menu" : 
+                            "Edit Menu"
+                        }
+                    </Title>}
+                className="flex h-3/4 w-fit min-w-96 flex-col top-10 left-36"
             >
                 <div className="flex h-full flex-col px-2">
                     <div
                         className="
                             flex h-0 grow flex-col gap-y-2 overflow-y-auto
                         "
-                    >
-                        <BasicInformation />
-                        <MenuImageUpload />
+                    >   
+                        <BasicInformation editMenuId={editMenuId}/>
+                        <MenuImageUpload editMenuId={editMenuId} />
                         {/* <Customizations /> */}
 
                         <div className="h-0 grow"></div>
 
-                        <GradientTextButton className="sticky bottom-0">
+                        <GradientTextButton 
+                            className="sticky bottom-0"
+                            onClick={
+                                editMenuId === 0 ?
+                                SubmitData
+                                :
+                                UpdateData
+                            }>
                             Confirm
                         </GradientTextButton>
                     </div>
                 </div>
             </Modal>
-        </NewMenuProvider>
+            
     );
 };
+
+export default function NewMenu({ setOpenModal, editMenuId }) {
+    return (
+        <NewMenuProvider>
+            <Menu setOpenModal={setOpenModal} editMenuId={editMenuId}></Menu>
+        </NewMenuProvider>
+    ); 
+}; 
+
+

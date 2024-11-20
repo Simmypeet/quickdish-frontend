@@ -70,3 +70,11 @@ export const getUser = async (axiosPrivate) => {
     const response = await axiosPrivate.get('/customers/me');
     return response.data;
 };
+
+export const getUserById = async (axiosPrivate, userId) => {
+    const response = await axiosPrivate.get(
+        `/customers/${userId}`
+    );
+    return response.data; 
+}
+
