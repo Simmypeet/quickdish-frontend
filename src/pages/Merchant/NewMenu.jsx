@@ -24,6 +24,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useMerchant from '../../hooks/useMerchant';
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
+import { getMenuImage } from '../../api/restaurantApi';
 
 
 /**
@@ -119,7 +120,7 @@ const useNewMenu = () => {
 /**
  * @returns {React.ReactNode}
  */
-const MenuImageUpload = () => {
+const MenuImageUpload = ({editMenuId}) => {
     const { setImage, image } = useNewMenu();
     const [error, setError] = useState(
         /**@type{'oneImage'|'notImage'|undefined} */ (undefined)
@@ -199,8 +200,14 @@ const MenuImageUpload = () => {
                             {image ? (
                                 <b>Image Uploaded</b>
                             ) : (
+
+                                editMenuId === 0 ? 
                                 <>
                                     <b>Choose a file</b> or drag it here
+                                </>
+                                :
+                                <>
+                                    <b>Choose a file to change image</b>
                                 </>
                             )}
                         </div>
@@ -381,7 +388,12 @@ const Menu = ({ setOpenModal, editMenuId }) => {
         estimatedTime, 
         price, 
         customizations, 
-        image } = useNewMenu();
+        image,
+        setMenuName,
+        setMenuDescription,
+        setEstimatedTime,
+        setPrice,
+        setImage } = useNewMenu();
 
     const SubmitData = async () => {
         // const axiosPrivate = useAxiosPrivate();
@@ -413,12 +425,44 @@ const Menu = ({ setOpenModal, editMenuId }) => {
         }
     
         //upload menu image
-        const img_payload = new FormData();
-        img_payload.append('image', image); 
-    
+        UploadImage(menu_id);
+        setOpenModal(false);
+        resetState();
+     
+    }
+
+    const UpdateData = async () => {
+        const payload = {
+            name: menuName,
+            description: menuDescription,
+            price: price,
+            estimated_prep_time: estimatedTime
+        };
+
         try{
             const response = await axiosPrivate.put(
-                `/restaurants/menus/${menu_id}/image`, 
+                `/restaurants/menus/${editMenuId}`, 
+                payload
+            );    
+        }catch(err){
+            console.log("Error uploading image: ", err);
+        }
+
+        if(image != null){
+            UploadImage(editMenuId);
+        }  
+        setOpenModal(false);
+        resetState();
+    }
+
+
+    const UploadImage = async (menuId) => {
+        const img_payload = new FormData();
+        img_payload.append('image', image); 
+
+        try{
+            const response = await axiosPrivate.put(
+                `/restaurants/menus/${menuId}/image`, 
                 img_payload, 
                 {
                     headers: {
@@ -429,6 +473,14 @@ const Menu = ({ setOpenModal, editMenuId }) => {
         }catch(err){
             console.log("Error uploading image: ", err);
         }
+    }
+
+    const resetState = () => {
+        setMenuName('');
+        setMenuDescription('');
+        setEstimatedTime('');
+        setPrice('');
+        setImage(null);
     }
    //here
     return (
@@ -452,26 +504,21 @@ const Menu = ({ setOpenModal, editMenuId }) => {
                         "
                     >   
                         <BasicInformation editMenuId={editMenuId}/>
-                        <MenuImageUpload />
+                        <MenuImageUpload editMenuId={editMenuId} />
                         {/* <Customizations /> */}
 
                         <div className="h-0 grow"></div>
 
                         <GradientTextButton 
                             className="sticky bottom-0"
-                            onClick={SubmitData}>
+                            onClick={
+                                editMenuId === 0 ?
+                                SubmitData
+                                :
+                                UpdateData
+                            }>
                             Confirm
                         </GradientTextButton>
-
-                        {
-                            editMenuId !== 0 ?
-                            (
-                                <GradientTextButton >
-                                    Delete
-                                </GradientTextButton>
-                            ) : null
-                        }
-                        
                     </div>
                 </div>
             </Modal>

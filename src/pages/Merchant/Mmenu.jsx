@@ -18,16 +18,16 @@ const Mmenu = () => {
         } catch (err) {
             console.log('Error fetching menus: ', err);
         }
-    }
+    } 
 
     const makeModalOpen = (id) => {
         setEditMenuId(id);
-        setOpenModal(true);
-    }
-
+        setOpenModal(true); 
+    } 
+ 
     const getMenusImg = async () => {
         let menuImgs = [];
-        for(let i = 0; i < menus.length; i++){
+        for(let i = 0; i < menus.length; i++){ 
             try{
                 const response = await getMenuImage(menus[i].id);
                 let actualImage = URL.createObjectURL(response);
@@ -66,7 +66,7 @@ const Mmenu = () => {
                         setOpenModal(true);  
                     }}>
                     <h2 className='text-3xl'>+</h2> 
-                </button>
+                </button> 
             </div>
 
             {
@@ -77,7 +77,6 @@ const Mmenu = () => {
                 : null
             }
 
-            
         </div>
     );
 }
