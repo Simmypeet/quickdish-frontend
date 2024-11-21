@@ -7,7 +7,7 @@ import TableStickyHeader from "../../components/Merchant/TableStickyHeader";
 
 const Msales = () => {
   return (
-    <div className="w-full mx-auto  rounded-lg shadow-md">
+    <div className="w-full mx-auto">
         <div className="flex">
             <div className="w-1/2">
                 <RevenueCardWithGraph></RevenueCardWithGraph>
