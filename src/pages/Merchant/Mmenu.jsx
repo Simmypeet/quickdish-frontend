@@ -157,6 +157,7 @@ const Mmenu = () => {
                 <div className="fixed top-52">
                     <NewCustomizations
                         menu_id={editMenuId}
+                        onClose={() => setOpenModal(undefined)}
                         onSubmit={(customs) => {
                             for (let i = 0 ; i < customs.length; i++) {
                                 axiosPrivate.post(

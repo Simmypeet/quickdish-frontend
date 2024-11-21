@@ -445,17 +445,18 @@ const ConfirmButton = ({ onSubmit }) => {
  * @param {{
  *  menu_id: number
  *  onSubmit: (customizations: CustomizationCreate[]) => void
+ *  onClose: () => void
  * }} prop
  *
  * @returns {React.ReactNode}
  */
-export default ({ menu_id, onSubmit }) => {
+export default ({ menu_id, onSubmit, onClose }) => {
     return (
         <NewCustomizationsProvider menu_id={menu_id}>
             <Modal
-                onClose={undefined}
+                onClose={onClose}
                 title={<Title>New Customizations</Title>}
-                className="flex w-fit min-w-96 flex-col"
+                className="flex h-3/4 w-fit min-w-96 flex-col top-10 left-36"
             >
                 <div className="flex h-full flex-col px-2">
                     <div
