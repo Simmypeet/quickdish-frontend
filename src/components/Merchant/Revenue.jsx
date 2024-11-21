@@ -3,11 +3,14 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement } from "chart.js";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useMerchant from "../../hooks/useMerchant";
+
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
 const RevenueCardWithGraph = () => {
   const axiosPrivate = useAxiosPrivate();
+    const { merchant } = useMerchant();
   const [selectedTab, setSelectedTab] = useState("monthly");
   const [graphData, setGraphData] = useState({
     daily: [],
@@ -27,7 +30,7 @@ const RevenueCardWithGraph = () => {
 
   const fetchData = async () => {
     try {
-      const restaurant_id = 4; // Replace with dynamic restaurant_id if needed
+      const restaurant_id = merchant.restaurant_id; // Replace with dynamic restaurant_id if needed
       const response = await axiosPrivate.get(`orders/?restaurant_id=${restaurant_id}&status=SETTLED`);
       const orders = response.data;
 
