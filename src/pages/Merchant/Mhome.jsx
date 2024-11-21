@@ -43,7 +43,6 @@ const Mhome = () => {
             const orders_raw = []; 
             //get restaurant id
             const response = await axiosPrivate.get(`http://127.0.0.1:8000/orders/?restaurant_id=${merchant.restaurant_id}&status=${status}`); 
-            console.log("response: ", response.data);
             for(let order of response.data){
                 let temp = {};
                 let menu_img = URL.createObjectURL(await getMenuImage(order.items[0].menu_id));

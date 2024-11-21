@@ -2,28 +2,33 @@ import * as React from 'react';
 import Table from '@mui/joy/Table';
 import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
+import useMerchant from "../../hooks/useMerchant";
+import { getTopSalesMenus } from "../../api/orderApi";
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-const rows = [
-  createData('1', 159, 6.0, 24, 4.0),
-  createData('2', 237, 9.0, 37, 4.3),
-  createData('3', 262, 16.0, 24, 6.0),
-  createData('4', 305, 3.7, 67, 4.3),
-  createData('5', 356, 16.0, 49, 3.9),
-  createData('6', 159, 6.0, 24, 4.0),
-  createData('7', 237, 9.0, 37, 4.3),
-  createData('8', 262, 16.0, 24, 6.0),
-  createData('9', 305, 3.7, 67, 4.3),
-  createData('10', 356, 16.0, 49, 3.9),
-];
-
-function sum(column) {
-  return rows.reduce((acc, row) => acc + row[column], 0);
-}
 
 const TableStickyHeader = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const [menus, setMenus] = React.useState([]);
+  const { merchant } = useMerchant();
+
+  const getRankedMenu = async (restaurant_id, axiosPrivate) => {
+    const response = await getTopSalesMenus(restaurant_id, axiosPrivate);
+    console.log("API response:", response); 
+    setMenus(response);
+  }
+
+  const sum = (field) => {
+    return menus.reduce((total, menu) => total + (menu[field] || 0), 0);
+  };
+
+  React.useEffect(() => {
+    if (merchant.restaurant_id) {
+      getRankedMenu(merchant.restaurant_id, axiosPrivate);
+    }else {
+      console.error("No restaurant ID available.");
+    }
+  }, [merchant.restaurant_id]);
 
   return (
     <div className="">
@@ -48,13 +53,13 @@ const TableStickyHeader = () => {
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
+            {menus.map((row, index) => (
               <tr key={row.name}>
+                <td>{index + 1}</td>
                 <td>{row.name}</td>
-                <td>{row.calories}</td>
                 <td>-</td>
-                <td>{row.carbs}</td>
-                <td>{row.protein}</td>
+                <td>{row.quantity}</td>
+                <td>{row.sale}</td>
               </tr>
             ))}
           </tbody>
@@ -63,8 +68,8 @@ const TableStickyHeader = () => {
               <th scope="row">Totals</th>
               <td></td>
               <td></td>
-              <td>{sum('carbs').toFixed(2)}</td>
-              <td>{sum('carbs').toFixed(2)}</td>
+              <td>{sum('quantity').toFixed(2)}</td>
+              <td>{sum('sale').toFixed(2)}</td>
             </tr>
             
           </tfoot>

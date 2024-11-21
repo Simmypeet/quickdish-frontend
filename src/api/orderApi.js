@@ -2,6 +2,7 @@
 
 import EventSourceStream from '@server-sent-stream/web';
 import axios from 'axios';
+import { getMenu } from './restaurantApi';
 
 /**
  * @import {
@@ -113,6 +114,26 @@ export const updateOrderStatus = async (axiosPrivate, orderId, status) => {
     return;
 };
 
-export const getTopSalesMenus = async (restaurant_id) => {
-    
+export const getTopSalesMenus = async (restaurant_id, axiosPrivate) => {
+    //price per menu x quantity
+    //menu name
+    const order = await axiosPrivate.get(`orders/?restaurant_id=${restaurant_id}&status=SETTLED`); 
+    let menu_sales = [];
+    for(let o of order.data){
+        let menu = {}; 
+        for(let item of o.items){
+            if(menu["name"]){
+                menu["quantity"] += 1;
+            }else{
+                let result = await getMenu(item.menu_id); 
+                menu["name"] = result.name;
+                menu["quantity"] = item.quantity;
+                menu["price"] = parseInt(result.price);
+            }
+            menu["sale"] = menu["price"] * menu["quantity"];
+        }
+        menu_sales.push(menu);
+    }
+    console.log("menu_sale", menu_sales);
+    return menu_sales;
 }
