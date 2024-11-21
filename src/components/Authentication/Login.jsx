@@ -38,7 +38,7 @@ const Login = ({toggle}) => {
             // const role = response?.data?.role;
             const role = "user";
 
-            setAuth({ username: username, password: password, role: role, accessToken: accessToken });
+            setAuth({ username: username, role: role, accessToken: accessToken });
 
           //easy way : feature/authen
            // navigate("/dashboard"); 
