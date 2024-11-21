@@ -79,9 +79,9 @@ const Signup = ({toggle}) => {
             setPassword('');
             setEmail('');
 
-            if (success) {
-                toggle("login");
-            }
+
+            alert("Register Success");
+
 
         }catch(err){
             console.log(err);
