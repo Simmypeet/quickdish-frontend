@@ -43,7 +43,6 @@ const Mhome = () => {
             const orders_raw = []; 
             //get restaurant id
             const response = await axiosPrivate.get(`http://127.0.0.1:8000/orders/?restaurant_id=${merchant.restaurant_id}&status=${status}`); 
-            console.log("response: ", response.data);
             for(let order of response.data){
                 let temp = {};
                 let menu_img = URL.createObjectURL(await getMenuImage(order.items[0].menu_id));
@@ -156,7 +155,7 @@ const Mhome = () => {
             </div>
 
             {/* body */}
-            <div className="w-5/6">
+            <div className="w-full">
                 {/* Big Card */}
                 {orders.length > 0 ? (
                     <div
@@ -230,35 +229,6 @@ const Mhome = () => {
                 <div className="">
                     <h1 className='heading-font my-6'>Ongoing Orders</h1>
                 </div>
-               
-
-                {/* card */}
-                {/* { loading ? (
-                    <div className="flex justify-center items-center h-48">
-                        <img src="/loading_main.svg" className='w-28'></img>
-                    </div>
-                ) : (
-                    orders.map((order, index) => (
-
-                        index > 0 ? (
-                            <OrderCard
-                            key={index}
-                            order_id={order.order_id}
-
-                            menu_id={order.menu_id}
-                            menu_name={order.menu_name}
-                            menu_quantity={order.menu_quantity}
-
-                            menu_img={orders.display_img}
-                            price={order.price_paid}
-                            status={order.order_status}
-
-                            order_request={order.extra_requests}
-                            order_at={order.ordered_at}
-                            />
-                        ) : null
-                    ))
-                )} */}
 
                 { loading ? (
                     <div className="flex justify-center items-center h-48">

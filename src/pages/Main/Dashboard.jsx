@@ -91,7 +91,6 @@ const Dashboard = () => {
                                     <Route path="purchase_history" element={<PurchaseHistory/>}/>
                                     <Route path="myprofile" element={<MyProfile/>}/>
                                     <Route path="favourites" element={<Favourite/>}/>
-                                    <Route path="notification" element={<Notification/>}/>
                                     <Route path="orders/:orderID" element={<OrderDetail/>}/>
                                 </Route>
 

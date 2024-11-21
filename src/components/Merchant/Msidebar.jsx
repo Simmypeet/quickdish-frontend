@@ -1,9 +1,19 @@
 import React from 'react';
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faBookmark, faComment, faClockRotateLeft, faUser, faUtensils, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faBookmark, faChartSimple, faUsers, faUser, faBowlFood, faUtensils, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const SideBar = () => {
+  // const navigate = useNavigate();
+  const { setAuth } = useAuth();
+  const navigate = useNavigate();
+  const logout = () => {
+    setAuth({});
+    navigate("/");
+  }
+
   return (
     <>
       {/* Vertical Sidebar for large screens */}
@@ -23,7 +33,7 @@ const SideBar = () => {
         <NavLink to="/merchant/" className="w-full">
             <div
               className="
-                flex items-center space-x-3 hover:bg-white hover:text-black 
+                flex items-center space-x-3 hover:bg-white  
                 px-4 py-2 rounded-md
               "
             >
@@ -40,7 +50,7 @@ const SideBar = () => {
                 px-4 py-2 rounded-md
               "
             >
-              <FontAwesomeIcon icon={faBookmark} className="text-2xl text-white" />
+              <FontAwesomeIcon icon={faBowlFood} className="text-2xl text-white" />
               <h2 className="text-white text-lg">Menus</h2>
             </div>
           </NavLink>
@@ -51,7 +61,7 @@ const SideBar = () => {
                 px-4 py-2 rounded-md
               "
             >
-              <FontAwesomeIcon icon={faComment} className="text-2xl text-white" />
+              <FontAwesomeIcon icon={faChartSimple} className="text-2xl text-white" />
               <h2 className="text-white text-lg">Sales</h2>
             </div>
           </NavLink>
@@ -62,21 +72,11 @@ const SideBar = () => {
                 px-4 py-2 rounded-md
               "
             >
-              <FontAwesomeIcon icon={faClockRotateLeft} className="text-2xl text-white" />
+              <FontAwesomeIcon icon={faUsers} className="text-2xl text-white hover:text-black" />
               <h2 className="text-white text-lg">User reviews</h2>
             </div>
           </NavLink>
-          {/* <NavLink to="/dashboard/myprofile" className="w-full">
-            <div
-              className="
-                flex items-center space-x-3 hover:bg-white hover:text-black 
-                px-4 py-2 rounded-md
-              "
-            >
-              <FontAwesomeIcon icon={faUser} className="text-2xl text-white" />
-              <h2 className="text-white text-lg">Profile</h2>
-            </div>
-          </NavLink> */}
+          
         </div>
 
         {/* Logout */}
@@ -85,6 +85,8 @@ const SideBar = () => {
             text-3xl text-white hover:bg-white hover:text-black 
             p-4 rounded-full mt-10 flex justify-center
           "
+          onClick={logout} 
+          
         >
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
         </div>
@@ -97,7 +99,7 @@ const SideBar = () => {
           flex justify-center space-x-8 py-4 h-20 lg:hidden
         "
       >
-        <NavLink to="/dashboard">
+        <NavLink to="/merchant/">
           <div
             className="
               flex flex-col items-center space-y-1 
@@ -107,46 +109,37 @@ const SideBar = () => {
             <FontAwesomeIcon icon={faHouse} className="text-2xl text-white" />
           </div>
         </NavLink>
-        <NavLink to="/dashboard/favourites">
+        <NavLink to="/merchant/menu">
           <div
             className="
               flex flex-col items-center space-y-1 
               hover:bg-white hover:text-black px-4 py-2 rounded-md
             "
           >
-            <FontAwesomeIcon icon={faBookmark} className="text-2xl text-white" />
+            <FontAwesomeIcon icon={faBowlFood} className="text-2xl text-white" />
           </div>
         </NavLink>
-        <NavLink to="/dashboard/notification">
+        <NavLink to="/merchant/sales">
           <div
             className="
               flex flex-col items-center space-y-1 
               hover:bg-white hover:text-black px-4 py-2 rounded-md
             "
           >
-            <FontAwesomeIcon icon={faComment} className="text-2xl text-white" />
+            <FontAwesomeIcon icon={faChartSimple} className="text-2xl text-white" />
           </div>
         </NavLink>
-        <NavLink to="/dashboard/purchase_history">
+        <NavLink to="/merchant/review">
           <div
             className="
               flex flex-col items-center space-y-1 
               hover:bg-white hover:text-black px-4 py-2 rounded-md
             "
           >
-            <FontAwesomeIcon icon={faClockRotateLeft} className="text-2xl text-white" />
+            <FontAwesomeIcon icon={faUsers} className="text-2xl text-white" />
           </div>
         </NavLink>
-        <NavLink to="/dashboard/myprofile">
-          <div
-            className="
-              flex flex-col items-center space-y-1 
-              hover:bg-white hover:text-black px-4 py-2 rounded-md
-            "
-          >
-            <FontAwesomeIcon icon={faUser} className="text-2xl text-white" />
-          </div>
-        </NavLink>
+        
 
         {/* Logout */}
         <div
@@ -154,6 +147,7 @@ const SideBar = () => {
             text-3xl text-white hover:text-black 
             p-1 rounded-full
           "
+          onClick={logout} 
         >
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
         </div>

@@ -188,7 +188,9 @@ const calculateQuantity = (orders) => {
  * @returns
  */
 const OrderSummary = ({ onClose, onEdit }) => {
-    const [orderPlaced, setOrderPlaced] = useState(false);
+    const [orderPlaced, setOrderPlaced] = useState(
+        /** @type{undefined | number} */ (undefined)
+    );
     const { orderCreate, restaurant, setOrders } = useRestaurant();
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
@@ -237,14 +239,19 @@ const OrderSummary = ({ onClose, onEdit }) => {
                                 className="
                                     rounded-md bg-gradient-to-r 
                                     from-orange-300 to-red-500 px-2 py-1
-                                    shadow-md hover:cursor-pointer 
-                                    hover:shadow-xl
+                                    text-white shadow-md 
+                                    hover:cursor-pointer hover:shadow-xl
                                 "
                                 onClick={() => {
-                                    navigate('/dashboard', { replace: true });
+                                    navigate(
+                                        `/dashboard/orders/${orderPlaced}`,
+                                        {
+                                            replace: true,
+                                        }
+                                    );
                                 }}
                             >
-                                Back to Homepage
+                                See Order Detail
                             </div>
                         </div>
                     ) : orderCreate.items.length == 0 ? (
@@ -299,11 +306,13 @@ const OrderSummary = ({ onClose, onEdit }) => {
 
                 {orderCreate.items.length != 0 && !orderPlaced ? (
                     <CheckoutSummary
-                        onCheckout={() => {
-                            createOrder(axiosPrivate, orderCreate).then(() => {
-                                setOrderPlaced(true);
-                                setOrders([]);
-                            });
+                        onCheckout={async () => {
+                            const orderID = await createOrder(
+                                axiosPrivate,
+                                orderCreate
+                            );
+
+                            setOrderPlaced(orderID);
                         }}
                     />
                 ) : null}
