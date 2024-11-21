@@ -137,3 +137,10 @@ export const getTopSalesMenus = async (restaurant_id, axiosPrivate) => {
     console.log("menu_sale", menu_sales);
     return menu_sales;
 }
+
+export const getTotalSaleByDate = async (date, month, year, restaurant_id, axiosPrivate) => {
+    const order = await axiosPrivate.get(`orders/?restaurant_id=${restaurant_id}&status=SETTLED`);
+    let total_sale = 0;
+     
+
+}
