@@ -46,8 +46,10 @@ const Mmenu = () => {
 
     useEffect(() => {
         getAllMenus();
-        getMenusImg(); 
-    }, []);
+        if(menus.length > 0){
+            getMenusImg(); 
+        }
+    }, [menus]);
 
     return ( 
         <div>
