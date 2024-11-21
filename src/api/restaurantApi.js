@@ -157,3 +157,31 @@ export const searchRestaurants = async (name, limit) => {
 
     return restaurants.data;
 };
+
+
+export const getRestaurantReviewByIds = async (restaurant_id) => {
+        let total_rate = 0; 
+        let total_tastiness = 0;
+        let total_hygiene = 0;
+        let total_quickness = 0;
+        const response = await axios.get(`http://127.0.0.1:8000/restaurants/reviews/${restaurant_id}`); 
+        if (response.status !== 200){
+            throw new Error(
+                `Error fetching restaurant data status: ${response.status};`
+            );
+        }
+        let review_edit = 0; 
+        for(let r of response.data){
+            total_rate += (r.tastiness + r.hygiene + r.quickness)/3; 
+            total_tastiness += r.tastiness;
+            total_hygiene += r.hygiene;
+            total_quickness += r.quickness;
+            review_edit += 1; 
+        }
+        const avgRating = review_edit === 0 ? 0 : total_rate/review_edit;
+        const avgTastiness = review_edit === 0 ? 0 : total_tastiness/review_edit;
+        const avgHygiene = review_edit === 0 ? 0 : total_hygiene/review_edit;
+        const avgQuickness = review_edit === 0 ? 0 : total_quickness/review_edit;
+        return { overall_rate: Math.ceil(avgRating), avgTastiness: Math.ceil(avgTastiness), avgHygiene: Math.ceil(avgHygiene), avgQuickness: Math.ceil(avgQuickness) };
+    }
+

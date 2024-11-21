@@ -112,3 +112,7 @@ export const updateOrderStatus = async (axiosPrivate, orderId, status) => {
 
     return;
 };
+
+export const getTopSalesMenus = async (restaurant_id) => {
+    
+}
