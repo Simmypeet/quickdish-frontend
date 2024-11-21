@@ -97,6 +97,21 @@ const Mmenu = () => {
         }
     } 
 
+    const getMenusImg = async () => {
+        let menuImgs = [];
+        for(let i = 0; i < menus.length; i++){ 
+            try{
+                const response = await getMenuImage(menus[i].id);
+                let actualImage = URL.createObjectURL(response);
+
+                menuImgs[menus[i].id] = actualImage;
+            }catch(err){
+                console.log("Error fetching menu image: ", err);
+            }
+        }
+        setMenusImg(menuImgs);
+    }
+
     const makeModalOpen = (id) => {
         setEditMenuId(id);
         setOpenModal("update"); 
@@ -138,7 +153,7 @@ const Mmenu = () => {
                 <div className="fixed top-52">
                     <NewMenu setOpenModal={setOpenModal} editMenuId={editMenuId}></NewMenu>
                 </div>
-                : openModal === 'customize' ?
+                : openModal === 'custom' ?
                 <div className="fixed top-52">
                     <NewCustomizations
                         menu_id={editMenuId}
