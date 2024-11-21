@@ -426,14 +426,30 @@ const Customizations = () => {
     );
 };
 
+const ConfirmButton = ({ onSubmit }) => {
+    const { customizations } = useNewCustomizations();
+
+    return (
+        <GradientTextButton
+            className="sticky bottom-0"
+            onClick={() => {
+                onSubmit(customizations);
+            }}
+        >
+            Confirm
+        </GradientTextButton>
+    );
+};
+
 /**
  * @param {{
  *  menu_id: number
+ *  onSubmit: (customizations: CustomizationCreate[]) => void
  * }} prop
  *
  * @returns {React.ReactNode}
  */
-export default ({ menu_id }) => {
+export default ({ menu_id, onSubmit }) => {
     return (
         <NewCustomizationsProvider menu_id={menu_id}>
             <Modal
@@ -451,10 +467,7 @@ export default ({ menu_id }) => {
                         <Customizations />
 
                         <div className="h-0 grow"></div>
-
-                        <GradientTextButton className="sticky bottom-0">
-                            Confirm
-                        </GradientTextButton>
+                        <ConfirmButton onSubmit={onSubmit} />
                     </div>
                 </div>
             </Modal>
