@@ -30,7 +30,7 @@ const PickRestaurant = ({ merchant, setMerchant, axiosPrivate }) => {
     };
 
     const getRestaurant = async () => {
-        const response = await axiosPrivate.get(`/restaurants/${merchant.merchant_id}`); 
+        const response = await axiosPrivate.get(`/merchants/${merchant.merchant_id}/restaurants`); 
         const restaurantChoices = response.data.map((r) => ({
             name: r.name,
             id: r.id,
