@@ -7,8 +7,8 @@ import Banner from './Banner';
 
 const CarouselAutomate = () => {
     const carouselItems = [
-        { image: '/banner1.jpg' },
         { image: '/banner2.jpg' },
+        { image: '/banner1.jpg' },
     ];
 
     const responsive = {

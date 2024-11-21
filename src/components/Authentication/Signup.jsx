@@ -3,6 +3,7 @@ import axios from "../../api/axios";
 // import axios from 'axios'; 
 // import useAxiosPrivate  from "../hooks/useAxiosPrivate";
 import { useState, useRef, useEffect } from "react";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_].{3,23}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -10,7 +11,7 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const Signup = ({toggle}) => {
     const usernameRef = useRef();
-    const errRef = useRef();
+    const axiosPrivate = useAxiosPrivate();
 
     const [ username, setUsername ] = useState('');
     const [ validUsername, setValidUsername ] = useState(false);
@@ -58,7 +59,7 @@ const Signup = ({toggle}) => {
             console.log("email: ", email);
 
             // const response = await axios.post('/customers/register',
-            const response = await useAxiosPrivate.post('/customers/register',
+            const response = await axiosPrivate.post('/customers/register',
                 JSON.stringify(
                     { username: username,
                       password: password,
@@ -78,7 +79,12 @@ const Signup = ({toggle}) => {
             setPassword('');
             setEmail('');
 
+
+            alert("Register Success");
+
+
         }catch(err){
+            console.log(err);
             if(!err?.response){
                 setErrMsg('No Server Response'); 
             }else if(err.response?.status == 409){
@@ -91,7 +97,6 @@ const Signup = ({toggle}) => {
                 setErrMsg('Register Failed');
             }
             console.log(errMsg);
-            errRef.current.focus();
         }
     };
 

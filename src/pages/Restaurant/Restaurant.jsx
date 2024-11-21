@@ -424,7 +424,7 @@ const OrderPopup = ({
                 className="
                     mx-auto my-auto flex h-[90%] w-[80%] min-w-[80%] flex-col 
                     overflow-hidden rounded-2xl bg-white drop-shadow-2xl 
-                    md:min-w-[70%]
+                    md:min-w-[70%] lg:min-w-0 max-w-96
                 "
             >
                 <div className="relative ml-6 mr-6 mt-6 flex grow flex-col">
@@ -707,6 +707,8 @@ const MainPage = () => {
         new Decimal(0)
     );
 
+    console.log(isFavorite);
+
     return (
         <div className="flex min-h-svh flex-col">
             <div className="sticky top-0 z-[10]">
@@ -749,8 +751,7 @@ const MainPage = () => {
 
                                             setIsFavorite(true);
                                         }
-                                    } catch (e) {
-                                        console.error(e);
+                                    } catch (e) { console.error(e);
                                     }
                                 }}
                             >
@@ -947,12 +948,12 @@ const RestaurantContext = React.createContext(
  *
  * @returns {ReactNode}
  */
-const RestaurantProvider = ({ children, restaurant }) => {
+const RestaurantProvider = ({ children, restaurant, isFavorite }) => {
     const [cookie, setCookie, _] =
         /** @type {ReturnType<typeof useCookies<"order", {[K in "order"]?: OrderCreate}>>} */
         (useCookies(['order']));
 
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [thisIsFavorite, setIsFavorite] = useState(isFavorite);
 
     if (
         cookie.order == null ||
@@ -984,7 +985,7 @@ const RestaurantProvider = ({ children, restaurant }) => {
                     }
                 ),
                 restaurant: restaurant,
-                isFavorite,
+                isFavorite: thisIsFavorite,
                 setIsFavorite,
             }}
         >

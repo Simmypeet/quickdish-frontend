@@ -114,7 +114,7 @@ const CommentWindow = ({closeModal, menuId, menuName, restaurant_id, handleRevie
       }
     
     return (
-        <div className='fixed top-32 left-1/4 w-3/6 max-w-3/5 min-w-2/5 p-2 z-10'>
+        <div className='fixed top-20 left-1/4 w-3/6 max-w-3/5 min-w-2/5 p-2 z-10'>
             <div className="bg-slate-100 p-2 rounded-3xl flex flex-col shadow-xl">
                     <div className="m-3">
                     <div className="flex justify-between">
@@ -165,7 +165,7 @@ const CommentWindow = ({closeModal, menuId, menuName, restaurant_id, handleRevie
                             </label>
                             <div className="mt-2 flex justify-center items-center rounded-lg border border-dashed bg-slate-200 w-full px-6 py-3">
                             {/* <div className="mt-2 flex justify-center rounded-lg border border-dashed bg-slate-200 border-gray-900/25 px-6 py-10"> */}
-                                <img src={menuImg} className='w-96 overflow-hidden rounded-lg'></img>
+                                <img src={menuImg} className='h-96 overflow-hidden rounded-lg'></img>
                                 <div className="text-center">
                                     {/* if have time */}
                                     {/* <FontAwesomeIcon aria-hidden="true" className="mx-auto h-12 w-12 text-gray-300" icon={faUpload} />
