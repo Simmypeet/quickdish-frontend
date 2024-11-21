@@ -161,13 +161,15 @@ const Mmenu = () => {
                     <NewCustomizations
                         menu_id={editMenuId}
                         onClose={() => setOpenModal(undefined)}
-                        onSubmit={(customs) => {
+                        onSubmit={async (customs) => {
                             for (let i = 0 ; i < customs.length; i++) {
-                                axiosPrivate.post(
+                                await axiosPrivate.post(
                                     `/restaurants/menus/${editMenuId}/customizations`, 
                                     customs[i]
                                 );
                             }
+
+                            setOpenModal(undefined);
                         }}
                     />
                 </div> 
