@@ -424,7 +424,7 @@ const OrderPopup = ({
                 className="
                     mx-auto my-auto flex h-[90%] w-[80%] min-w-[80%] flex-col 
                     overflow-hidden rounded-2xl bg-white drop-shadow-2xl 
-                    md:min-w-[70%]
+                    md:min-w-[70%] lg:min-w-0 max-w-96
                 "
             >
                 <div className="relative ml-6 mr-6 mt-6 flex grow flex-col">
@@ -751,8 +751,7 @@ const MainPage = () => {
 
                                             setIsFavorite(true);
                                         }
-                                    } catch (e) {
-                                        console.error(e);
+                                    } catch (e) { console.error(e);
                                     }
                                 }}
                             >
