@@ -85,6 +85,7 @@ const SideBar = () => {
             text-3xl text-white hover:bg-white hover:text-black 
             p-4 rounded-full mt-10 flex justify-center
           "
+          onClick={logout} 
           
         >
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
