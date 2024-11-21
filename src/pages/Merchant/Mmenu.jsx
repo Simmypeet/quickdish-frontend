@@ -142,7 +142,10 @@ const Mmenu = () => {
                 <button 
                     className="add-button shadow-2xl" 
                     onClick = {() => { 
-                        setOpenModal(true);  
+                        
+                        setOpenModal("update");  
+                        setEditMenuId(0);
+
                     }}>
                     <h2 className='text-3xl'>+</h2> 
                 </button> 
