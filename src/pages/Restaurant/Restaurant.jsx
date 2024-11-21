@@ -707,6 +707,8 @@ const MainPage = () => {
         new Decimal(0)
     );
 
+    console.log(isFavorite);
+
     return (
         <div className="flex min-h-svh flex-col">
             <div className="sticky top-0 z-[10]">
@@ -947,12 +949,12 @@ const RestaurantContext = React.createContext(
  *
  * @returns {ReactNode}
  */
-const RestaurantProvider = ({ children, restaurant }) => {
+const RestaurantProvider = ({ children, restaurant, isFavorite }) => {
     const [cookie, setCookie, _] =
         /** @type {ReturnType<typeof useCookies<"order", {[K in "order"]?: OrderCreate}>>} */
         (useCookies(['order']));
 
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [thisIsFavorite, setIsFavorite] = useState(isFavorite);
 
     if (
         cookie.order == null ||
@@ -984,7 +986,7 @@ const RestaurantProvider = ({ children, restaurant }) => {
                     }
                 ),
                 restaurant: restaurant,
-                isFavorite,
+                isFavorite: thisIsFavorite,
                 setIsFavorite,
             }}
         >
