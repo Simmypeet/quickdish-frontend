@@ -46,7 +46,7 @@ const RatingChart = () => {
 
   if (loading) {
     return (
-      <div className="bg-white h-96 rounded-md p-5 flex justify-center items-center">
+      <div className="bg-white w-96 h-96 rounded-md p-5 flex justify-center items-center">
         <div>Loading...</div>
       </div>
     );
@@ -63,7 +63,7 @@ const RatingChart = () => {
   };
 
   return (
-    <div className="bg-white h-96 rounded-md p-5">
+    <div className="bg-white w-96 h-96 rounded-md p-5 orange-shadow">
       <div style={{ width: 200, height: 200, margin: "auto" }}>
         <CircularProgressbarWithChildren
           value={percentage}

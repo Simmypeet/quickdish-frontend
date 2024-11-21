@@ -126,7 +126,7 @@ const RevenueCardWithGraph = () => {
   };
 
   return (
-    <div className="w-full p-6 mx-auto bg-white rounded-lg shadow-md">
+    <div className="w-full p-6 mx-auto bg-white rounded-lg orange-shadow">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Revenue</h2>
         <div className="flex space-x-2">

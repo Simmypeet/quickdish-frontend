@@ -32,10 +32,14 @@ const TableStickyHeader = () => {
 
   return (
     <div className="">
-      <h1 className='mb-5'>
+      <h1 className='sub-title mb-2'>
         Best selling menus
       </h1>
-      <Sheet sx={{ height: 300, overflow: 'auto' }}>
+      <Sheet sx={{ 
+        height: 300, 
+        overflow: 'auto',
+        borderRadius: "8px",
+        boxShadow: "0 25px 50px -12px rgba(251, 146, 60, 0.5)" }}>
         <Table
           aria-label="table with sticky header"
           stickyHeader

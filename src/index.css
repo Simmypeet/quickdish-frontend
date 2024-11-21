@@ -129,6 +129,10 @@
   @apply  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-slate-200 dark:border-slate-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500
 }
 
+.orange-shadow{
+  @apply shadow-2xl shadow-orange-500/50
+}
+
 .grid-container {
   display: grid; 
   grid-template-columns: 1fr 1fr 1fr;
