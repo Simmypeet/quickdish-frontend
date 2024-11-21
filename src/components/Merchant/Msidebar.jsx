@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const SideBar = () => {
   // const navigate = useNavigate();
   const { setAuth } = useAuth();
+  const navigate = useNavigate();
   const logout = () => {
     setAuth({});
     navigate("/");
@@ -144,7 +145,7 @@ const SideBar = () => {
             text-3xl text-white hover:text-black 
             p-1 rounded-full
           "
-        
+          onClick={logout} 
         >
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
         </div>
